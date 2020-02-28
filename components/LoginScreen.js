@@ -8,7 +8,7 @@ export default class abc extends Component {
     render() {
         return (
             <View>
-                <ScreenTopMenu></ScreenTopMenu>
+                <ScreenTopMenu {...this.props}></ScreenTopMenu>
                 <View>
                     <View style={styles.logoContainer}>
                         <Image

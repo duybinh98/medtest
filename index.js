@@ -9,9 +9,10 @@ import {name as appName} from './app.json';
 import LoginScreen from './components/LoginScreen';
 import ResetPassword from './components/ResetPasswordScreen';
 import RegisterScreen from './components/RegisterScreen';
+import Navigator from './components/Navigator'
 
 
 
-AppRegistry.registerComponent(appName, () => ResetPassword);
+AppRegistry.registerComponent(appName, () => Navigator);
 
 
