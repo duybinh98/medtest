@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Image, Text, Dimensions} from 'react-native';
+import {View, StyleSheet, Image, Text, Dimensions, TouchableOpacity} from 'react-native';
 import {Button} from 'react-native-elements';
 import ScreenBackGround from './ScreenBackGround';
 
 export default class HomeScreenArticle extends Component {
     render(){
         return(
-            <View style={styles.articleArea}>
+            <TouchableOpacity 
+                style={styles.articleArea}>
+                
                     <Image 
                         source={{uri:this.props.imageUri}}
                         style={styles.articleImage}
@@ -15,7 +17,7 @@ export default class HomeScreenArticle extends Component {
                         <Text style={styles.articleTitle}>{this.props.title}</Text>
                         <Text style={styles.articleShortContent}>{this.props.shortContent}</Text>
                 </View>                    
-            </View>        
+            </TouchableOpacity>        
         );
     }
 }

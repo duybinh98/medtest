@@ -6,13 +6,16 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import HomeScreen from './HomeScreen';
 import LoginScreen from './LoginScreen';
-
+import RequestListScreen from './RequestListScreen';
+import AppointmentListScreen from './AppointmentListScreen';
 export default class Navigator extends Component {    
     render(){
         return(
             <NavigationContainer>
-                <Drawer.Navigator initialRouteName="home" drawerContent={props => CustomDrawerContent(props)}>
+                <Drawer.Navigator initialRouteName="AppointmentList" drawerContent={props => CustomDrawerContent(props)}>
                 <Drawer.Screen name="Home" component={HomeScreen} />
+                <Drawer.Screen name="RequestList" component={RequestListScreen} />
+                <Drawer.Screen name="AppointmentList" component={AppointmentListScreen} />
                 <Drawer.Screen name="Login" component={LoginScreen} />
                 </Drawer.Navigator>                                        
             </NavigationContainer>
@@ -23,18 +26,11 @@ export default class Navigator extends Component {
 
 const Drawer = createDrawerNavigator();
 
-function MyHomeScreen ({navigation}) {
-  return(
-     <HomeScreen navigation={navigation}>
-    </HomeScreen>
-    );
-}
-
 function CustomDrawerContent(props){
   return(
     <View style ={{flex:1}}>
       <View style ={{
-        height:150,        
+        height:130,        
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'flex-end',
@@ -65,47 +61,63 @@ function CustomDrawerContent(props){
       </View>
       <View style ={{
         marginLeft:10}}>
-      <TouchableOpacity
-       style ={styles.navigatorButton}
-       onPress={() => props.navigation.navigate('Home')}
-      >
-        <Icon
-          name='home'
-          type='entypo'
-          color='#0A6ADA'
-          size= {20}
-          iconStyle={{}}
-        ></Icon>
-      <Text style={styles.navigatorButtonText}>Trang chủ</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-       style ={styles.navigatorButton}
-       onPress={() => props.navigation.navigate('Login')}
-      >
-      <Icon
-          name='user'
-          type='antdesign'
-          color='#0A6ADA'
-          size= {20}
-          iconStyle={{}}
-        ></Icon>
-      <Text style={styles.navigatorButtonText}>Đăng nhập</Text>
-      </TouchableOpacity> 
-       <TouchableOpacity
-       style ={styles.navigatorButton }
-       onPress={() => props.navigation.navigate('Home')}
-      >
-      <Icon
-          name='home'
-          type='entypo'
-          color='#0A6ADA'
-          size= {20}
-          iconStyle={{}}
-        ></Icon>
-      <Text style={styles.navigatorButtonText}>Trang chủ</Text>
-      </TouchableOpacity>
+        <MenuButtonContainer 
+          screenName='Home'
+          iconName='home'
+          iconType='entypo'
+          iconColor='#0A6ADA'
+          iconSize={20}
+          screenTitle='Trang chủ'
+          navigator = {props.navigation}
+        />   
+        <MenuButtonContainer 
+          screenName='Login'
+          iconName='user'
+          iconType='antdesign'
+          iconColor='#0A6ADA'
+          iconSize={20}
+          screenTitle='Đăng nhập'
+          navigator = {props.navigation}
+        />
+        <MenuButtonContainer 
+          screenName='RequestList'
+          iconName='list'
+          iconType='Feather'
+          iconColor='#0A6ADA'
+          iconSize={20}
+          screenTitle='Lịch sử xét nghiệm'
+          navigator = {props.navigation}
+        />   
+        <MenuButtonContainer 
+          screenName='AppointmentList'
+          iconName='list'
+          iconType='Feather'
+          iconColor='#0A6ADA'
+          iconSize={20}
+          screenTitle='Lịch sử đặt khám'
+          navigator = {props.navigation}
+        />     
       </View> 
     </View>
+  );
+}
+
+function MenuButtonContainer({screenName, iconName, iconType, iconColor, iconSize, screenTitle, navigator}) {
+  return(
+    <TouchableOpacity
+       style ={styles.navigatorButton}
+       onPress={() => navigator.navigate(screenName)}
+      >
+        <Icon
+          name={iconName}
+          type={iconType}
+          color={iconColor}
+          size= {iconSize}
+          iconStyle={{}}
+        ></Icon>
+      <Text style={styles.navigatorButtonText}>{screenTitle}</Text>
+      </TouchableOpacity>
+      
   );
 }
 

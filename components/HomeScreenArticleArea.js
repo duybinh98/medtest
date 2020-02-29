@@ -5,7 +5,10 @@ import HomeScreenArticle from './HomeScreenArticle'
 export default class HomeScreen extends Component {
     render(){
         return(
-                <ScrollView style={{                    
+                <ScrollView 
+                    keyboardShouldPersistTaps="always"
+                    keyboardDismissMode='on-drag'
+                    style={{                    
                     flex:1,
                     paddingLeft:10,
                     paddingRight:10,

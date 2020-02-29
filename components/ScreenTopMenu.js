@@ -34,7 +34,7 @@ export default class ScreenTopMenu extends Component {
 
 const styles = StyleSheet.create({
     menuArea:{
-        height:70, 
+        height:60, 
         backgroundColor: '#25345D',
         flexDirection: 'row',
         alignItems: 'center'
@@ -44,9 +44,10 @@ const styles = StyleSheet.create({
         width:40,                               
     },
     title:{
-        fontSize: 30,
+        fontSize: 26,
         color: 'white',
         flex: 1,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontWeight:'bold'
     }
 });
