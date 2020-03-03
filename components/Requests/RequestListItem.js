@@ -6,7 +6,7 @@ export default class RequestListItem extends Component {
     
     render(){        
         return(
-            <TouchableOpacity style={styles.requestListArea}>
+            <TouchableOpacity style={styles.requestListItem}>
                 <View style={{
                     width:185,
                     height:90,
@@ -71,7 +71,7 @@ export default class RequestListItem extends Component {
     }
 }
 const styles = StyleSheet.create({
-    requestListArea:{
+    requestListItem:{
         height:90,
         width: Dimensions.get('window').width-20,
         backgroundColor: 'white',

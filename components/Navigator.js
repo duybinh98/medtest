@@ -7,6 +7,10 @@ import HomeScreen from './Home/HomeScreen';
 import LoginScreen from './Authentication/LoginScreen';
 import RequestListScreen from './Requests/RequestListScreen';
 import AppointmentListScreen from './Appointments/AppointmentListScreen';
+import RequestTestListScreen from './Requests/RequestTestListScreen';
+import RequestConfirmScreen from './Requests/RequestConfirmScreen';
+import RequestViewScreen from './Requests/RequestViewScreen';
+
 export default class Navigator extends Component {    
     render(){
         return(
@@ -16,6 +20,9 @@ export default class Navigator extends Component {
                 <Drawer.Screen name="RequestList" component={RequestListScreen} />
                 <Drawer.Screen name="AppointmentList" component={AppointmentListScreen} />
                 <Drawer.Screen name="Login" component={LoginScreen} />
+                <Drawer.Screen name="RequestTestList" component={RequestTestListScreen} />
+                <Drawer.Screen name="RequestConfirm" component={RequestConfirmScreen} />
+                <Drawer.Screen name="RequestView" component={RequestViewScreen} />
                 </Drawer.Navigator>                                        
             </NavigationContainer>
             

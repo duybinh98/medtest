@@ -11,16 +11,24 @@ export default class HomeScreenContent extends Component {
                 style ={styles.background}>            
                 <View style={styles.mainButtonArea}>     
 
-                    <Button buttonStyle={[styles.mainButton,{
-                        marginLeft: 40                        
-                    }]}
-                    titleStyle={{color:'#0A6ADA'}} title="Đặt khám"
+                    <Button 
+                        buttonStyle={[
+                            styles.mainButton,{
+                            marginLeft: 40                        
+                        }]}
+                        titleStyle={{color:'#0A6ADA'}} 
+                        title="Đặt khám"
+                        
                     >\</Button>  
 
-                    <Button buttonStyle={[styles.mainButton,{
-                        marginRight:40
-                    }]}
-                    titleStyle={{color:'#0A6ADA'}} title="Đặt xét nghiệm"
+                    <Button 
+                        buttonStyle={[
+                            styles.mainButton,{
+                            marginRight:40
+                        }]}
+                        titleStyle={{color:'#0A6ADA'}} 
+                        title="Đặt xét nghiệm"
+                        onPress={() => this.props.navigation.navigate('RequestTestList')}
                     >\</Button>   
 
                 </View>
