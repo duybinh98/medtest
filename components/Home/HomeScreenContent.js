@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Image, Text, Dimensions} from 'react-native';
 import {Button} from 'react-native-elements';
-import ScreenBackGround from './ScreenBackGround';
+import ScreenBackGround from './../Common/ScreenBackGround';
 import HomeScreenArticleArea from './HomeScreenArticleArea';
 
 export default class HomeScreenContent extends Component {

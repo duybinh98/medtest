@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {View,Text,Image,StyleSheet} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
-import CustomIcon from './CustomIcon';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 

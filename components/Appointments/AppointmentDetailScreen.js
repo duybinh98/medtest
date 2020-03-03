@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import ScreenTopMenu from './ScreenTopMenu';
+import ScreenTopMenu from './../Common/ScreenTopMenu';
 
 
 

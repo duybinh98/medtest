@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
-import { TextInput, ScrollView } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 import { Button, Icon } from 'react-native-elements';
-import ScreenTopMenu from './ScreenTopMenu';
+import ScreenTopMenu from './../Common/ScreenTopMenu';
 
 
 
 const { width: WIDTH } = Dimensions.get('window')
 
-export default class ChangePassword extends Component {
+export default class ForgottenPassword extends Component {
     render() {
         return (
-            <ScrollView style={{ flex: 1 }}>
+            <View>
                 <ScreenTopMenu></ScreenTopMenu>
                 <View>
                     <View style={styles.logoContainer}>
-                        <Text style={styles.logoText}>Đổi mật khẩu</Text>
+                        <Text style={styles.logoText}>Quên mật khẩu</Text>
                     </View>
                 </View>
                 <View style={styles.inputContainer}>
                     <Icon
-                        name='lock-question'
+                        name='cellphone'
                         type='material-community'
                         color='black'
                         size={32}
@@ -28,14 +28,13 @@ export default class ChangePassword extends Component {
                     ></Icon>
                     <TextInput
                         style={styles.input}
-                        secureTextEntry={true}
-                        placeholder={'Mật khẩu cũ'}
+                        placeholder={'Số điện thoại'}
                         underlineColorAndroid='transparent'
                     />
                 </View>
                 <View style={styles.inputContainer}>
                     <Icon
-                        name='lock-question'
+                        name='email-outline'
                         type='material-community'
                         color='black'
                         size={32}
@@ -43,32 +42,16 @@ export default class ChangePassword extends Component {
                     ></Icon>
                     <TextInput
                         style={styles.input}
-                        secureTextEntry={true}
-                        placeholder={'Mật khẩu mới'}
-                        underlineColorAndroid='transparent'
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Icon
-                        name='lock-question'
-                        type='material-community'
-                        color='black'
-                        size={32}
-                        iconStyle={styles.inputIcon}
-                    ></Icon>
-                    <TextInput
-                        style={styles.input}
-                        secureTextEntry={true}
-                        placeholder={'Xác nhận mật khẩu mới'}
+                        placeholder={'Email'}
                         underlineColorAndroid='transparent'
                     />
                 </View>
                 <TouchableOpacity style={styles.btnRsPassword}>
-                    <Text style={styles.textBtn}>Xác nhận đổi mật khẩu</Text>
+                    <Text style={styles.textBtn}>Thay đổi mật khẩu</Text>
                 </TouchableOpacity>
                 <View>
                 </View>
-            </ScrollView>
+            </View>
         );
     }
 }
@@ -76,6 +59,20 @@ export default class ChangePassword extends Component {
 //#0A6ADA
 //#27CDCB
 const styles = StyleSheet.create({
+    backIcon: {
+        position: "absolute",
+        top: 10,
+        left: 20,
+    },
+    nameHeader: {
+        alignItems: "center",
+        backgroundColor: '#25345D',
+    },
+    nameText: {
+        margin: 10,
+        fontSize: 25,
+        color: 'white',
+    },
     logoContainer: {
         marginTop: 30,
         alignItems: 'center',
@@ -94,7 +91,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#0A6ADA',
         backgroundColor: 'rgba(255,255,255,0.7)',
-        color: 'black',
+        color: 'rgba(255,255,255,0.7)',
         marginHorizontal: 25
     },
     inputIcon: {

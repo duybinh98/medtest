@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
-import CustomIcon from './CustomIcon'
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
-import HomeScreen from './HomeScreen';
-import LoginScreen from './LoginScreen';
-import RequestListScreen from './RequestListScreen';
-import AppointmentListScreen from './AppointmentListScreen';
+import HomeScreen from './Home/HomeScreen';
+import LoginScreen from './Authentication/LoginScreen';
+import RequestListScreen from './Requests/RequestListScreen';
+import AppointmentListScreen from './Appointments/AppointmentListScreen';
 export default class Navigator extends Component {    
     render(){
         return(
             <NavigationContainer>
-                <Drawer.Navigator initialRouteName="AppointmentList" drawerContent={props => CustomDrawerContent(props)}>
+                <Drawer.Navigator initialRouteName="Home" drawerContent={props => CustomDrawerContent(props)}>
                 <Drawer.Screen name="Home" component={HomeScreen} />
                 <Drawer.Screen name="RequestList" component={RequestListScreen} />
                 <Drawer.Screen name="AppointmentList" component={AppointmentListScreen} />

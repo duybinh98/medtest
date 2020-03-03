@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
-import ScreenTopMenu from './ScreenTopMenu';
 import { RadioButton } from 'react-native-paper';
-import ScreenBottomMenu from './ScreenBottomMenu';
+import ScreenBottomMenu from './../Common/ScreenBottomMenu';
+import ScreenTopMenu from './../Common/ScreenTopMenu';
 
 
 

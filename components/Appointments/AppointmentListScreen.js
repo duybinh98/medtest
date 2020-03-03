@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView} from 'react-native';
-import ScreenTopMenu from './ScreenTopMenu';
-import ScreenBottomMenu from './ScreenBottomMenu';
-import RequestListItem from './RequestListItem';
+import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenBottomMenu from './../Common/ScreenBottomMenu';
+import RequestListItem from './../Requests/RequestListItem';
 
 export default class Request extends Component {
     let 

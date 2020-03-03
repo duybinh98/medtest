@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
-import { Button, Icon } from 'react-native-elements';
-import ScreenTopMenu from './ScreenTopMenu';
+import { TextInput, ScrollView } from 'react-native-gesture-handler';
+import { Icon } from 'react-native-elements';
+import ScreenTopMenu from './../Common/ScreenTopMenu';
 
-
-
-const { width: WIDTH } = Dimensions.get('window')
-
-export default class ForgottenPassword extends Component {
+export default class abc extends Component {
     render() {
         return (
-            <View>
-                <ScreenTopMenu></ScreenTopMenu>
+            <ScrollView style={{ flex: 1 }}>
+                <ScreenTopMenu {...this.props}></ScreenTopMenu>
                 <View>
                     <View style={styles.logoContainer}>
-                        <Text style={styles.logoText}>Quên mật khẩu</Text>
+                        <Image
+                            source={{ uri: 'https://getdrawings.com/free-icon/react-icon-69.png' }}
+                            style={styles.logo}
+                        ></Image>
+                        <Text style={styles.logoText}>Đăng nhập</Text>
                     </View>
                 </View>
                 <View style={styles.inputContainer}>
@@ -34,7 +34,7 @@ export default class ForgottenPassword extends Component {
                 </View>
                 <View style={styles.inputContainer}>
                     <Icon
-                        name='email-outline'
+                        name='lock-question'
                         type='material-community'
                         color='black'
                         size={32}
@@ -42,41 +42,44 @@ export default class ForgottenPassword extends Component {
                     ></Icon>
                     <TextInput
                         style={styles.input}
-                        placeholder={'Email'}
+                        secureTextEntry={true}
+                        placeholder={'Mật khẩu'}
                         underlineColorAndroid='transparent'
                     />
                 </View>
-                <TouchableOpacity style={styles.btnRsPassword}>
-                    <Text style={styles.textBtn}>Thay đổi mật khẩu</Text>
+                <TouchableOpacity style={styles.btnLogin}>
+                    <Text style={styles.textBtn}>Đăng nhập</Text>
                 </TouchableOpacity>
-                <View>
+                <View style={styles.textLinkView} >
+                    <Text
+                        style={styles.textLink}
+                        onPress={() => { alert("Change password") }}
+                    >Quên mật khẩu?</Text>
                 </View>
-            </View>
+                <View style={styles.textLinkView} >
+                    <Text
+                        style={styles.textLink}
+                        onPress={() => { alert("Signup") }}
+                    >Đăng ký ngay</Text>
+                </View>
+            </ScrollView>
         );
     }
 }
+const { width: WIDTH } = Dimensions.get('window')
 //#25345D
 //#0A6ADA
 //#27CDCB
 const styles = StyleSheet.create({
-    backIcon: {
-        position: "absolute",
-        top: 10,
-        left: 20,
-    },
-    nameHeader: {
-        alignItems: "center",
-        backgroundColor: '#25345D',
-    },
-    nameText: {
-        margin: 10,
-        fontSize: 25,
-        color: 'white',
+    logo: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
     },
     logoContainer: {
-        marginTop: 30,
+        marginTop: 20,
         alignItems: 'center',
-        marginBottom: 30
+        marginBottom: 20
     },
     logoText: {
         fontSize: 40,
@@ -91,7 +94,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#0A6ADA',
         backgroundColor: 'rgba(255,255,255,0.7)',
-        color: 'rgba(255,255,255,0.7)',
+        color: 'black',
         marginHorizontal: 25
     },
     inputIcon: {
@@ -102,13 +105,13 @@ const styles = StyleSheet.create({
     inputContainer: {
         marginTop: 10
     },
-    btnRsPassword: {
+    btnLogin: {
         width: WIDTH - 170,
         height: 45,
         borderRadius: 5,
         backgroundColor: '#0A6ADA',
         justifyContent: 'center',
-        marginTop: 40,
+        marginTop: 20,
         marginHorizontal: 85
     },
     textBtn: {
@@ -116,4 +119,15 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 16,
     },
+    textLinkView: {
+        marginHorizontal: 110,
+    },
+    textLink: {
+        color: 'gray',
+        marginTop: 20,
+        textAlign: "center",
+        textDecorationLine: 'underline',
+        fontSize: 16,
+    },
+
 })

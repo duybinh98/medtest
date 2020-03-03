@@ -1,33 +1,25 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import { TextInput, ScrollView } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
-import ScreenTopMenu from './ScreenTopMenu';
 import { RadioButton } from 'react-native-paper';
-
+import ScreenTopMenu from './../Common/ScreenTopMenu';
 
 
 const { width: WIDTH } = Dimensions.get('window')
 
 export default class ForgottenPassword extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            name: 'Nguyễn Văn A',
-            dob: '01/01/1970',
-            gender: 'Nữ',
-            address: 'Số 123 đường abc, xyz',
-            email: '123@123.com'
-        };
-    }
+    state = {
+        checked: 'Male',
+    };
     render() {
-        const { gender } = this.state;
+        const { checked } = this.state;
         return (
-            <ScrollView style={{ flex: 1 }}>
+            <View>
                 <ScreenTopMenu></ScreenTopMenu>
                 <View>
                     <View style={styles.logoContainer}>
-                        <Text style={styles.logoText}>Chỉnh sửa thông tin</Text>
+                        <Text style={styles.logoText}>Đăng ký</Text>
                     </View>
                 </View>
                 <View style={styles.inputContainer}>
@@ -42,28 +34,11 @@ export default class ForgottenPassword extends Component {
                         style={styles.input}
                         placeholder={'Tên hiển thị'}
                         underlineColorAndroid='transparent'
-                        defaultValue={this.state.name}
-                        onChangeText={
-                            (text) => {
-                                this.setState(
-                                    (previousState) => {
-                                        return {
-                                            name: text
-                                        };
-                                    }
-                                )
-                            }
-                        }
                     />
-                    {this.state.name != '' ? null : (
-                        <Text style={styles.errorMessage}>
-                            * Tên không được để trống.
-                        </Text>
-                    )}
                 </View>
                 <View style={styles.inputContainer}>
                     <Icon
-                        name='calendar'
+                        name='cellphone'
                         type='material-community'
                         color='black'
                         size={32}
@@ -71,70 +46,8 @@ export default class ForgottenPassword extends Component {
                     ></Icon>
                     <TextInput
                         style={styles.input}
-                        placeholder={'Ngày sinh'}
+                        placeholder={'Số điện thoại'}
                         underlineColorAndroid='transparent'
-                        defaultValue={this.state.dob}
-                        onChangeText={
-                            (text) => {
-                                this.setState(
-                                    (previousState) => {
-                                        return {
-                                            dob: text
-                                        };
-                                    }
-                                )
-                            }
-                        }
-                    />
-                </View>
-                <View style={styles.radioGroup} >
-                    <Icon
-                        name='human-male-female'
-                        type='material-community'
-                        color='black'
-                        size={32}
-                        iconStyle={styles.genderIcon}
-                    ></Icon>
-                    <View style={styles.RadioButton}>
-                        <RadioButton
-                            value="Nam"
-                            gender={true}
-                            status={gender === 'Nam' ? 'checked' : 'unchecked'}
-                            onPress={() => { this.setState({ gender: 'Nam' }); }}
-                        />
-                        <Text style={styles.radioName}>Nam</Text>
-                        <RadioButton
-                            value="Nữ"
-                            status={gender === 'Nữ' ? 'checked' : 'unchecked'}
-                            onPress={() => { this.setState({ gender: 'Nữ' }); }}
-                        />
-                        <Text style={styles.radioName}>Nữ</Text>
-                    </View>
-                </View>
-                <View style={styles.inputContainer}>
-                    <Icon
-                        name='map-marker'
-                        type='material-community'
-                        color='black'
-                        size={32}
-                        iconStyle={styles.inputIcon}
-                    ></Icon>
-                    <TextInput
-                        style={styles.input}
-                        placeholder={'Địa chỉ'}
-                        underlineColorAndroid='transparent'
-                        defaultValue={this.state.address}
-                        onChangeText={
-                            (text) => {
-                                this.setState(
-                                    (previousState) => {
-                                        return {
-                                            address: text
-                                        };
-                                    }
-                                )
-                            }
-                        }
                     />
                 </View>
                 <View style={styles.inputContainer}>
@@ -149,47 +62,112 @@ export default class ForgottenPassword extends Component {
                         style={styles.input}
                         placeholder={'Email'}
                         underlineColorAndroid='transparent'
-                        autoCompleteType={'email'}
-                        defaultValue={this.state.email}
-                        onChangeText={
-                            (text) => {
-                                this.setState(
-                                    (previousState) => {
-                                        return {
-                                            email: text
-                                        };
-                                    }
-                                )
-                            }
-                        }
                     />
                 </View>
-                <TouchableOpacity style={styles.btnConfirm}>
-                    <Text style={styles.textBtn}>Xác nhận</Text>
+
+                <View style={styles.inputContainer}>
+                    <Icon
+                        name='calendar'
+                        type='material-community'
+                        color='black'
+                        size={32}
+                        iconStyle={styles.inputIcon}
+                    ></Icon>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={'Ngày sinh'}
+                        underlineColorAndroid='transparent'
+                    />
+                </View>
+                <View style={styles.radioGroup} >
+                    <Icon
+                        name='human-male-female'
+                        type='material-community'
+                        color='black'
+                        size={32}
+                        iconStyle={styles.genderIcon}
+                    ></Icon>
+                    <View style={styles.RadioButton}>
+                        <RadioButton
+                            value="Male"
+                            checked={true}
+                            status={checked === 'Male' ? 'checked' : 'unchecked'}
+                            onPress={() => { this.setState({ checked: 'Male' }); }}
+                        />
+                        <Text style={styles.radioName}>Nam</Text>
+                        <RadioButton
+                            value="Female"
+                            status={checked === 'Female' ? 'checked' : 'unchecked'}
+                            onPress={() => { this.setState({ checked: 'Female' }); }}
+                        />
+                        <Text style={styles.radioName}>Nữ</Text>
+                    </View>
+
+                </View>
+                <View style={styles.inputContainer}>
+                    <Icon
+                        name='lock-question'
+                        type='material-community'
+                        color='black'
+                        size={32}
+                        iconStyle={styles.inputIcon}
+                    ></Icon>
+                    <TextInput
+                        style={styles.input}
+                        secureTextEntry={true}
+                        placeholder={'Mật khẩu'}
+                        underlineColorAndroid='transparent'
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <Icon
+                        name='lock-question'
+                        type='material-community'
+                        color='black'
+                        size={32}
+                        iconStyle={styles.inputIcon}
+                    ></Icon>
+                    <TextInput
+                        style={styles.input}
+                        secureTextEntry={true}
+                        placeholder={'Xác nhận mật khẩu'}
+                        underlineColorAndroid='transparent'
+                    />
+                </View>
+                <TouchableOpacity style={styles.btnRegister}>
+                    <Text style={styles.textBtn}>Đăng ký</Text>
                 </TouchableOpacity>
                 <View>
                 </View>
-            </ScrollView>
+            </View>
         );
     }
 }
-
-
 //#25345D
 //#0A6ADA
 //#27CDCB
 const styles = StyleSheet.create({
-    errorMessage: {
-        color: 'red',
-        textAlign: "center",
+    backIcon: {
+        position: "absolute",
+        top: 10,
+        left: 20,
+    },
+    nameHeader: {
+        alignItems: "center",
+        backgroundColor: '#25345D',
+    },
+    nameText: {
+        margin: 10,
+        fontSize: 25,
+        color: 'white',
     },
     logoContainer: {
-        marginTop: 30,
+        marginTop: 10,
         alignItems: 'center',
-        marginBottom: 20
+        marginBottom: 10
     },
     logoText: {
-        fontSize: 30,
+        fontSize: 40,
         color: '#25345D',
     },
     input: {
@@ -212,13 +190,13 @@ const styles = StyleSheet.create({
     inputContainer: {
         marginTop: 7
     },
-    btnConfirm: {
+    btnRegister: {
         width: WIDTH - 170,
         height: 45,
         borderRadius: 5,
         backgroundColor: '#0A6ADA',
         justifyContent: 'center',
-        marginTop: 40,
+        marginTop: 20,
         marginHorizontal: 85
     },
     textBtn: {
