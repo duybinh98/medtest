@@ -37,7 +37,12 @@ const renderField = ({
     );
 }
 
+const submit = values => {
+    alert(`Validation success. Values = ~${JSON.stringify(values)}`);
+}
+
 const LoginComponent = props => {
+    const { handleSubmit } = props;
     return (
         <ScrollView style={{ flex: 1 }}>
             <ScreenTopMenu ></ScreenTopMenu>
@@ -59,7 +64,7 @@ const LoginComponent = props => {
                 validate={[required]}
                 warn={isWeakPassword}
             />
-            <TouchableOpacity style={styles.btnLogin}>
+            <TouchableOpacity style={styles.btnLogin} onPress={handleSubmit(submit)}>
                 <Text style={styles.textBtn}>Đăng nhập</Text>
             </TouchableOpacity>
             <View style={styles.textLinkView} >
@@ -125,7 +130,8 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#0A6ADA',
         backgroundColor: 'rgba(255,255,255,0.7)',
-        color: 'rgba(255,255,255,0.7)',
+        // color: 'rgba(255,255,255,0.7)',
+        color: 'black',
         marginHorizontal: 25
     },
     inputIcon: {
