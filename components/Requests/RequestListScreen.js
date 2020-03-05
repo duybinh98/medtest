@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView} from 'react-native';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import RequestListItem from './RequestListItem';
 
@@ -9,7 +9,7 @@ export default class RequestListScreen extends Component {
     render(){
         return(
                 <View style={{flex:1}}>
-                    <ScreenTopMenu {...this.props}></ScreenTopMenu>
+                    <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                     <View 
                         style ={styles.background}>            
                         <View style={styles.titleArea}>     
@@ -18,7 +18,7 @@ export default class RequestListScreen extends Component {
                         <RequestListArea></RequestListArea>
                     </View>
                     
-                    <ScreenBottomMenu></ScreenBottomMenu>
+                    <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
                 </View>  
         );
     }

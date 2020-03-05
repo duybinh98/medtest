@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-nati
 import { TextInput } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { RadioButton } from 'react-native-paper';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 
 
 const { width: WIDTH } = Dimensions.get('window')
@@ -16,7 +16,7 @@ export default class ForgottenPassword extends Component {
         const { checked } = this.state;
         return (
             <View>
-                <ScreenTopMenu></ScreenTopMenu>
+                <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                 <View>
                     <View style={styles.logoContainer}>
                         <Text style={styles.logoText}>Đăng ký</Text>

@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 
 export default class abc extends Component {
     render() {
         return (
             <ScrollView style={{ flex: 1 }}>
-                <ScreenTopMenu {...this.props}></ScreenTopMenu>
+                <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                 <View>
                     <View style={styles.logoContainer}>
                         <Image

@@ -18,7 +18,7 @@ export default class HomeScreenContent extends Component {
                         }]}
                         titleStyle={{color:'#0A6ADA'}} 
                         title="Đặt khám"
-                        
+                        onPress={() => this.props.navigation.navigate('AppointmentDetailScreen')}
                     >\</Button>  
 
                     <Button 
@@ -28,7 +28,7 @@ export default class HomeScreenContent extends Component {
                         }]}
                         titleStyle={{color:'#0A6ADA'}} 
                         title="Đặt xét nghiệm"
-                        onPress={() => this.props.navigation.navigate('RequestTestList')}
+                        onPress={() => this.props.navigation.navigate('RequestTestListScreen')}
                     >\</Button>   
 
                 </View>

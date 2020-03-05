@@ -11,7 +11,7 @@ export default class HomeScreen extends Component {
                 <View style={{flex:1}}>
                     <ScreenTopMenu {...this.props}></ScreenTopMenu>
                     <HomeScreenContent {...this.props}></HomeScreenContent>
-                    <ScreenBottomMenu></ScreenBottomMenu>
+                    <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
                 </View>  
         );
     }

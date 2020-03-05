@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity} from 'react-native';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestSelectItem from './TestSelectItem'
@@ -10,7 +10,7 @@ export default class HomeScreen extends Component {
     render(){
         return(
                 <View style={{flex:1}}>
-                    <ScreenTopMenu {...this.props}></ScreenTopMenu>
+                    <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                     <View 
                         style ={styles.background}>            
                         <View style={styles.titleArea}>     
@@ -25,13 +25,13 @@ export default class HomeScreen extends Component {
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
                                 style={styles.btnConfirm}
-                                onPress={() => this.props.navigation.navigate('RequestConfirm')}
+                                onPress={() => this.props.navigation.navigate('RequestPersionalInformation')}
                                 >
                                 <Text style={styles.textBtn}>Đặt xét nghiệm</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <ScreenBottomMenu></ScreenBottomMenu>
+                    <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
                 </View>  
         );
     }
