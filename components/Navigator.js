@@ -140,7 +140,7 @@ function CustomDrawerContent(props){
           navigator = {props.navigation}
         />  
         <MenuButtonContainer 
-          screenName='HomeScreen'
+          screenName='LoginScreen'
           iconName='logout'
           iconType='antdesign'
           iconColor='#0A6ADA'

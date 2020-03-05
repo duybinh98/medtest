@@ -4,7 +4,7 @@ import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 
-export default class abc extends Component {
+export default class LoginScreen extends Component {
     render() {
         return (
             <ScrollView style={{ flex: 1 }}>
@@ -53,13 +53,13 @@ export default class abc extends Component {
                 <View style={styles.textLinkView} >
                     <Text
                         style={styles.textLink}
-                        onPress={() => { alert("Change password") }}
+                        onPress={() => this.props.navigation.navigate('ResetPasswordScreen')}
                     >Quên mật khẩu?</Text>
                 </View>
                 <View style={styles.textLinkView} >
                     <Text
                         style={styles.textLink}
-                        onPress={() => { alert("Signup") }}
+                        onPress={() => this.props.navigation.navigate('RegisterScreen')}
                     >Đăng ký ngay</Text>
                 </View>
             </ScrollView>
