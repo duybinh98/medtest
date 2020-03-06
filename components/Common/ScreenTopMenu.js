@@ -25,6 +25,7 @@ export default class ScreenTopMenu extends Component {
                     color='yellow'
                     size= {30}
                     iconStyle={[styles.button,{marginRight:20,height:30,width:30}]}
+                    onPress={() => this.props.navigation.navigate('NotificationListScreen')}
                 ></Icon> 
             </View>            
         );
@@ -33,7 +34,7 @@ export default class ScreenTopMenu extends Component {
 
 const styles = StyleSheet.create({
     menuArea:{
-        height:60, 
+        height:50, 
         backgroundColor: '#25345D',
         flexDirection: 'row',
         alignItems: 'center'

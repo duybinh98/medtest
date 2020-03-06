@@ -37,7 +37,7 @@ export default class ScreenBottomMenu extends Component {
 
 const styles = StyleSheet.create({
     menuArea:{
-        height:60, 
+        height:50, 
         backgroundColor: '#25345D',
         flexDirection: 'row',
         alignItems: 'center',

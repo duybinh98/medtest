@@ -3,19 +3,27 @@ import {View, StyleSheet, Image, Text, Dimensions, TouchableOpacity} from 'react
 import {Button} from 'react-native-elements';
 import ScreenBackGround from './../Common/ScreenBackGround';
 
-export default class HomeScreenArticle extends Component {
+export default class ArticleListItem extends Component {
     render(){
+        const _imageUri = this.props.imageUri;
+        const _title = this.props.title;
+        const _shortContent = this.props.shortContent;
         return(
             <TouchableOpacity 
-                style={styles.articleArea}>
+                style={styles.articleArea}
+                onPress={() => this.props.navigation.navigate('ArticleViewScreen',{
+                                    imageUri:_imageUri,
+                                    title:_title
+                                })}
+                >
                 
                     <Image 
-                        source={{uri:this.props.imageUri}}
+                        source={{uri:_imageUri}}
                         style={styles.articleImage}
                         ></Image>
                     <View style={styles.articleTextArea}>
-                        <Text style={styles.articleTitle}>{this.props.title}</Text>
-                        <Text style={styles.articleShortContent}>{this.props.shortContent}</Text>
+                        <Text style={styles.articleTitle}>{_title}</Text>
+                        <Text style={styles.articleShortContent}>{_shortContent}</Text>
                 </View>                    
             </TouchableOpacity>        
         );

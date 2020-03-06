@@ -15,7 +15,9 @@ import LoginScreen from './Authentication/LoginScreen';
 import RegisterScreen from './Authentication/RegisterScreen';
 import ResetPasswordScreen from './Authentication/ResetPasswordScreen';
 
+import ArticleViewScreen from './Home/ArticleViewScreen';
 import HomeScreen from './Home/HomeScreen';
+import NotificationListScreen from './Home/NotificationListScreen';
 
 import RequestConfirmScreen from './Requests/RequestConfirmScreen';
 import RequestListScreen from './Requests/RequestListScreen';
@@ -27,7 +29,7 @@ export default class Navigator extends Component {
     render(){
         return(
             <NavigationContainer>
-                <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => CustomDrawerContent(props)}>
+              <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => CustomDrawerContent(props)}>
                 <Drawer.Screen name="ChangePassword" component={ChangePassword} />
                 <Drawer.Screen name="CustomerInformation" component={CustomerInformation} />
                 <Drawer.Screen name="UpdateInformation" component={UpdateInformation} />
@@ -39,14 +41,16 @@ export default class Navigator extends Component {
                 <Drawer.Screen name="RegisterScreen" component={RegisterScreen} />
                 <Drawer.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
 
+                <Drawer.Screen name="ArticleViewScreen" component={ArticleViewScreen} />
                 <Drawer.Screen name="HomeScreen" component={HomeScreen} />
+                <Drawer.Screen name="NotificationListScreen" component={NotificationListScreen} />
 
                 <Drawer.Screen name="RequestConfirmScreen" component={RequestConfirmScreen} />
                 <Drawer.Screen name="RequestListScreen" component={RequestListScreen} />                
                 <Drawer.Screen name="RequestPersionalInformation" component={RequestPersionalInformation} />                
                 <Drawer.Screen name="RequestTestListScreen" component={RequestTestListScreen} />                
                 <Drawer.Screen name="RequestViewScreen" component={RequestViewScreen} />
-                </Drawer.Navigator>                                        
+              </Drawer.Navigator>                                        
             </NavigationContainer>
             
         );
