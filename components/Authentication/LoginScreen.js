@@ -57,7 +57,7 @@ const LoginComponent = props => {
             </View>
             <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
                 iconType="material-community" placeholder="Số điện thoại" secureText={false}
-                validate={[required, isPhonenumber, isNumber]}
+                validate={[required, isNumber, isPhonenumber]}
             />
             <Field name="password" keyboardType="default" component={renderField} iconName="lock-question"
                 iconType="material-community" placeholder="Mật khẩu" secureText={true}

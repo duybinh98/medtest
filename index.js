@@ -18,6 +18,8 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import ContactForm from './components/Authentication/ContactForm';
 import LoginForm from './components/Authentication/LoginScreen';
+import RegisterForm from './components/Authentication/RegisterScreen';
+import AppointmentForm from './components/Appointments/CreateAppointmentScreen';
 
 // const handleSubmit = values => {
 //     alert(`Submitting form with values = ${values}`);
@@ -27,8 +29,10 @@ export default class appForm extends Component {
     render(){
         return(
             <Provider store = {store}>
-                <LoginForm/>
+                {/* <LoginForm/> */}
                 {/* <ContactForm/> */}
+                <AppointmentForm/>
+                {/* <RegisterForm/> */}
             </Provider>
         );
     }

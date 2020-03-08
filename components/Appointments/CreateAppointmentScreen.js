@@ -12,10 +12,6 @@ import { format } from 'date-fns';
 const required = values => values ? undefined : 'Bắt buộc';
 const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
 const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
-const isEmail = values =>
-    values && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values) ? 'Email không hợp lệ' : undefined;
-const isWeakPassword = values => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
-
 
 const renderField = ({
     iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
@@ -52,14 +48,16 @@ const submit = values => {
 
 const { width: WIDTH } = Dimensions.get('window')
 
-class RegisterScreen extends Component {
+class CreateAppointmentScreen extends Component {
     state = {
         name: '',
         phonenumber: '',
         email: '',
         dob: '',
+        apointmentDate: '',
+        apointmentTime: '',
         password: '',
-        checked: 'Male',       
+        checked: 'Male',
     };
     render() {
         const { handleSubmit } = this.props;
@@ -70,11 +68,11 @@ class RegisterScreen extends Component {
                     <ScreenTopMenu></ScreenTopMenu>
                     <View>
                         <View style={styles.logoContainer}>
-                            <Text style={styles.logoText}>Đăng ký</Text>
+                            <Text style={styles.logoText}>Đặt lịch khám</Text>
                         </View>
                     </View>
                     <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
-                        iconType="material-community" placeholder="Tên hiển thị" secureText={false} 
+                        iconType="material-community" placeholder="Tên hiển thị" secureText={false}
                         // onChange ={(text) => {this.setState({username : text})}}
                         validate={[required]}
                     />
@@ -82,12 +80,8 @@ class RegisterScreen extends Component {
                         iconType="material-community" placeholder="Số điện thoại" secureText={false}
                         validate={[required, isNumber, isPhonenumber]}
                     />
-                    <Field name="email" keyboardType="email-address" component={renderField} iconName="email-outline"
-                        iconType="material-community" placeholder="Email" secureText={false}
-                        validate={[required, isEmail]}
-                    />
                     <View style={styles.inputContainer}>
-                        <DatePicker                    
+                        <DatePicker
                             style={styles.DatePicker}
                             date={this.state.dob}
                             mode="date"
@@ -115,40 +109,61 @@ class RegisterScreen extends Component {
                             onDateChange={(date) => { this.setState({ dob: date }) }}
                         />
                     </View>
-                    <View style={styles.radioGroup} >
-                        <View style={styles.genderContainer}>
-                            <Icon
-                                name='human-male-female'
-                                type='material-community'
-                                color='black'
-                                size={32}
-                                iconStyle={styles.genderIcon}
-                            ></Icon>
-                            <View style={styles.RadioButton}>
-                                <RadioButton
-                                    value="Male"
-                                    checked={true}
-                                    status={checked === 'Male' ? 'checked' : 'unchecked'}
-                                    onPress={() => { this.setState({ checked: 'Male' }); }}
-                                />
-                                <Text style={styles.radioName}>Nam</Text>
-                                <RadioButton
-                                    value="Female"
-                                    status={checked === 'Female' ? 'checked' : 'unchecked'}
-                                    onPress={() => { this.setState({ checked: 'Female' }); }}
-                                />
-                                <Text style={styles.radioName}>Nữ</Text>
-                            </View>
-                        </View>
+                    <View style={styles.inputContainer}>
+                        <DatePicker
+                            style={styles.DatePicker}
+                            date={this.state.apointmentDate}
+                            mode="date"
+                            placeholder="Ngày hẹn"
+                            format="DD-MM-YYYY"
+                            minDate={new Date()}
+                            customStyles={{
+                                dateIcon: {
+                                    position: 'absolute',
+                                    left: 7,
+                                    top: 4,
+                                    marginLeft: 0,
+                                },
+                                dateInput: {
+                                    borderRadius: 15,
+                                    height: 45,
+                                    borderRadius: 15,
+                                    borderWidth: 2,
+                                    borderColor: '#0A6ADA',
+                                    backgroundColor: 'rgba(255,255,255,0.7)',
+                                    width: 250,
+                                }
+                            }}
+                            onDateChange={(date) => { this.setState({ apointmentDate: date }) }}
+                        />
                     </View>
-                    <Field name="password" keyboardType="default" component={renderField} iconName="lock-question"
-                        iconType="material-community" placeholder="Mật khẩu" secureText={true}
-                        validate={[required,isWeakPassword]}
-                    />
-                    <Field name="cfPassword" keyboardType="default" component={renderField} iconName="lock-question"
-                        iconType="material-community" placeholder="Xác nhận mật khẩu" secureText={true}
-                        validate={[required,isWeakPassword]}                       
-                    />
+                    <View style={styles.inputContainer}>
+                        <DatePicker
+                            style={styles.DatePicker}
+                            date={this.state.apointmentTime}
+                            mode="time"
+                            placeholder="Giờ hẹn"
+                            format="HH:mm"
+                            customStyles={{
+                                dateIcon: {
+                                    position: 'absolute',
+                                    left: 7,
+                                    top: 4,
+                                    marginLeft: 0,
+                                },
+                                dateInput: {
+                                    borderRadius: 15,
+                                    height: 45,
+                                    borderRadius: 15,
+                                    borderWidth: 2,
+                                    borderColor: '#0A6ADA',
+                                    backgroundColor: 'rgba(255,255,255,0.7)',
+                                    width: 250,
+                                }
+                            }}
+                            onDateChange={(time) => { this.setState({ apointmentTime: time }) }}
+                        />
+                    </View>
                     <TouchableOpacity style={styles.btnRegister} onPress={handleSubmit(submit)}>
                         <Text style={styles.textBtn}>Đăng ký</Text>
                     </TouchableOpacity>
@@ -160,10 +175,10 @@ class RegisterScreen extends Component {
     }
 }
 
-const RegisterForm = reduxForm({
-    form: 'register',
-})(RegisterScreen);
-export default RegisterForm;
+const AppointmentForm = reduxForm({
+    form: 'createAppointment',
+})(CreateAppointmentScreen);
+export default AppointmentForm;
 //#25345D
 //#0A6ADA
 //#27CDCB
@@ -233,25 +248,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 16,
     },
-    radioGroup: {
-        width: WIDTH - 25,
-        height: 60,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginHorizontal: 15,
-        backgroundColor: 'white'
-    },
-    genderContainer: {
-        width: WIDTH - 55,
-        height: 45,
-        borderRadius: 15,
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        borderWidth: 2,
-        borderColor: '#0A6ADA',
-        backgroundColor: 'rgba(255,255,255,0.7)',
-    },
     radioName: {
         marginTop: 7,
         fontSize: 16,
@@ -262,11 +258,6 @@ const styles = StyleSheet.create({
         top: 5,
         left: 5,
         color: 'gray',
-    },
-    RadioButton: {
-        flexDirection: 'row',
-        paddingLeft: 20,
-        paddingTop: 2,
     },
     DatePicker: {
         width: WIDTH - 55,
