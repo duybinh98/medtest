@@ -20,6 +20,8 @@ import ContactForm from './components/Authentication/ContactForm';
 import LoginForm from './components/Authentication/LoginScreen';
 import RegisterForm from './components/Authentication/RegisterScreen';
 import AppointmentForm from './components/Appointments/CreateAppointmentScreen';
+import ChangePasswordForm from './components/Account/ChangePassword';
+import ResetPasswordForm from './components/Authentication/ResetPasswordScreen';
 
 // const handleSubmit = values => {
 //     alert(`Submitting form with values = ${values}`);
@@ -31,8 +33,10 @@ export default class appForm extends Component {
             <Provider store = {store}>
                 {/* <LoginForm/> */}
                 {/* <ContactForm/> */}
-                <AppointmentForm/>
+                {/* <ChangePasswordForm/> */}
+                {/* <AppointmentForm/> */}
                 {/* <RegisterForm/> */}
+                <ResetPasswordForm/>
             </Provider>
         );
     }

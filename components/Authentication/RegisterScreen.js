@@ -171,21 +171,7 @@ const styles = StyleSheet.create({
     background: {
         flex: 1,
         backgroundColor: '#f1f0f0',
-    },
-    backIcon: {
-        position: "absolute",
-        top: 10,
-        left: 20,
-    },
-    nameHeader: {
-        alignItems: "center",
-        backgroundColor: '#25345D',
-    },
-    nameText: {
-        margin: 10,
-        fontSize: 25,
-        color: 'white',
-    },
+    },  
     logoContainer: {
         marginTop: 10,
         alignItems: 'center',

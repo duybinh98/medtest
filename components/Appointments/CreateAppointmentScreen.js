@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
-import { RadioButton } from 'react-native-paper';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
-import { format } from 'date-fns';
 
 
 const required = values => values ? undefined : 'Bắt buộc';
@@ -39,11 +37,7 @@ const renderField = ({
 
 
 const submit = values => {
-    if (values.cfPassword !== values.password) {
-        alert("Xác nhận mật khẩu không đúng!")
-    } else {
         alert(`Validation success. Values = ~${JSON.stringify(values)}`);
-    }
 }
 
 const { width: WIDTH } = Dimensions.get('window')
@@ -52,16 +46,12 @@ class CreateAppointmentScreen extends Component {
     state = {
         name: '',
         phonenumber: '',
-        email: '',
         dob: '',
         apointmentDate: '',
         apointmentTime: '',
-        password: '',
-        checked: 'Male',
     };
     render() {
         const { handleSubmit } = this.props;
-        const { checked } = this.state;
         return (
             <View style={styles.background}>
                 <ScrollView>
