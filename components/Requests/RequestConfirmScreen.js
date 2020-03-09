@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity} from 'react-native';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
@@ -18,7 +18,7 @@ constructor(props) {
     render(){
         return(
                 <View style={{flex:1}}>
-                    <ScreenTopMenu {...this.props}></ScreenTopMenu>
+                    <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                     <ScrollView 
                         style ={styles.background}                                            
                         showsVerticalScrollIndicator={false}
@@ -64,12 +64,13 @@ constructor(props) {
                         </View>
                         <RequestTestListArea></RequestTestListArea>
                         <View style={styles.buttonContainer}>
-                            <TouchableOpacity style={styles.btnConfirm}>
+                            <TouchableOpacity style={styles.btnConfirm} 
+                                onPress={() => this.props.navigation.navigate('RequestViewScreen')}>
                                 <Text style={styles.textBtn}>Xác nhận</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>
-                    <ScreenBottomMenu></ScreenBottomMenu>
+                    <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
                 </View>  
         );
     }

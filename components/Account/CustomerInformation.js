@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 
 
 
@@ -25,7 +25,7 @@ export default class ForgottenPassword extends Component {
         const { gender } = this.state;
         return (
             <ScrollView style={{ flex: 1 }}>
-                <ScreenTopMenu></ScreenTopMenu>
+                <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                 <View>
                     <View style={styles.logoContainer}>
                         <ImageBackground

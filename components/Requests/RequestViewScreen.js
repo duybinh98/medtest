@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity} from 'react-native';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
@@ -24,7 +24,7 @@ constructor(props) {
     render(){
         return(
                 <View style={{flex:1}}>
-                    <ScreenTopMenu {...this.props}></ScreenTopMenu>
+                    <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                     <ScrollView 
                         style ={styles.background}                                            
                         showsVerticalScrollIndicator={false}
@@ -82,7 +82,7 @@ constructor(props) {
                                 <View style={{
                                     width:110
                                     }}>
-                                    <TouchableOpacity style={[styles.btnConfirm,{height:26,width:100}]}>
+                                    <TouchableOpacity style={[styles.btnConfirm,{height:26,width:100}]} onPress={() => this.props.navigation.navigate('CustomerInformation')}>
                                         <Text style={[styles.textBtn,{fontSize:12}]}>Xem thông tin</Text>
                                     </TouchableOpacity>
                                 </View>                                                             
@@ -91,11 +91,14 @@ constructor(props) {
                         <RequestTestListArea></RequestTestListArea>
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity style={styles.btnConfirm}>
-                                <Text style={styles.textBtn}>Xác nhận</Text>
+                                <Text style={styles.textBtn}>Hủy đơn xét nghiệm</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.btnConfirm} onPress={() => this.props.navigation.navigate('HomeScreen')}>
+                                <Text style={styles.textBtn} >Ok</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>
-                    <ScreenBottomMenu></ScreenBottomMenu>
+                    <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
                 </View>  
         );
     }
@@ -234,7 +237,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         alignItems: 'flex-end',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         width:Dimensions.get('window').width-20,
         height:54,
         marginBottom:10

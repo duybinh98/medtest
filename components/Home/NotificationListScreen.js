@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Image, Text, Dimensions, FlatList, Alert} from 'react-native';
 import {Button} from 'react-native-elements';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenu';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
-import ArticleListItem from './ArticleListItem';
+import NotificationItem from './NotificationItem';
 import articlesList from './../../Data/Articles'
 
-export default class HomeScreen extends Component {
+export default class NotificationListScreen extends Component {
     constructor(props) {
     super(props);
     this.state = {
@@ -46,55 +46,28 @@ export default class HomeScreen extends Component {
         // } else {
         return(
                 <View style={{flex:1}}>
-                    <ScreenTopMenu {...this.props}></ScreenTopMenu>
+                    <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                     <View 
                         style ={styles.background}>            
-                        <View style={styles.mainButtonArea}>     
-
-                            <Button 
-                                buttonStyle={[
-                                    styles.mainButton,{
-                                    marginLeft: 40                        
-                                }]}
-                                titleStyle={{color:'#0A6ADA'}} 
-                                title="Đặt khám"
-                                onPress={() => this.props.navigation.navigate('AppointmentDetailScreen')}
-                            >\</Button>  
-
-                            <Button 
-                                buttonStyle={[
-                                    styles.mainButton,{
-                                    marginRight:40
-                                }]}
-                                titleStyle={{color:'#0A6ADA'}} 
-                                title="Đặt xét nghiệm"
-                                onPress={() => this.props.navigation.navigate('RequestTestListScreen')}
-                            >\</Button>   
-
-                        </View>
+                        
                         <FlatList
                             style={{                    
                             flex:1,
                             paddingLeft:10,
                             paddingRight:10,
+                            paddingTop:20
                             }}
                             keyboardShouldPersistTaps="always"
                             keyboardDismissMode='on-drag'
                             data={this.state.items}
                             renderItem={({item,index}) => {
                                 return (
-                                    <ArticleListItem 
-                                        // imageUri={item.imageUri}
-                                        // title={item.title}
-                                        // shortContent={item.shortContent}
+                                    <NotificationItem 
                                         // content={item.content}
-                                        imageUri={item.url}
-                                        title={item.title}
-                                        shortContent={item.title}
                                         content={item.title}
                                         navigation={this.props.navigation}
                                         >
-                                    </ArticleListItem>
+                                    </NotificationItem>
                                 );
                             }}
                         >                
@@ -112,25 +85,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#f1f0f0',
         flexDirection: 'column',
         alignItems: 'center'
-    },
-    mainButtonArea:{
-        height: 140,
-        width: Dimensions.get('window').width-20,
-        backgroundColor: 'white',
-        marginTop:15,
-        marginBottom:20,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingBottom:3,
-        borderRadius:10
-    },
-    mainButton:{
-        height:100,
-        width:100,                    
-        backgroundColor: 'white',
-        borderRadius: 5,
-        borderColor:'#0A6ADA',
-        borderWidth: 3
-    },    
+    }, 
 });

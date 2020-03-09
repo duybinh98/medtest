@@ -4,18 +4,18 @@ import {Button, Icon} from 'react-native-elements';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 
-export default class ScreenTopMenu extends Component {
+export default class ScreenTopMenuBack extends Component {
     render(){
         return(            
             <View style ={styles.menuArea}>                           
                 <Icon
-                    name='menu'
-                    type='entypo'
+                    name='chevron-left'
+                    type='Entypo'
                     color='#0A6ADA'
                     size= {40}
                     iconStyle={[styles.button,{marginLeft:20}]}
                     onPress= {() => {
-                    this.props.navigation.openDrawer();
+                    this.props.navigation.goBack();
                     }}
                 ></Icon>
                 <Text style={styles.title}> MedTest</Text>

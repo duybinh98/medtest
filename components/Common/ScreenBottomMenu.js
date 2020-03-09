@@ -12,6 +12,7 @@ export default class ScreenBottomMenu extends Component {
                     color='#0A6ADA'
                     size= {40}
                     iconStyle={[styles.button,{marginLeft:20}]}
+                    onPress={() => this.props.navigation.navigate('CustomerInformation')}
                 ></Icon>
                 
                 <Icon
@@ -20,13 +21,14 @@ export default class ScreenBottomMenu extends Component {
                     color='#0A6ADA'
                     size= {40}
                     iconStyle={[styles.button,{marginLeft:20}]}
+                    onPress={() => this.props.navigation.navigate('HomeScreen')}
                 ></Icon>
                 <Icon
                     name='phone-call'
                     type='feather'
                     color='#0A6ADA'
                     size= {40}
-                    iconStyle={[styles.button,{marginRight:20}]}
+                    iconStyle={[styles.button,{marginRight:20}]}                    
                 ></Icon>                
             </View>
         );
@@ -35,7 +37,7 @@ export default class ScreenBottomMenu extends Component {
 
 const styles = StyleSheet.create({
     menuArea:{
-        height:60, 
+        height:50, 
         backgroundColor: '#25345D',
         flexDirection: 'row',
         alignItems: 'center',

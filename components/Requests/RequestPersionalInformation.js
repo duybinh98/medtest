@@ -4,7 +4,7 @@ import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { RadioButton } from 'react-native-paper';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 
 
 
@@ -24,7 +24,7 @@ export default class ForgottenPassword extends Component {
         const { gender } = this.state;
         return (
             <ScrollView style={{ flex: 1 }}>
-                <ScreenTopMenu></ScreenTopMenu>
+                <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                 <View>
                     <View style={styles.logoContainer}>
                         <Text style={styles.logoText}>Thông tin lấy mẫu</Text>
@@ -139,7 +139,7 @@ export default class ForgottenPassword extends Component {
                         }
                     />
                 </View>
-                <TouchableOpacity style={styles.btnConfirm}>
+                <TouchableOpacity style={styles.btnConfirm} onPress={() => this.props.navigation.navigate('RequestConfirmScreen')}>
                     <Text style={styles.textBtn}>Tiếp</Text>
                 </TouchableOpacity>
                 <View>
