@@ -1,15 +1,76 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, Keyboard, FlatList, Alert} from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestSelectItem from './TestSelectItem'
+import testList from './../../Data/Test'
 
 export default class HomeScreen extends Component {
     
+    constructor(props){
+        super(props);
+        this.state={
+            showFooter: true,
+            selectedTest:[],
+        }
+        this.selectItem = this.selectItem.bind(this)
+    }
+    
+
+    selectItem(id) {
+        let _selectedTest = this.state.selectedTest;
+        const found = _selectedTest.findIndex(test => test == id);
+        found === -1 ? _selectedTest.push(id) : _selectedTest.splice(found, 1);
+        this.setState({            
+            selectedTest: _selectedTest
+        })
+        Alert.alert("this "+_selectedTest);
+    }
+    RenderFooter(){
+        if(this.state.showFooter){
+            return(
+                <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
+            )
+        } else {
+            return null
+        }
+    }
+
+    componentDidMount(){
+        this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+        this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+    }
+
+    // componentWillUnmount() {
+    //     this.keyboardDidShowSub.remove();
+    //     this.keyboardDidHideSub.remove();
+    // }
+
+    keyboardDidShow = (event) => {
+        console.log('keyboardDidShow')
+        this.setState({
+            showFooter: false
+        })
+    };
+
+    keyboardDidHide = (event) => {
+        console.log('keyboardDidHide')
+        this.setState({
+            showFooter: true
+        })
+    };
+
+
     render(){
         return(
-                <View style={{flex:1}}>
+                <View style={{
+                    flex:1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    }}>
                     <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                     <View 
                         style ={styles.background}>            
@@ -20,18 +81,49 @@ export default class HomeScreen extends Component {
                             style={styles.searchArea}
                             placeholder={'Tìm xét nghiệm'}
                             underlineColorAndroid='transparent'
-                        />
-                        <RequestTestListArea></RequestTestListArea>
+                        />                        
+                        <View style = {styles.TestListAreaBackground}>
+                            <View
+                                style = {styles.TestListArea}
+                                >
+                                <FlatList 
+                                    style ={styles.TestListAreaScrollView}                        
+                                    showsVerticalScrollIndicator={false}
+                                    data={testList}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({item}) => {
+                                            return (
+                                                <TestCategoryItem 
+                                                    categoryName={item.testType}
+                                                    totalPrice='100.000d'
+                                                    test = {item.test}
+                                                    viewOnly = {false}
+                                                    selectItem = {this.selectItem}
+                                                >
+                                                </TestCategoryItem>                                    
+                                            );
+                                        }}
+                                >                    
+                                </FlatList>
+                            </View>
+                        </View>
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
                                 style={styles.btnConfirm}
-                                onPress={() => this.props.navigation.navigate('RequestPersionalInformation')}
+                                onPress={() => this.props.navigation.dispatch(
+                                    CommonActions.navigate({
+                                        name: 'RequestPersionalInformation',
+                                        params: {
+                                            selectedTest: this.state.selectedTest,                                            
+                                        },
+                                    })
+                                )}
                                 >
                                 <Text style={styles.textBtn}>Đặt xét nghiệm</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
+                    {this.RenderFooter()}
                 </View>  
         );
     }
@@ -43,49 +135,32 @@ class RequestTestListArea extends Component{
     state = {
         isDone: false
     };    
-    render(){
+    render(){        
         return(
             <View style = {styles.TestListAreaBackground}>
                 <View
                     style = {styles.TestListArea}
                     >
-                    <ScrollView 
+                    <FlatList 
                         style ={styles.TestListAreaScrollView}                        
                         showsVerticalScrollIndicator={false}
-                    >
-                    <TestCategoryItem
-                        categoryName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh '
-                        totalPrice='100.000d'
-                    />
-                    <TestSelectItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh '
-                        testPrice='100.000d'
-                        iconName='crop-square'
-                        iconType='MaterialCommunityIcons'
-                    />
-                    <TestSelectItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                        iconName='check'
-                        iconType='AntDesign'
-                    />
-                    <TestCategoryItem
-                        categoryName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        totalPrice='100.000d'
-                    />
-                    <TestSelectItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                        iconName='crop-square'
-                        iconType='MaterialCommunityIcons'
-                    />
-                    <TestSelectItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                        iconName='check'
-                        iconType='AntDesign'
-                    />
-                    </ScrollView>
+                        data={testList}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({item}) => {
+                                return (
+                                    <TestCategoryItem 
+                                        categoryName={item.testType}
+                                        totalPrice='100.000d'
+                                        test = {item.test}
+                                        viewOnly = {false}
+                                        onPressItem = {this.onPressAction}
+                                        selected={false} 
+                                    >
+                                    </TestCategoryItem>                                    
+                                );
+                            }}
+                    >                    
+                    </FlatList>
                 </View>
             </View>
         );

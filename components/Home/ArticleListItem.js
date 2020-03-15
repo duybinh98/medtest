@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Image, Text, Dimensions, TouchableOpacity} from 'react-native';
 import {Button} from 'react-native-elements';
+import { CommonActions } from '@react-navigation/native';
 import ScreenBackGround from './../Common/ScreenBackGround';
 
 export default class ArticleListItem extends Component {
@@ -8,13 +9,20 @@ export default class ArticleListItem extends Component {
         const _imageUri = this.props.imageUri;
         const _title = this.props.title;
         const _shortContent = this.props.shortContent;
+        const _content = this.props.content;
         return(
             <TouchableOpacity 
                 style={styles.articleArea}
-                onPress={() => this.props.navigation.navigate('ArticleViewScreen',{
-                                    imageUri:_imageUri,
-                                    title:_title
-                                })}
+                onPress={() => this.props.navigation.dispatch(
+                    CommonActions.navigate({
+                        name: 'ArticleViewScreen',
+                        params: {
+                            imageUri: _imageUri,
+                            title: _title,
+                            content:_content
+                        },
+                    })
+                    )}
                 >
                 
                     <Image 

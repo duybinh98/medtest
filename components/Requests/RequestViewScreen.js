@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, FlatList} from 'react-native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
+import testList from './../../Data/Test'
 
 export default class RequestViewScreen extends Component {
 constructor(props) {
@@ -116,35 +117,25 @@ class RequestTestListArea extends Component{
                 <View
                     style = {styles.TestListArea}
                     >
-                    <ScrollView 
+                    <FlatList 
                         style ={styles.TestListAreaScrollView}                        
                         showsVerticalScrollIndicator={false}
-                    >
-                    <TestCategoryItem
-                        categoryName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh '
-                        totalPrice='100.000d'
-                    />
-                    <TestViewItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh '
-                        testPrice='100.000d'
-                    />
-                    <TestViewItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                    />
-                    <TestCategoryItem
-                        categoryName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        totalPrice='100.000d'
-                    />
-                    <TestViewItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                    />
-                    <TestViewItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                    />
-                    </ScrollView>
+                        scrollEnabled={false}
+                        data={testList}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({item}) => {
+                                return (
+                                    <TestCategoryItem 
+                                        categoryName={item.testType}
+                                        totalPrice='100.000d'
+                                        test = {item.test}
+                                        viewOnly = {true}
+                                        >
+                                    </TestCategoryItem>                                    
+                                );
+                            }}
+                    >                    
+                    </FlatList>
                 </View>
             </View>
         );
@@ -217,12 +208,17 @@ const styles = StyleSheet.create({
         color:'#25345D'
     },
     TestListAreaBackground:{
-        height:270,
+        width: Dimensions.get('window').width,
+        alignSelf: 'stretch',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginTop:5,
+        
     },
     TestListArea:{
         width: Dimensions.get('window').width-20,
-        flex:1,
+        alignSelf: 'stretch',
         backgroundColor:'white',
         borderRadius:10,
         padding:10,

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Image, StyleSheet} from 'react-native';
+import {View, Image, StyleSheet, Linking} from 'react-native';
 import {Button, Icon} from 'react-native-elements'
 
 export default class ScreenBottomMenu extends Component {
@@ -28,7 +28,8 @@ export default class ScreenBottomMenu extends Component {
                     type='feather'
                     color='#0A6ADA'
                     size= {40}
-                    iconStyle={[styles.button,{marginRight:20}]}                    
+                    iconStyle={[styles.button,{marginRight:20}]}           
+                    onPress={() => Linking.openURL('tel:1900561252')}         
                 ></Icon>                
             </View>
         );
@@ -38,10 +39,12 @@ export default class ScreenBottomMenu extends Component {
 const styles = StyleSheet.create({
     menuArea:{
         height:50, 
+        width:'100%',
         backgroundColor: '#25345D',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        
     },
     button:{
         height:40,

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
+import { CommonActions } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
 import { RadioButton } from 'react-native-paper';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
@@ -139,7 +140,19 @@ export default class ForgottenPassword extends Component {
                         }
                     />
                 </View>
-                <TouchableOpacity style={styles.btnConfirm} onPress={() => this.props.navigation.navigate('RequestConfirmScreen')}>
+                <TouchableOpacity style={styles.btnConfirm} 
+                    onPress={() => this.props.navigation.dispatch(
+                        CommonActions.navigate({
+                            name: 'RequestConfirmScreen',
+                            params: {
+                                name: this.state.name,
+                                address: this.state.address,
+                                date: this.state.date,
+                                freeTime: this.state.freeTime,
+                                selectedTest: this.props.route.params.selectedTest,     
+                            },
+                        })
+                    )}>
                     <Text style={styles.textBtn}>Tiếp</Text>
                 </TouchableOpacity>
                 <View>

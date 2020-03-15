@@ -17,13 +17,14 @@ export default class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/photos")
+    //fetch("https://jsonplaceholder.typicode.com/photos")
+    fetch("https://medtestlp.herokuapp.com/customers/list")
       .then(res => res.json())
       .then(
         (result) => {
           this.setState(previousState => ({
             isLoaded: true,
-            items: result
+            items: result,
           }));
         },
         // Note: it's important to handle errors here
@@ -39,13 +40,14 @@ export default class HomeScreen extends Component {
   }
     render(){
         const { error, isLoaded, items } = this.state;
-        // if (error) {
-        // return <div>Error: {error.message}</div>;
-        // } else if (!isLoaded) {
-        // return <div>Loading...</div>;
-        // } else {
+        
         return(
-                <View style={{flex:1}}>
+                <View style={{
+                    flex:1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    }}>
                     <ScreenTopMenu {...this.props}></ScreenTopMenu>
                     <View 
                         style ={styles.background}>            
@@ -58,7 +60,7 @@ export default class HomeScreen extends Component {
                                 }]}
                                 titleStyle={{color:'#0A6ADA'}} 
                                 title="Đặt khám"
-                                onPress={() => this.props.navigation.navigate('AppointmentDetailScreen')}
+                                onPress={() => this.props.navigation.navigate('CreateAppointmentScreen')}
                             >\</Button>  
 
                             <Button 
@@ -81,22 +83,19 @@ export default class HomeScreen extends Component {
                             keyboardShouldPersistTaps="always"
                             keyboardDismissMode='on-drag'
                             data={this.state.items}
-                            renderItem={({item,index}) => {
+                            renderItem={({item}) => {
                                 return (
                                     <ArticleListItem 
-                                        // imageUri={item.imageUri}
-                                        // title={item.title}
-                                        // shortContent={item.shortContent}
-                                        // content={item.content}
-                                        imageUri={item.url}
-                                        title={item.title}
-                                        shortContent={item.title}
-                                        content={item.title}
+                                        imageUri={item.imageUri}
+                                        title={item.cust_phone}
+                                        shortContent={item.dob}
+                                        content={item.dob}                                        
                                         navigation={this.props.navigation}
                                         >
                                     </ArticleListItem>
                                 );
                             }}
+                            keyExtractor={(item, index) => index.toString()}
                         >                
                         </FlatList>          
                     </View>

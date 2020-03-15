@@ -8,7 +8,9 @@ export default class TestViewItem extends Component {
     
     render(){
         return(
-            <TouchableOpacity style={styles.testItem}>
+            <View style={[styles.testItem,{
+                backgroundColor:this.props.backgroundColor != null ? this.props.backgroundColor : 'white',    
+            }]}>
                 <View
                     style={{
                         width:styles.testItem.width,
@@ -42,7 +44,7 @@ export default class TestViewItem extends Component {
                         }}    
                         >{this.props.testPrice}</Text>
                 </View>
-            </TouchableOpacity>
+            </View>
         );
     }
 }
@@ -57,8 +59,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderWidth:1,
-        borderColor:'#25345d',
+        //borderWidth:1,
+        //borderColor:'#25345d',
     },
 
 });
