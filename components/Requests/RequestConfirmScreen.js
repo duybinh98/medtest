@@ -5,14 +5,14 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
-import { CommonActions } from '@react-navigation/native';
+
 
 export default class RequestConfirmScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
             name: this.props.route.params.name,
-            address: this.props.route.params.address,
+            address: this.props.route.params.address + ", "  + this.props.route.params.town + ", " +  this.props.route.params.district, 
             date: this.props.route.params.date,
             freeTime: this.props.route.params.freeTime,
         };

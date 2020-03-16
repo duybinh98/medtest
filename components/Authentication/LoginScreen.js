@@ -4,15 +4,15 @@ import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
+import { CommonActions } from '@react-navigation/native';
 
+//validate conditions
 const required = value => value ? undefined : 'Required';
 const isNumber = value => value && isNaN(Number(value)) ? 'Must be phone number' : undefined;
 const isPhonenumber = value => value && value.length == 10 ? undefined : 'Must be 10 digits';
-const isEmail = value =>
-    value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined;
-const isWeakPassword = value => value && value.length > 6 ? undefined : 'Your password is weak!';
+const isWeakPassword = values => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
 
-
+//Field input for redux-form
 const renderField = ({
     iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
     input: { onChange, ...restInput }, placeholder
@@ -37,51 +37,70 @@ const renderField = ({
     );
 }
 
-const submit = values => {
-    alert(`Validation success. Values = ~${JSON.stringify(values)}`);
+class LoginComponent extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            phoneNumber: '',
+            password: '',
+        };
+        this.submit = this.submit.bind(this)
+    }
+    submit = values => {
+        this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'HomeScreen',
+                params: {
+                    phonenumber: this.state.phoneNumber,
+                    password: this.state.password,
+                },
+            })
+        )
+    }
+    render() {
+        const { handleSubmit } = this.props;
+        return (
+            <ScrollView style={{ flex: 1 }}>
+                <ScreenTopMenu ></ScreenTopMenu>
+                <View>
+                    <View style={styles.logoContainer}>
+                        <Image
+                            source={{ uri: 'https://getdrawings.com/free-icon/react-icon-69.png' }}
+                            style={styles.logo}
+                        ></Image>
+                        <Text style={styles.logoText}>Đăng nhập</Text>
+                    </View>
+                </View>
+                <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
+                    iconType="material-community" placeholder="Số điện thoại" secureText={false}
+                    onChange={(text) => { this.setState({ phoneNumber: text }) }}
+                    validate={[required, isNumber, isPhonenumber]}
+                />
+                <Field name="password" keyboardType="default" component={renderField} iconName="lock-question"
+                    iconType="material-community" placeholder="Mật khẩu" secureText={true}
+                    onChange={(text) => { this.setState({ password: text }) }}
+                    validate={[required,isWeakPassword]}                 
+                />
+                <TouchableOpacity style={styles.btnLogin} onPress={handleSubmit(this.submit)}>
+                    <Text style={styles.textBtn}>Đăng nhập</Text>
+                </TouchableOpacity>
+                <View style={styles.textLinkView} >
+                    <Text
+                        style={styles.textLink}
+                        onPress={() => { alert("Change password") }}
+                    >Quên mật khẩu?</Text>
+                </View>
+                <View style={styles.textLinkView} >
+                    <Text
+                        style={styles.textLink}
+                        onPress={() => { alert("Signup") }}
+                    >Đăng ký ngay</Text>
+                </View>
+            </ScrollView>
+        );
+    }
 }
 
-const LoginComponent = props => {
-    const { handleSubmit } = props;
-    return (
-        <ScrollView style={{ flex: 1 }}>
-            <ScreenTopMenu ></ScreenTopMenu>
-            <View>
-                <View style={styles.logoContainer}>
-                    <Image
-                        source={{ uri: 'https://getdrawings.com/free-icon/react-icon-69.png' }}
-                        style={styles.logo}
-                    ></Image>
-                    <Text style={styles.logoText}>Đăng nhập</Text>
-                </View>
-            </View>
-            <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
-                iconType="material-community" placeholder="Số điện thoại" secureText={false}
-                validate={[required, isNumber, isPhonenumber]}
-            />
-            <Field name="password" keyboardType="default" component={renderField} iconName="lock-question"
-                iconType="material-community" placeholder="Mật khẩu" secureText={true}
-                validate={[required]}
-                warn={isWeakPassword}
-            />
-            <TouchableOpacity style={styles.btnLogin} onPress={handleSubmit(submit)}>
-                <Text style={styles.textBtn}>Đăng nhập</Text>
-            </TouchableOpacity>
-            <View style={styles.textLinkView} >
-                <Text
-                    style={styles.textLink}
-                    onPress={() => { alert("Change password") }}
-                >Quên mật khẩu?</Text>
-            </View>
-            <View style={styles.textLinkView} >
-                <Text
-                    style={styles.textLink}
-                    onPress={() => { alert("Signup") }}
-                >Đăng ký ngay</Text>
-            </View>
-        </ScrollView>
-    );
-}
 
 const LoginForm = reduxForm({
     form: 'login',
@@ -139,7 +158,7 @@ const styles = StyleSheet.create({
         top: 7,
         left: 35,
     },
-    inputContainer: {      
+    inputContainer: {
         marginTop: 10
     },
     btnLogin: {

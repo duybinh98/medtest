@@ -6,9 +6,9 @@ import { RadioButton } from 'react-native-paper';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
-import { format } from 'date-fns';
+import { CommonActions } from '@react-navigation/native';
 
-
+//validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
 const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
 const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
@@ -16,7 +16,7 @@ const isEmail = values =>
     values && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values) ? 'Email không hợp lệ' : undefined;
 const isWeakPassword = values => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
 
-
+//Field textInput for redux-form
 const renderField = ({
     iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
     input: { onChange, ...restInput }, placeholder
@@ -41,29 +41,44 @@ const renderField = ({
     );
 }
 
-
-const submit = values => {
-    if (values.cfPassword !== values.password) {
-        alert("Xác nhận mật khẩu không đúng!")
-    } else {
-        alert(`Validation success. Values = ~${JSON.stringify(values)}`);
-    }
-}
-
 const { width: WIDTH } = Dimensions.get('window')
 
 class RegisterScreen extends Component {
-    state = {
-        name: '',
-        phonenumber: '',
-        email: '',
-        dob: '',
-        password: '',
-        checked: 'Male',       
-    };
+    constructor(props) {
+        super(props)
+        this.state = {
+            name: '',
+            phonenumber: '',
+            email: '',
+            dob: '',
+            password: '',
+            gender: 'Nữ',
+        };
+        this.submit = this.submit.bind(this)
+    }
+    submit = values => {
+        if (values.cfPassword !== values.password) {
+            alert("Xác nhận mật khẩu không đúng!")
+        } else {
+            this.props.navigation.dispatch(
+                CommonActions.navigate({
+                    name: 'LoginScreen',
+                    params: {
+                        name: this.state.name,
+                        phonenumber: this.state.phonenumber,
+                        email: this.state.email,
+                        dob: this.state.dob,
+                        password: this.state.password,
+                        gender: this.state.gender,
+                    },
+                })
+            )
+        }
+    }
+
     render() {
         const { handleSubmit } = this.props;
-        const { checked } = this.state;
+        const { gender } = this.state;
         return (
             <View style={styles.background}>
                 <ScrollView>
@@ -74,20 +89,22 @@ class RegisterScreen extends Component {
                         </View>
                     </View>
                     <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
-                        iconType="material-community" placeholder="Tên hiển thị" secureText={false} 
-                        // onChange ={(text) => {this.setState({username : text})}}
+                        iconType="material-community" placeholder="Tên hiển thị" secureText={false}
+                        onChange={(text) => { this.setState({ name: text }) }}
                         validate={[required]}
                     />
                     <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
                         iconType="material-community" placeholder="Số điện thoại" secureText={false}
+                        onChange={(text) => { this.setState({ phonenumber: text }) }}
                         validate={[required, isNumber, isPhonenumber]}
                     />
                     <Field name="email" keyboardType="email-address" component={renderField} iconName="email-outline"
                         iconType="material-community" placeholder="Email" secureText={false}
+                        onChange={(text) => { this.setState({ email: text }) }}
                         validate={[required, isEmail]}
                     />
                     <View style={styles.inputContainer}>
-                        <DatePicker                    
+                        <DatePicker
                             style={styles.DatePicker}
                             date={this.state.dob}
                             mode="date"
@@ -128,14 +145,14 @@ class RegisterScreen extends Component {
                                 <RadioButton
                                     value="Male"
                                     checked={true}
-                                    status={checked === 'Male' ? 'checked' : 'unchecked'}
-                                    onPress={() => { this.setState({ checked: 'Male' }); }}
+                                    status={gender === 'Nam' ? 'checked' : 'unchecked'}
+                                    onPress={() => { this.setState({ gender: 'Nam' }); }}
                                 />
                                 <Text style={styles.radioName}>Nam</Text>
                                 <RadioButton
                                     value="Female"
-                                    status={checked === 'Female' ? 'checked' : 'unchecked'}
-                                    onPress={() => { this.setState({ checked: 'Female' }); }}
+                                    status={gender === 'Nữ' ? 'checked' : 'unchecked'}
+                                    onPress={() => { this.setState({ gender: 'Nữ' }); }}
                                 />
                                 <Text style={styles.radioName}>Nữ</Text>
                             </View>
@@ -143,13 +160,14 @@ class RegisterScreen extends Component {
                     </View>
                     <Field name="password" keyboardType="default" component={renderField} iconName="lock-question"
                         iconType="material-community" placeholder="Mật khẩu" secureText={true}
-                        validate={[required,isWeakPassword]}
+                        onChange={(text) => { this.setState({ password: text }) }}
+                        validate={[required, isWeakPassword]}
                     />
                     <Field name="cfPassword" keyboardType="default" component={renderField} iconName="lock-question"
                         iconType="material-community" placeholder="Xác nhận mật khẩu" secureText={true}
-                        validate={[required,isWeakPassword]}                       
+                        validate={[required, isWeakPassword]}
                     />
-                    <TouchableOpacity style={styles.btnRegister} onPress={handleSubmit(submit)}>
+                    <TouchableOpacity style={styles.btnRegister} onPress={handleSubmit(this.submit)}>
                         <Text style={styles.textBtn}>Đăng ký</Text>
                     </TouchableOpacity>
                     <View>
@@ -171,7 +189,7 @@ const styles = StyleSheet.create({
     background: {
         flex: 1,
         backgroundColor: '#f1f0f0',
-    },  
+    },
     logoContainer: {
         marginTop: 10,
         alignItems: 'center',

@@ -11,7 +11,7 @@ import districtList from '../../Data/District';
 import { CommonActions } from '@react-navigation/native';
 
 
-
+//validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
 const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
 const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
@@ -19,6 +19,7 @@ const isEmail = values =>
     values && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values) ? 'Email không hợp lệ' : undefined;
 const isWeakPassword = values => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
 
+//Field input for redux-form
 const renderField = ({
     iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
     input: { onChange, ...restInput }, placeholder
@@ -45,6 +46,7 @@ const renderField = ({
 
 const { width: WIDTH } = Dimensions.get('window');
 
+//Render combobox selected value
 const _renderDistrictRow = rowData => {
     const { districtId, districtName } = rowData;
     return (
@@ -68,7 +70,6 @@ class RequestPersonalInformation extends Component {
         super(props)
         this.state = {
             name: '',
-            requestAddress: '',
             apointmentDate: '01/01/2020',
             apointmentTime: '7h30',
             selectTownList: [],
@@ -87,47 +88,21 @@ class RequestPersonalInformation extends Component {
     _renderTownButtonText = listTown => {
         const { townCode, townName } = listTown;
         this.setState({ town: townName })
-        this.getAddress()
         return ` ${townName}`;
     }
     submit = values => {
-        
-        // alert(`Validation success. Values = ~${JSON.stringify(values)}`);
-        // alert("Name: " + this.state.name)
-        // alert(this.state.address)
-        const _requestAddress = this.state.address + ", " + this.state.town + ", " + this.state.district
-        this.setState({
-            requestAddress: _requestAddress
-        })
-        // alert("address: " + this.state.requestAddress)
-        
-        console.log(this.state.requestAddress)
-        console.log(this.state.address)
-        console.log(this.state.town)
-        console.log(this.state.district)
-        
-        // const { navigate } = this.props.navigation;
-        // alert("district: " + this.state.district)
-        // alert("date: " + this.state.apointmentDate)
-        // alert("time: " + this.state.apointmentTime)
         this.props.navigation.dispatch(
             CommonActions.navigate({
                 name: 'RequestConfirmScreen',
-                params: {
-                  
+                params: {                 
                     address: this.state.address,
                     town: this.state.town,
                     district : this.state.district
-
-                    // customerInfo  = this.state.customerInfo,
                 },
             })
-        )
-        
-        
+        )              
     }
     selectItem(id) {
-        // this.setState({ district: id })
         districtList.forEach(district => {
             if (district.districtCode === id) {
                 this.setState({
@@ -136,13 +111,8 @@ class RequestPersonalInformation extends Component {
             }
         });
     }
-    getAddress() {
-        // this.setState({
-        //     requestAddress: this.state.address + ", " + this.state.town + ", " + this.state.district
-        // })
-    }
     render() {
-        const { handleSubmit, navigation } = this.props;
+        const { handleSubmit } = this.props;
         return (
             <ScrollView style={{ flex: 1 }}>
                 <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
@@ -173,7 +143,6 @@ class RequestPersonalInformation extends Component {
                         style={styles.dropdownButton}
                         dropdownStyle={{ width: 200, borderWidth: 2 }}
                         dropdownTextStyle={{ fontSize: 16 }}
-                        // onSelect={(value) => { this.setState({ town: value }) }}
                     />
                 </View>
                 <View style={styles.dropdownContainer}>
@@ -326,6 +295,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 15,
+        backgroundColor: 'white'
     },
     dropdownButton: {
         width: WIDTH - 55,

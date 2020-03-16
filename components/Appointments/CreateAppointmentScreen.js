@@ -5,12 +5,14 @@ import { Icon } from 'react-native-elements';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
+import { CommonActions } from '@react-navigation/native';
 
-
+//validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
 const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
 const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
 
+//Field input for redux-form
 const renderField = ({
     iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
     input: { onChange, ...restInput }, placeholder
@@ -35,21 +37,34 @@ const renderField = ({
     );
 }
 
-
-const submit = values => {
-        alert(`Validation success. Values = ~${JSON.stringify(values)}`);
-}
-
 const { width: WIDTH } = Dimensions.get('window')
 
 class CreateAppointmentScreen extends Component {
-    state = {
-        name: '',
-        phonenumber: '',
-        dob: '',
-        apointmentDate: '',
-        apointmentTime: '',
-    };
+    constructor(props) {
+        super(props)
+        this.state = {
+            name: '',
+            phonenumber: '',
+            dob: '',
+            apointmentDate: '',
+            apointmentTime: '',
+        };
+        this.submit = this.submit.bind(this)
+    }
+    submit = values => {
+        this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'AppointmentDetailScreen',
+                params: {
+                    name: this.state.name,
+                    phonenumber: this.state.phonenumber,
+                    dob: this.state.dob,
+                    apointmentDate: this.state.apointmentDate,
+                    apointmentTime: this.state.apointmentTime,
+                },
+            })
+        )
+    }
     render() {
         const { handleSubmit } = this.props;
         return (
@@ -63,11 +78,12 @@ class CreateAppointmentScreen extends Component {
                     </View>
                     <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                         iconType="material-community" placeholder="Tên hiển thị" secureText={false}
-                        // onChange ={(text) => {this.setState({username : text})}}
+                        onChange ={(text) => {this.setState({name : text})}}
                         validate={[required]}
                     />
                     <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
                         iconType="material-community" placeholder="Số điện thoại" secureText={false}
+                        onChange ={(text) => {this.setState({phonenumber : text})}}
                         validate={[required, isNumber, isPhonenumber]}
                     />
                     <View style={styles.inputContainer}>
@@ -154,8 +170,8 @@ class CreateAppointmentScreen extends Component {
                             onDateChange={(time) => { this.setState({ apointmentTime: time }) }}
                         />
                     </View>
-                    <TouchableOpacity style={styles.btnRegister} onPress={handleSubmit(submit)}>
-                        <Text style={styles.textBtn}>Đăng ký</Text>
+                    <TouchableOpacity style={styles.btnRegister} onPress={handleSubmit(this.submit)}>
+                        <Text style={styles.textBtn}>Đặt lịch</Text>
                     </TouchableOpacity>
                     <View>
                     </View>

@@ -4,12 +4,13 @@ import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
+import { CommonActions } from '@react-navigation/native';
 
-
+//validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
 const isWeakPassword = values => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
 
-
+//Field input for redux-form
 const renderField = ({
     iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
     input: { onChange, ...restInput }, placeholder
@@ -34,24 +35,34 @@ const renderField = ({
     );
 }
 
-
-const submit = values => {
-    if (values.password === values.newPassword) {
-        alert("Mật khẩu mới phải khác mật khẩu cũ!")
-    }else if (values.cfNewPassword !== values.newPassword) {
-        alert("Xác nhận mật khẩu mới không đúng!")
-    } else {
-        alert(`Validation success. Values = ~${JSON.stringify(values)}`);
-    }
-}
-
 const { width: WIDTH } = Dimensions.get('window')
 
 class changePassword extends Component {
-    state = {
-        password: '',
-        newPassword: '',
-    };
+    constructor(props) {
+        super(props)
+        this.state = {
+            password: '',
+            newPassword: '',
+        };
+        this.submit = this.submit.bind(this)
+    }
+    submit = values => {
+        if (values.password === values.newPassword) {
+            alert("Mật khẩu mới phải khác mật khẩu cũ!")
+        } else if (values.cfNewPassword !== values.newPassword) {
+            alert("Xác nhận mật khẩu mới không đúng!")
+        } else {
+            this.props.navigation.dispatch(
+                CommonActions.navigate({
+                    name: 'LoginScreen',
+                    params: {
+                        password: this.state.password,
+                        newPassword: this.state.newPassword,
+                    },
+                })
+            )
+        }
+    }
     render() {
         const { handleSubmit } = this.props;
         return (
@@ -65,17 +76,19 @@ class changePassword extends Component {
                     </View>
                     <Field name="password" keyboardType="default" component={renderField} iconName="lock-question"
                         iconType="material-community" placeholder="Mật khẩu cũ" secureText={true}
+                        onChange={(text) => { this.setState({ password: text }) }}
                         validate={[required, isWeakPassword]}
                     />
                     <Field name="newPassword" keyboardType="default" component={renderField} iconName="lock-question"
                         iconType="material-community" placeholder="Mật khẩu mới" secureText={true}
+                        onChange={(text) => { this.setState({ newPassword: text }) }}
                         validate={[required, isWeakPassword]}
                     />
                     <Field name="cfNewPassword" keyboardType="default" component={renderField} iconName="lock-question"
                         iconType="material-community" placeholder="Xác nhận mật khẩu mới" secureText={true}
                         validate={[required, isWeakPassword]}
                     />
-                    <TouchableOpacity style={styles.btnChangePassword} onPress={handleSubmit(submit)}>
+                    <TouchableOpacity style={styles.btnChangePassword} onPress={handleSubmit(this.submit)}>
                         <Text style={styles.textBtn}>Xác nhận đổi mật khẩu</Text>
                     </TouchableOpacity>
                     <View>
