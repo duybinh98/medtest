@@ -22,11 +22,12 @@ import RegisterForm from './components/Authentication/RegisterScreen';
 import AppointmentForm from './components/Appointments/CreateAppointmentScreen';
 import ChangePasswordForm from './components/Account/ChangePassword';
 import ResetPasswordForm from './components/Authentication/ResetPasswordScreen';
+import RequestPersonalInformationForm from './components/Requests/RequestPersonalInformation';
 
 // const handleSubmit = values => {
 //     alert(`Submitting form with values = ${values}`);
 // }
-
+console.disableYellowBox = true;
 export default class appForm extends Component {
     render(){
         return(
@@ -36,13 +37,15 @@ export default class appForm extends Component {
                 {/* <ChangePasswordForm/> */}
                 {/* <AppointmentForm/> */}
                 {/* <RegisterForm/> */}
-                <ResetPasswordForm/>
+                {/* <ResetPasswordForm/> */}
+                {/* <RequestPersonalInformationForm/> */}
+                <Navigator/>
             </Provider>
         );
     }
 }
 
 
-AppRegistry.registerComponent(appName, () => appForm);
+AppRegistry.registerComponent(appName, () =>  appForm);
 
 

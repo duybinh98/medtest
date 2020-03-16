@@ -21,7 +21,7 @@ import NotificationListScreen from './Home/NotificationListScreen';
 
 import RequestConfirmScreen from './Requests/RequestConfirmScreen';
 import RequestListScreen from './Requests/RequestListScreen';
-import RequestPersionalInformation from './Requests/RequestPersionalInformation';
+import RequestPersonalInformation from './Requests/RequestPersonalInformation';
 import RequestTestListScreen from './Requests/RequestTestListScreen';
 import RequestViewScreen from './Requests/RequestViewScreen';
 
@@ -47,7 +47,7 @@ export default class Navigator extends Component {
 
                 <Drawer.Screen name="RequestConfirmScreen" component={RequestConfirmScreen} />
                 <Drawer.Screen name="RequestListScreen" component={RequestListScreen} />                
-                <Drawer.Screen name="RequestPersionalInformation" component={RequestPersionalInformation} />                
+                <Drawer.Screen name="RequestPersonalInformation" component={RequestPersonalInformation} />                
                 <Drawer.Screen name="RequestTestListScreen" component={RequestTestListScreen} />                
                 <Drawer.Screen name="RequestViewScreen" component={RequestViewScreen} />
               </Drawer.Navigator>                                        
@@ -144,7 +144,7 @@ function CustomDrawerContent(props){
           navigator = {props.navigation}
         />  
         <MenuButtonContainer 
-          screenName='LoginScreen'
+          screenName='RequestPersonalInformation'
           iconName='logout'
           iconType='antdesign'
           iconColor='#0A6ADA'

@@ -4,13 +4,15 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
+import { CommonActions } from '@react-navigation/native';
 
 export default class RequestConfirmScreen extends Component {
 constructor(props) {
         super(props)
         this.state = {
             name: 'Nguyễn Văn A',
-            address: 'Số 123 đường abc, xyz',
+            // address: 'abv',
+            address: this.props.route.params.address + ", "  + this.props.route.params.town + ", " +  this.props.route.params.district, 
             date: '20/20/2020',
             time: '17h00'
         };
