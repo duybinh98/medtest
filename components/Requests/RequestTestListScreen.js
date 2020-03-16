@@ -1,15 +1,101 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, Keyboard, FlatList, Alert} from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestSelectItem from './TestSelectItem'
+import testList from './../../Data/Test'
 
 export default class HomeScreen extends Component {
     
+    constructor(props){
+        super(props);
+        this.state={
+            showFooter: true,
+            selectedTest:[],
+            testList:[],
+            totalPrice:'0',
+        }
+        this.selectItem = this.selectItem.bind(this)
+    }
+    
+
+    selectItem(id,price) {
+        let _selectedTest = this.state.selectedTest;
+        let _totalPrice = parseInt(this.state.totalPrice);
+        let _price = parseInt(price);
+        const found = _selectedTest.findIndex(test => test == id);
+        found === -1 ? _selectedTest.push(id) : _selectedTest.splice(found, 1);
+        found === -1 ? _totalPrice+=_price : _totalPrice-=_price;
+        this.setState({            
+            selectedTest: _selectedTest,
+            totalPrice:_totalPrice
+        })        
+        // Alert.alert("this "+ _totalPrice);
+        
+    }
+    RenderFooter(){
+        if(this.state.showFooter){
+            return(
+                <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
+            )
+        } else {
+            return null
+        }
+    }
+
+    componentDidMount(){
+        this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+        this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+    }
+
+    getApiData() {        
+        fetch("https://medtestlp.herokuapp.com/requests/tests/list")
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState(previousState => ({
+                isLoaded: true,
+                testList: result,
+            }));
+            },            
+            (error) => {
+            this.setState({
+                isLoaded: true,
+                error
+            });
+            }
+        )
+    }
+    // componentWillUnmount() {
+    //     this.keyboardDidShowSub.remove();
+    //     this.keyboardDidHideSub.remove();
+    // }
+
+    keyboardDidShow = (event) => {
+        console.log('keyboardDidShow')
+        this.setState({
+            showFooter: false
+        })
+    };
+
+    keyboardDidHide = (event) => {
+        console.log('keyboardDidHide')
+        this.setState({
+            showFooter: true
+        })
+    };
+
     render(){
+        // const {testList} = this.state;
         return(
-                <View style={{flex:1}}>
+                <View style={{
+                    flex:1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    }}>
                     <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                     <View 
                         style ={styles.background}>            
@@ -20,18 +106,52 @@ export default class HomeScreen extends Component {
                             style={styles.searchArea}
                             placeholder={'Tìm xét nghiệm'}
                             underlineColorAndroid='transparent'
-                        />
-                        <RequestTestListArea></RequestTestListArea>
+                        />                        
+                        <View style = {styles.TestListAreaBackground}>
+                            <View
+                                style = {styles.TestListArea}
+                                >
+                                <FlatList 
+                                    style ={styles.TestListAreaScrollView}                        
+                                    showsVerticalScrollIndicator={false}
+                                    data={testList}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({item}) => {
+                                            return (
+                                                <TestCategoryItem 
+                                                    categoryName={item.testType}
+                                                    test = {item.test}
+                                                    viewOnly = {false}
+                                                    selectItem = {this.selectItem}
+                                                >
+                                                </TestCategoryItem>                                    
+                                            );
+                                        }}
+                                >                    
+                                </FlatList>
+                            </View>
+                        </View>
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
                                 style={styles.btnConfirm}
-                                onPress={() => this.props.navigation.navigate('RequestPersionalInformation')}
+                                onPress={() => this.props.navigation.dispatch(
+                                    CommonActions.navigate({
+                                        name: 'RequestPersionalInformation',
+                                        params: {
+                                            selectedTest: this.state.selectedTest, 
+                                            totalPrice: this.state.totalPrice, 
+                                            
+                                            //testList: this.state.testList   
+                                            testList: testList
+                                        },
+                                    })
+                                )}
                                 >
                                 <Text style={styles.textBtn}>Đặt xét nghiệm</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
+                    {this.RenderFooter()}
                 </View>  
         );
     }
@@ -43,49 +163,32 @@ class RequestTestListArea extends Component{
     state = {
         isDone: false
     };    
-    render(){
+    render(){        
         return(
             <View style = {styles.TestListAreaBackground}>
                 <View
                     style = {styles.TestListArea}
                     >
-                    <ScrollView 
+                    <FlatList 
                         style ={styles.TestListAreaScrollView}                        
                         showsVerticalScrollIndicator={false}
-                    >
-                    <TestCategoryItem
-                        categoryName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh '
-                        totalPrice='100.000d'
-                    />
-                    <TestSelectItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh '
-                        testPrice='100.000d'
-                        iconName='crop-square'
-                        iconType='MaterialCommunityIcons'
-                    />
-                    <TestSelectItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                        iconName='check'
-                        iconType='AntDesign'
-                    />
-                    <TestCategoryItem
-                        categoryName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        totalPrice='100.000d'
-                    />
-                    <TestSelectItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                        iconName='crop-square'
-                        iconType='MaterialCommunityIcons'
-                    />
-                    <TestSelectItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                        iconName='check'
-                        iconType='AntDesign'
-                    />
-                    </ScrollView>
+                        data={testList}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({item}) => {
+                                return (
+                                    <TestCategoryItem 
+                                        categoryName={item.testType}
+                                        totalPrice='100.000d'
+                                        test = {item.test}
+                                        viewOnly = {false}
+                                        onPressItem = {this.onPressAction}
+                                        selected={false} 
+                                    >
+                                    </TestCategoryItem>                                    
+                                );
+                            }}
+                    >                    
+                    </FlatList>
                 </View>
             </View>
         );

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, Alert, FlatList} from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
@@ -7,27 +8,59 @@ import TestViewItem from './TestViewItem'
 import { CommonActions } from '@react-navigation/native';
 
 export default class RequestConfirmScreen extends Component {
-constructor(props) {
+    constructor(props) {
         super(props)
         this.state = {
-            name: 'Nguyễn Văn A',
-            // address: 'abv',
-            address: this.props.route.params.address + ", "  + this.props.route.params.town + ", " +  this.props.route.params.district, 
-            date: '20/20/2020',
-            time: '17h00'
+            name: this.props.route.params.name,
+            address: this.props.route.params.address,
+            date: this.props.route.params.date,
+            freeTime: this.props.route.params.freeTime,
         };
+        this.isSelected = this.isSelected.bind(this);
     }
+
+    isSelected(id) {
+        const found = this.props.route.params.selectedTest.findIndex(test => test == id);   
+        let result = false;     
+        found === -1 ? '' : result=true;     
+        return result;
+    }
+
+    onConfirm  = async () => {
+        fetch('https://medtestlp.herokuapp.com/requests/create', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            test_ID: this.props.route.params.selectedTest,
+            cust_ID: this.props.route.params.cust_ID,
+            appoint_date: this.props.route.params.email,
+            appoint_time    : "",
+            appoint_address: this.props.route.params.address
+        }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                Alert.alert("hi"+result);
+            },
+            (error) => {
+            this.setState({
+                error
+            });
+            }
+        )
+        ;
+    }
+
     render(){
         return(
                 <View style={{flex:1}}>
                     <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
-                    <ScrollView 
-                        style ={styles.background}                                            
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{
-                            flexDirection: 'column',
-                            alignItems: 'center'
-                        }}
+                    <View 
+                        style ={styles.background} 
                         >            
                         <View style={styles.titleArea}>     
                             <Text style={{fontSize:22,color:'#25345D'}}>Đặt xét nghiệm</Text>
@@ -48,7 +81,7 @@ constructor(props) {
                             >
                             <View
                                 style={{
-                                    width:180,
+                                    width:170,
                                     height:20,
                                 }}
                             >
@@ -56,22 +89,66 @@ constructor(props) {
                             </View>
                             <View
                                 style={{
-                                    width:120,
+                                    width:140,
                                     height:20,
                                 }}
                             >
-                                <Text style={styles.textInfor} >Giờ hẹn: {this.state.time}</Text>
+                                <Text style={styles.textInfor} >Giờ hẹn: {this.state.freeTime}</Text>
                             </View>
                             </View>
                         </View>
-                        <RequestTestListArea></RequestTestListArea>
+                        <View style = {styles.TestListAreaBackground}>
+                            <View
+                                style = {styles.TestListArea}
+                                >
+                                <FlatList 
+                                    style ={styles.TestListAreaScrollView}                        
+                                    showsVerticalScrollIndicator={false}
+                                    //scrollEnabled={false}
+                                    data={this.props.route.params.testList}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({item}) => {
+                                            return (
+                                                <TestCategoryItem 
+                                                    categoryName={item.testType}
+                                                    test = {item.test}
+                                                    viewOnly = {true}
+                                                    isSelected = {this.isSelected}
+                                                    >
+                                                </TestCategoryItem>                                    
+                                            );
+                                        }}
+                                >                    
+                                </FlatList>
+                            </View>
+                        </View>
                         <View style={styles.buttonContainer}>
+                            <View style={styles.totalMoneyContainer}>
+                                <Text>Tổng tiền: {this.props.route.params.totalPrice}</Text>
+                            </View>
                             <TouchableOpacity style={styles.btnConfirm} 
-                                onPress={() => this.props.navigation.navigate('RequestViewScreen')}>
+                                onPress={() => {
+                                    this.props.navigation.dispatch(
+                                        CommonActions.navigate({
+                                            name: 'RequestViewScreen',
+                                            params: {
+                                                name: this.state.name,
+                                                address: this.state.address,
+                                                date: this.state.date,
+                                                freeTime: this.state.freeTime,
+                                                selectedTest: this.props.route.params.selectedTest,   
+                                                testList: this.props.route.params.testList,
+                                                // customerInfo  = this.state.customerInfo,
+                                            },
+                                        })
+                                    )
+                                    // this.onConfirm
+                                    }}                                                              
+                                >
                                 <Text style={styles.textBtn}>Xác nhận</Text>
                             </TouchableOpacity>
                         </View>
-                    </ScrollView>
+                    </View>
                     <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
                 </View>  
         );
@@ -90,35 +167,25 @@ class RequestTestListArea extends Component{
                 <View
                     style = {styles.TestListArea}
                     >
-                    <ScrollView 
+                    <FlatList 
                         style ={styles.TestListAreaScrollView}                        
                         showsVerticalScrollIndicator={false}
-                    >
-                                        <TestCategoryItem
-                        categoryName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh '
-                        totalPrice='100.000d'
-                    />
-                    <TestViewItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh '
-                        testPrice='100.000d'
-                    />
-                    <TestViewItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                    />
-                    <TestCategoryItem
-                        categoryName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        totalPrice='100.000d'
-                    />
-                    <TestViewItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                    />
-                    <TestViewItem
-                        testName='Xét nghiệm hóa sinh Xét nghiệm hóa sinh Xét nghiệm hóa sinh'
-                        testPrice='100.000d'
-                    />
-                    </ScrollView>
+                        //scrollEnabled={false}
+                        data={testList}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({item}) => {
+                                return (
+                                    <TestCategoryItem 
+                                        categoryName={item.testType}
+                                        totalPrice='100.000d'
+                                        test = {item.test}
+                                        viewOnly = {true}
+                                        >
+                                    </TestCategoryItem>                                    
+                                );
+                            }}
+                    >                    
+                    </FlatList>
                 </View>
             </View>
         );
@@ -132,7 +199,8 @@ const styles = StyleSheet.create({
     background:{
         flex:1, 
         backgroundColor: '#f1f0f0',
-
+        flexDirection: 'column',
+        alignItems: 'center',
     },
     titleArea:{
         height: 50,
@@ -168,26 +236,18 @@ const styles = StyleSheet.create({
     textInfor: {
         fontSize: 16,
     },
-    searchArea:{
-        height: 40,
-        width: Dimensions.get('window').width-40,
-        backgroundColor: 'white',
+    TestListAreaBackground:{
+        width: Dimensions.get('window').width,
+        height:Dimensions.get('window').height-370,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginTop:5,
         
-        paddingLeft:10,
-        paddingRight:5,
-        borderRadius:10,
-        borderWidth:1,
-        borderColor:'#25345D',
-        color:'#25345D'
-    },
-    TestListAreaBackground:{
-        height:270,
-        marginTop:5,
     },
     TestListArea:{
         width: Dimensions.get('window').width-20,
-        flex:1,
+        alignSelf: 'stretch',
         backgroundColor:'white',
         borderRadius:10,
         padding:10,
@@ -202,10 +262,17 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         alignItems: 'flex-end',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         width:Dimensions.get('window').width-20,
         height:54,
-        marginBottom:10
+        marginBottom:10,
+    },
+    totalMoneyContainer:{
+        width: 130,
+        height: 45,
+        justifyContent: 'center',
+        paddingBottom:5,
+        paddingLeft:2,
     },
     btnConfirm: {
         width: 130,

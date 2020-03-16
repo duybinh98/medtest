@@ -4,48 +4,50 @@ import {Button} from 'react-native-elements';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import ArticleListItem from './ArticleListItem';
-import articlesList from './../../Data/Articles'
+// import articlesList from './../../Data/Articles'
 
 export default class HomeScreen extends Component {
     constructor(props) {
-    super(props);
-    this.state = {
-      error: null,
-      isLoaded: false,
-      items: []
-    };
-  }
+        super(props);
+        this.state = {
+            error: null,
+            isLoaded: false,
+            articlesList: []
+        };
+    }
 
-  componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/photos")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState(previousState => ({
-            isLoaded: true,
-            items: result
-          }));
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
-  }
+    componentDidMount() {
+
+    }
+
+    getApiData() {
+        fetch("https://medtestlp.herokuapp.com/article/list")
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState(previousState => ({
+                isLoaded: true,
+                articlesList: result,
+            }));
+            },            
+            (error) => {
+            this.setState({
+                isLoaded: true,
+                error
+            });
+            }
+        )
+    }
+
     render(){
-        const { error, isLoaded, items } = this.state;
-        // if (error) {
-        // return <div>Error: {error.message}</div>;
-        // } else if (!isLoaded) {
-        // return <div>Loading...</div>;
-        // } else {
+        const { error, isLoaded, articlesList } = this.state;        
         return(
-                <View style={{flex:1}}>
+                <View style={{
+                    flex:1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    }}>
                     <ScreenTopMenu {...this.props}></ScreenTopMenu>
                     <View 
                         style ={styles.background}>            
@@ -58,7 +60,7 @@ export default class HomeScreen extends Component {
                                 }]}
                                 titleStyle={{color:'#0A6ADA'}} 
                                 title="Đặt khám"
-                                onPress={() => this.props.navigation.navigate('AppointmentDetailScreen')}
+                                onPress={() => this.props.navigation.navigate('CreateAppointmentScreen')}
                             >\</Button>  
 
                             <Button 
@@ -80,30 +82,26 @@ export default class HomeScreen extends Component {
                             }}
                             keyboardShouldPersistTaps="always"
                             keyboardDismissMode='on-drag'
-                            data={this.state.items}
-                            renderItem={({item,index}) => {
+                            data={articlesList}
+                            renderItem={({item}) => {
                                 return (
                                     <ArticleListItem 
-                                        // imageUri={item.imageUri}
-                                        // title={item.title}
-                                        // shortContent={item.shortContent}
-                                        // content={item.content}
-                                        imageUri={item.url}
-                                        title={item.title}
-                                        shortContent={item.title}
-                                        content={item.title}
+                                        imageUri={article.imageUri}
+                                        title={article.cust_phone}
+                                        shortContent={article.dob}
+                                        content={article.dob}                                        
                                         navigation={this.props.navigation}
                                         >
                                     </ArticleListItem>
                                 );
                             }}
+                            keyExtractor={(article, index) => index.toString()}
                         >                
                         </FlatList>          
                     </View>
                     <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
                 </View>  
         );
-        // }
     }
 }
 const styles = StyleSheet.create({

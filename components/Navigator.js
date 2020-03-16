@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Linking} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
@@ -10,6 +10,7 @@ import UpdateInformation from './Account/UpdateInformation';
 
 import AppointmentListScreen from './Appointments/AppointmentListScreen';
 import AppointmentDetailScreen from './Appointments/AppointmentDetailScreen';
+import CreateAppointmentScreen from './Appointments/CreateAppointmentScreen';
 
 import LoginScreen from './Authentication/LoginScreen';
 import RegisterScreen from './Authentication/RegisterScreen';
@@ -36,6 +37,7 @@ export default class Navigator extends Component {
 
                 <Drawer.Screen name="AppointmentListScreen" component={AppointmentListScreen} />
                 <Drawer.Screen name="AppointmentDetailScreen" component={AppointmentDetailScreen} />
+                <Drawer.Screen name="CreateAppointmentScreen" component={CreateAppointmentScreen} />
                 
                 <Drawer.Screen name="LoginScreen" component={LoginScreen} />
                 <Drawer.Screen name="RegisterScreen" component={RegisterScreen} />
@@ -98,7 +100,7 @@ function CustomDrawerContent(props){
       <View style ={{
         marginLeft:10}}>
         
-        <MenuButtonContainer 
+        <MenuButtonScreenContainer 
           screenName='RequestListScreen'
           iconName='linechart'
           iconType='antdesign'
@@ -107,7 +109,7 @@ function CustomDrawerContent(props){
           screenTitle='Lịch sử xét nghiệm'
           navigator = {props.navigation}
         />   
-        <MenuButtonContainer 
+        <MenuButtonScreenContainer 
           screenName='AppointmentListScreen'
           iconName='wechat'
           iconType='antdesign'
@@ -116,25 +118,24 @@ function CustomDrawerContent(props){
           screenTitle='Lịch sử đặt khám'
           navigator = {props.navigation}
         />  
-        <MenuButtonContainer 
-          screenName='HomeScreen'
+        <MenuButtonLinkingContainer 
           iconName='phone-call'
           iconType='feather'
           iconColor='#0A6ADA'
           iconSize={20}
           screenTitle='Liên hệ'
-          navigator = {props.navigation}
+          link='tel:1900561252'
         />  
-        <MenuButtonContainer 
-          screenName='HomeScreen'
+        <MenuButtonLinkingContainer 
           iconName='facebook-square'
           iconType='antdesign'
           iconColor='#0A6ADA'
           iconSize={20}
           screenTitle='MedTest on Facebook'
-          navigator = {props.navigation}
+          // link='fb://profile/?canh.cam.31'
+          link='fb://page/1739029202909840'
         />  
-        <MenuButtonContainer 
+        <MenuButtonScreenContainer 
           screenName='HomeScreen'
           iconName='tool'
           iconType='antdesign'
@@ -143,8 +144,8 @@ function CustomDrawerContent(props){
           screenTitle='Mời bạn bè cài đặt'
           navigator = {props.navigation}
         />  
-        <MenuButtonContainer 
-          screenName='RequestPersonalInformation'
+        <MenuButtonScreenContainer 
+          screenName='LoginScreen'
           iconName='logout'
           iconType='antdesign'
           iconColor='#0A6ADA'
@@ -157,7 +158,7 @@ function CustomDrawerContent(props){
   );
 }
 
-function MenuButtonContainer({screenName, iconName, iconType, iconColor, iconSize, screenTitle, navigator}) {
+function MenuButtonScreenContainer({screenName, iconName, iconType, iconColor, iconSize, screenTitle, navigator}) {
   return(
     <TouchableOpacity
        style ={styles.navigatorButton}
@@ -168,7 +169,23 @@ function MenuButtonContainer({screenName, iconName, iconType, iconColor, iconSiz
           type={iconType}
           color={iconColor}
           size= {iconSize}
-          iconStyle={{}}
+        ></Icon>
+      <Text style={styles.navigatorButtonText}>{screenTitle}</Text>
+      </TouchableOpacity>
+      
+  );
+}
+function MenuButtonLinkingContainer({ iconName, iconType, iconColor, iconSize, screenTitle, link}) {
+  return(
+    <TouchableOpacity
+       style ={styles.navigatorButton}
+       onPress={() => Linking.openURL(link)}
+      >
+        <Icon
+          name={iconName}
+          type={iconType}
+          color={iconColor}
+          size= {iconSize}
         ></Icon>
       <Text style={styles.navigatorButtonText}>{screenTitle}</Text>
       </TouchableOpacity>

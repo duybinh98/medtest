@@ -3,64 +3,48 @@ import {View, StyleSheet, Image, Text, Dimensions, TouchableOpacity} from 'react
 import { CommonActions } from '@react-navigation/native';
 import {Button} from 'react-native-elements';
 
-export default class RequestListItem extends Component {
+export default class AppointmentListItem extends Component {
     constructor(props) {
         super(props)
         this.state = {
             statusName:'',
-            statusColor:''
+            statusColor:'',
+            appointmentDate:'',
+            appointmentTime:'',
+            appointmentDob:'',
         };
         this.isVisible = this.isVisible.bind(this);
     }
     componentDidMount(){
-        switch (this.props.req_status) {
-        case 'pending':
+        this.setState(previousState => ({ 
+            appointmentDate:this.props.appointment_meetingTime.substring(0, 10),
+            appointmentTime:this.props.appointment_meetingTime.substring(12, 17),
+            appointmentDob:this.props.appointment_DOB.substring(0, 10),
+        }));
+        switch (this.props.appointment_status) {
+        case '0':
             this.setState(previousState => ({ 
-                statusName:'Đang đợi y tá nhận đơn',
+                statusName:'Đợi xác nhận',
                 statusColor:'#ffd66f'
             }));
             break;
-        case 'accepted':
+        case '1':
             this.setState(previousState => ({ 
-                statusName:'Đang đợi lấy mẫu',
+                statusName:'Đã được xác nhận',
                 statusColor:'#a4d57b'
             }));
             break;
-        case 'transporting':
-            this.setState(previousState => ({ 
-                statusName:'Đang vận chuyển mẫu',
-                statusColor:'#a4d57b'
-            }));
-            break;
-        case 'waitingforresult':
-            this.setState(previousState => ({ 
-                statusName:'Đang đợi kết quả',
-                statusColor:'#6398d6'
-            }));
-            break;
-        case 'closed':
+        case '2':
             this.setState(previousState => ({ 
                 statusName:'',
                 statusColor:''
             }));
             break;
-        case 'lostsample':
-            this.setState(previousState => ({ 
-                statusName:'Đang đợi lấy lại mẫu',
-                statusColor:'#a4d57b'
-            }));
-            break;
-        case 'coordinatorlostsample':
-            this.setState(previousState => ({ 
-                statusName:'Đang đợi y tá nhận đơn',
-                statusColor:'#ffd66f'
-            }));
-            break;
-        }        
+        }
     }
 
     isVisible(){
-        if (this.props.req_status ==='closed'){
+        if (this.props.appointment_status ==='2'){
             if (this.props.viewDone() == true) return true;
             return false;
         }
@@ -77,16 +61,15 @@ export default class RequestListItem extends Component {
                 onPress={() => {
                     this.props.navigation.dispatch(
                         CommonActions.navigate({
-                            name: 'RequestViewScreen',
+                            name: 'AppointmentDetailScreen',
                             params: {
-                                name: this.props.cust_name,
-                                address: this.props.appoint_address,
-                                date: this.props.appoint_date,
-                                freeTime: this.props.appoint_time,
-                                selectedTest: this.props.selectedTest,   
-                                status: this.state.statusName,
-                                statusColor: this.state.statusColor,
-                                testList: this.props.testList,
+                                appointment_userName: this.props.appointment_userName,
+                                appointment_phoneNumber: this.props.appointment_phoneNumber,
+                                appointment_DOB: this.state.appointmentDob,
+                                appointment_date: this.state.appointmentDate,
+                                appointment_time: this.state.appointmentTime,
+                                appointment_status: this.state.statusName,   
+                                appointment_note: this.props.appointment_note,
                                 // customerInfo  = this.state.customerInfo,
                             },
                         })
@@ -124,10 +107,10 @@ export default class RequestListItem extends Component {
                         justifyContent: 'space-between',
                         }}>
                         <View style={{width:100,height:25}}>
-                            <Text style={{fontSize:17}}>{this.props.request_createTime}</Text>
+                            <Text style={{fontSize:17}}>{this.state.appointmentDate}</Text>
                         </View>
                         <View style={{width:100,height:25}}>
-                            <Text style={{fontSize:17}}>{this.props.appoint_date}</Text>
+                            <Text style={{fontSize:17}}>{this.state.appointmentDate}</Text>
                         </View>
                     </View>
                 </View>
@@ -149,7 +132,7 @@ export default class RequestListItem extends Component {
                             <Text style={{fontSize:11}}>{this.state.statusName}</Text>
                         </View>
                         <View style={{width:100,height:25,marginLeft:5}}>
-                            <Text style={{fontSize:17}}>{this.props.appoint_time}</Text>
+                            <Text style={{fontSize:17}}>{this.state.appointmentTime}</Text>
                         </View>
                     </View>
                 </View>                

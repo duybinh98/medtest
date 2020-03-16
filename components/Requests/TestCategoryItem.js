@@ -1,46 +1,109 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity} from 'react-native';
-
+import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, FlatList, Alert} from 'react-native';
+import TestSelectItem from './TestSelectItem'
+import TestViewItem from './TestViewItem'
 
 
 export default class TestCategoryItem extends Component {
-    
+    constructor(props){
+        super(props);
+        this.state={
+            viewTest: true,            
+            visible: false
+        }
+        this.isVisible = this.isVisible.bind(this);
+    }
+
+    isVisible(){
+        // not view => hide if empty         
+        if (!this.props.viewOnly){
+            if (Array.isArray(this.props.test) && !this.props.test.length) return false;
+            return true;
+        }
+        // view => hide if no selected
+        let result = false;
+        this.props.test.forEach(test => {
+            this.props.isSelected(test.testId) == true ? result=true : '';  
+        });
+        return result;
+    }
+
     render(){
+        const testList = this.props.test;
         return(
-            <TouchableOpacity style={styles.testItem}>
-                <View
-                    style={{
-                        width:styles.testItem.width,
-                        height:35,
-                        paddingLeft:5,
-                        paddingRight:5,                        
+            <View>
+            {this.isVisible() ?
+            <View>
+                <TouchableOpacity style={styles.testItem}
+                    onPress={() =>{
+                        this.setState(previousState => ({
+                            viewTest: !this.state.viewTest
+                        }));
                     }}
                 >
-                    <Text style={{
-                            fontSize:17,
-                            color:'#25345d'
-                        }} >{this.props.categoryName}</Text>
-                
-                </View>
-                <View
-                    style={{
-                        width:styles.testItem.width,
-                        height:15,
-                        flexDirection: 'row',
-                        alignItems: 'flex-end',
-                        justifyContent: 'flex-end',
-                        marginBottom:2,
-                        paddingRight:10
-                    }}
-                >
-                    <Text
+                    <View
                         style={{
-                            fontSize:12,
-                            color:'#25345d'
-                        }}    
-                        >{this.props.totalPrice}</Text>
-                </View>
-            </TouchableOpacity>
+                            width:styles.testItem.width,
+                            height:35,
+                            paddingLeft:5,
+                            paddingRight:5,         
+                        }}
+                    >
+                        <Text style={{
+                                fontSize:17,
+                                color:'#25345d'
+                            }} >{this.props.categoryName}</Text>
+                    
+                    </View>
+                    <View
+                        style={{
+                            width:styles.testItem.width,
+                            height:15,
+                            flexDirection: 'row',
+                            alignItems: 'flex-end',
+                            justifyContent: 'flex-end',
+                            marginBottom:2,
+                            paddingRight:10
+                        }}
+                    >
+                        {/* <Text
+                            style={{
+                                fontSize:12,
+                                color:'#25345d'
+                            }}    
+                            >{this.props.totalPrice}</Text> */}
+                    </View>
+                </TouchableOpacity>
+                <FlatList 
+                    style ={styles.TestListAreaScrollView}                        
+                    showsVerticalScrollIndicator={false}
+                    scrollEnabled={false}
+                    data={testList}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({item, index}) => {
+                            return ( 
+                                <View>                                 
+                                { this.state.viewTest ? this.props.viewOnly ? this.props.isSelected(item.testId) ?
+                                    <TestViewItem 
+                                    testName={item.testName}
+                                    testPrice={item.price}
+                                    testId={item.testId}
+                                    backgroundColor={index % 2 == 0 ? '#EEE': '#FFF'}
+                                    /> : null :
+                                    <TestSelectItem 
+                                    testName={item.testName}
+                                    testPrice={item.price}
+                                    testId={item.testId}
+                                    backgroundColor={index % 2 == 0 ? '#EEE': '#FFF'}
+                                    onPressItem = {this.props.selectItem}
+                                    /> 
+                                     : null}    
+                                </View>                          
+                            );
+                        }}
+                />
+            </View> : null }
+            </View>
         );
     }
 }
@@ -55,9 +118,15 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderWidth:2,
-        borderColor:'#25345d'
-        
-    }
+        borderWidth:1,
+        borderColor:'#25345d',
+              
+    },
+    TestListAreaScrollView:{
+        width: Dimensions.get('window').width-40,
+        flex:1,
+        backgroundColor:'white',
+        borderRadius:10,
+    },
 
 });

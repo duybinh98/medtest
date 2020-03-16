@@ -3,21 +3,18 @@ import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-nati
 import { ScrollView } from 'react-native-gesture-handler';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 
-
-
-
 const { width: WIDTH } = Dimensions.get('window')
 
 export default class ForgottenPassword extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: 'Nguyễn Văn A',
-            dob: '01/01/1970',
-            phone: '0123456789',
-            date: '01/01/2020',
-            freeTime: '7h30-8h30',
-            status: 'Đang chờ xác nhận'
+            name: this.props.route.params.appointment_userName? this.props.route.params.appointment_userName: 'Nguyễn Văn A',
+            dob: this.props.route.params.appointment_DOB? this.props.route.params.appointment_DOB: '01/01/1970',
+            phone: this.props.route.params.appointment_phoneNumber? this.props.route.params.appointment_phoneNumber: '0123456789',
+            date: this.props.route.params.appointment_date? this.props.route.params.appointment_date: '01/01/2020',
+            freeTime: this.props.route.params.appointment_time? this.props.route.params.appointment_time: '7h30-8h30',
+            status: this.props.route.params.appointment_status? this.props.route.params.appointment_status: 'Đang chờ xác nhận'
         };
     }
     render() {
