@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, Alert, FlatList} from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
-import testList from './../../Data/Test'
+// import testList from './../../Data/Test'
 export default class RequestConfirmScreen extends Component {
-constructor(props) {
+    constructor(props) {
         super(props)
         this.state = {
             name: this.props.route.params.name,
@@ -24,47 +25,41 @@ constructor(props) {
         return result;
     }
 
-    // onConfirm  = async () => {
-    //     fetch('https://medtestlp.herokuapp.com/customers/sign-up', {
-    //     method: 'POST',
-    //     headers: {
-    //         Accept: 'application/json',
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //         cust_phone: "111111",
-    //         cust_name: "test11111",
-    //         cust_email: "111111",
-    //         cust_password: "medtest",
-    //         dob: "1998-12-12T17:00:00.000+0000"
-    //     }),
-    //     })
-    //     .then(res => res.json())
-    //     .then(
-    //         (result) => {
-    //             Alert.alert("hi"+result);
-    //         },
-    //         (error) => {
-    //         this.setState({
-    //             error
-    //         });
-    //         }
-    //     )
-    //     ;
-    // }
+    onConfirm  = async () => {
+        fetch('https://medtestlp.herokuapp.com/requests/create', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            test_ID: this.props.route.params.selectedTest,
+            cust_ID: this.props.route.params.cust_ID,
+            appoint_date: this.props.route.params.email,
+            appoint_time    : "",
+            appoint_address: this.props.route.params.address
+        }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                Alert.alert("hi"+result);
+            },
+            (error) => {
+            this.setState({
+                error
+            });
+            }
+        )
+        ;
+    }
 
     render(){
         return(
                 <View style={{flex:1}}>
                     <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
-                    <ScrollView 
-                        style ={styles.background}                                            
-                        showsVerticalScrollIndicator={false}
-                        scrollEnabled={false}
-                        contentContainerStyle={{
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
+                    <View 
+                        style ={styles.background} 
                         >            
                         <View style={styles.titleArea}>     
                             <Text style={{fontSize:22,color:'#25345D'}}>Đặt xét nghiệm</Text>
@@ -109,13 +104,12 @@ constructor(props) {
                                     style ={styles.TestListAreaScrollView}                        
                                     showsVerticalScrollIndicator={false}
                                     //scrollEnabled={false}
-                                    data={testList}
+                                    data={this.props.route.params.testList}
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={({item}) => {
                                             return (
                                                 <TestCategoryItem 
                                                     categoryName={item.testType}
-                                                    totalPrice='100.000d'
                                                     test = {item.test}
                                                     viewOnly = {true}
                                                     isSelected = {this.isSelected}
@@ -128,14 +122,32 @@ constructor(props) {
                             </View>
                         </View>
                         <View style={styles.buttonContainer}>
+                            <View style={styles.totalMoneyContainer}>
+                                <Text>Tổng tiền: {this.props.route.params.totalPrice}</Text>
+                            </View>
                             <TouchableOpacity style={styles.btnConfirm} 
-                                onPress={() => this.props.navigation.navigate('RequestViewScreen')}
-                                //onPress={this.onConfirm}                                
+                                onPress={() => {
+                                    this.props.navigation.dispatch(
+                                        CommonActions.navigate({
+                                            name: 'RequestViewScreen',
+                                            params: {
+                                                name: this.state.name,
+                                                address: this.state.address,
+                                                date: this.state.date,
+                                                freeTime: this.state.freeTime,
+                                                selectedTest: this.props.route.params.selectedTest,   
+                                                testList: this.props.route.params.testList,
+                                                // customerInfo  = this.state.customerInfo,
+                                            },
+                                        })
+                                    )
+                                    // this.onConfirm
+                                    }}                                                              
                                 >
                                 <Text style={styles.textBtn}>Xác nhận</Text>
                             </TouchableOpacity>
                         </View>
-                    </ScrollView>
+                    </View>
                     <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
                 </View>  
         );
@@ -186,7 +198,8 @@ const styles = StyleSheet.create({
     background:{
         flex:1, 
         backgroundColor: '#f1f0f0',
-
+        flexDirection: 'column',
+        alignItems: 'center',
     },
     titleArea:{
         height: 50,
@@ -248,10 +261,17 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         alignItems: 'flex-end',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         width:Dimensions.get('window').width-20,
         height:54,
         marginBottom:10,
+    },
+    totalMoneyContainer:{
+        width: 130,
+        height: 45,
+        justifyContent: 'center',
+        paddingBottom:5,
+        paddingLeft:2,
     },
     btnConfirm: {
         width: 130,

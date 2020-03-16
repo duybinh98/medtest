@@ -18,11 +18,45 @@ export default class ForgottenPassword extends Component {
             name: 'Nguyễn Văn A',
             address: 'Số 123 đường abc, xyz',
             date: '01/01/2020',
-            freeTime: '7h30-8h30'
+            freeTime: '7h30',
+            customerInfo: null
         };
     }
+
+    componentDidMount() {
+
+    }
+
+    getApiData() {
+        fetch("https://medtestlp.herokuapp.com/user/customers/detail", {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: this.props.route.params.cust_id,
+        }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState(previousState => ({
+                isLoaded: true,
+                customerInfo: result,
+            }));
+            },            
+            (error) => {
+            this.setState({
+                isLoaded: true,
+                error
+            });
+            }
+        )
+    }
+
     render() {
-        const { gender } = this.state;
+        const { customerInfo } = this.state;
         return (
             <ScrollView style={{ flex: 1 }}>
                 <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
@@ -149,7 +183,10 @@ export default class ForgottenPassword extends Component {
                                 address: this.state.address,
                                 date: this.state.date,
                                 freeTime: this.state.freeTime,
-                                selectedTest: this.props.route.params.selectedTest,     
+                                selectedTest: this.props.route.params.selectedTest,   
+                                testList: this.props.route.params.testList,
+                                totalPrice: this.props.route.params.totalPrice,
+                                // customerInfo  = this.state.customerInfo,
                             },
                         })
                     )}>

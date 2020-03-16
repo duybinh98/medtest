@@ -11,23 +11,25 @@ export default class NotificationItem extends Component {
                 style={styles.notificationItem}
                 onPress={() => this.props.navigation.navigate('HomeScreen')}
                 >
-                        <Text style={styles.articleShortContent}>{_content}</Text>                  
+                    <Text style={styles.articleShortContent}>{_content}</Text>                  
             </TouchableOpacity>        
         );
     }
 }
 const styles = StyleSheet.create({
     notificationItem:{
-        height:40,
+        alignSelf: 'stretch',
         width: Dimensions.get('window').width-20,
         backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingBottom:2, 
+        paddingTop:1,
+        paddingBottom:5, 
         paddingLeft:10,       
         borderRadius:10,
-        marginBottom:10
+        marginBottom:10,
+        
     },
     articleShortContent:{
         fontSize:13

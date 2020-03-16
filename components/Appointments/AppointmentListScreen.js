@@ -1,11 +1,23 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView} from 'react-native';
+import {View, StyleSheet, Dimensions, Text, TouchableOpacity, FlatList} from 'react-native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
-import RequestListItem from './../Requests/RequestListItem';
+import AppointmentListItem from './AppointmentListItem';
+import appointmentsList from './../../Data/AppointmentList'
 
 export default class Request extends Component {
-    let 
+    constructor(props) {
+        super(props)
+        this.state = {
+            isDone: false
+        };
+        this.viewDone = this.viewDone.bind(this);
+    }
+    
+    viewDone(){
+        return this.state.isDone;
+    }
+  
     render(){
         return(
                 <View style={{flex:1}}>
@@ -15,22 +27,7 @@ export default class Request extends Component {
                         <View style={styles.titleArea}>     
                             <Text style={{fontSize:22,color:'#25345D'}}>Lịch sử đặt khám</Text>
                         </View>
-                        <RequestListArea></RequestListArea>
-                    </View>
-                    
-                    <ScreenBottomMenu></ScreenBottomMenu>
-                </View>  
-        );
-    }
-}
-
-class RequestListArea extends Component{        
-    state = {
-        isDone: false
-    };    
-    render(){
-        return(
-            <View style = {{flex:1}}>
+                        <View style = {{flex:1}}>
                 <View style={[styles.titleArea,{
                     height:60,
                     marginBottom:10
@@ -61,53 +58,39 @@ class RequestListArea extends Component{
                         >
                         <Text style={{fontSize:18}}>Đơn đã xong</Text>
                     </TouchableOpacity>                    
+                    </View>
+                    <FlatList style={{                    
+                        flex:1
+                        }}
+                        showsVerticalScrollIndicator={false}
+                        data={appointmentsList}
+                        keyExtractor={(item, index) => index.toString()}
+                                renderItem={({item}) => {
+                                        return (
+                                            <View>                                
+                                            <AppointmentListItem
+                                                appointment_userName={item.appointment_userName}
+                                                appointment_phoneNumber={item.appointment_phoneNumber}
+                                                appointment_DOB={item.appointment_DOB}
+                                                appointment_meetingTime={item.appointment_meetingTime}
+                                                appointment_status={item.appointment_status}
+                                                appointment_note={item.appointment_note}
+                                                viewDone={this.viewDone}
+                                                navigation={this.props.navigation}
+                                            />   
+                                            </View>                             
+                                        );
+                                    }}
+                        >                           
+                    </FlatList>
                 </View>
-                <ScrollView style={{                    
-                    flex:1
-                    }}
-                    maximumZoomScale={1}
-                    minimumZoomScale={1}
-                    showsVerticalScrollIndicator={false}
-                    >
-
-                        {!this.state.isDone ? <RequestListItem
-                            createDate='20/12/2020'
-                            requestDate='20/12/2020'
-                            requestTime='19h30'
-                            status='Đang đợi xác nhận'
-                            statusColor='#ffeca9'
-                        />
-                        :<View/>}
-                        
-                        {!this.state.isDone ? <RequestListItem
-                            createDate='20/12/2020'
-                            requestDate='20/12/2020'
-                            requestTime='19h30'
-                            status='Đã được xác nhận'
-                            statusColor='#c7e8ac'
-                        />
-                        :<View/>}
-                        
-                        {this.state.isDone ? <RequestListItem
-                            createDate='20/12/2020'
-                            requestDate='20/12/2020'
-                            requestTime='19h30'
-                        />
-                        :<View/>}
-                        
-                        {this.state.isDone ? <RequestListItem
-                            createDate='20/2/2020'
-                            requestDate='20/1/2020'
-                            requestTime='13h30'
-                        />
-                        :<View/>}
-                        
-                </ScrollView>
-            </View>
+                    </View>
+                    
+                    <ScreenBottomMenu></ScreenBottomMenu>
+                </View>  
         );
     }
 }
-
 
 
 

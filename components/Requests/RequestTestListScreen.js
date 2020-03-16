@@ -14,19 +14,26 @@ export default class HomeScreen extends Component {
         this.state={
             showFooter: true,
             selectedTest:[],
+            testList:[],
+            totalPrice:'0',
         }
         this.selectItem = this.selectItem.bind(this)
     }
     
 
-    selectItem(id) {
+    selectItem(id,price) {
         let _selectedTest = this.state.selectedTest;
+        let _totalPrice = parseInt(this.state.totalPrice);
+        let _price = parseInt(price);
         const found = _selectedTest.findIndex(test => test == id);
         found === -1 ? _selectedTest.push(id) : _selectedTest.splice(found, 1);
+        found === -1 ? _totalPrice+=_price : _totalPrice-=_price;
         this.setState({            
-            selectedTest: _selectedTest
-        })
-        Alert.alert("this "+_selectedTest);
+            selectedTest: _selectedTest,
+            totalPrice:_totalPrice
+        })        
+        // Alert.alert("this "+ _totalPrice);
+        
     }
     RenderFooter(){
         if(this.state.showFooter){
@@ -43,6 +50,24 @@ export default class HomeScreen extends Component {
         this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
     }
 
+    getApiData() {        
+        fetch("https://medtestlp.herokuapp.com/requests/tests/list")
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState(previousState => ({
+                isLoaded: true,
+                testList: result,
+            }));
+            },            
+            (error) => {
+            this.setState({
+                isLoaded: true,
+                error
+            });
+            }
+        )
+    }
     // componentWillUnmount() {
     //     this.keyboardDidShowSub.remove();
     //     this.keyboardDidHideSub.remove();
@@ -62,8 +87,8 @@ export default class HomeScreen extends Component {
         })
     };
 
-
     render(){
+        // const {testList} = this.state;
         return(
                 <View style={{
                     flex:1,
@@ -95,7 +120,6 @@ export default class HomeScreen extends Component {
                                             return (
                                                 <TestCategoryItem 
                                                     categoryName={item.testType}
-                                                    totalPrice='100.000d'
                                                     test = {item.test}
                                                     viewOnly = {false}
                                                     selectItem = {this.selectItem}
@@ -114,7 +138,11 @@ export default class HomeScreen extends Component {
                                     CommonActions.navigate({
                                         name: 'RequestPersionalInformation',
                                         params: {
-                                            selectedTest: this.state.selectedTest,                                            
+                                            selectedTest: this.state.selectedTest, 
+                                            totalPrice: this.state.totalPrice, 
+                                            
+                                            //testList: this.state.testList   
+                                            testList: testList
                                         },
                                     })
                                 )}

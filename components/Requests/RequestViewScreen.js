@@ -10,18 +10,28 @@ export default class RequestViewScreen extends Component {
 constructor(props) {
         super(props)
         this.state = {
-            name: 'Nguyễn Văn A',
+            name: this.props.route.params.name? this.props.route.params.name : 'Nguyễn Văn A',
             dob: '01/01/1970',
             phone: '0123456789',
-            gender: 'Nữ',
-            address: 'Số 123 đường abc, xyz',
+            address: this.props.route.params.address ? this.props.route.params.address :'Số 123 đường abc, xyz',
             email: '123@123.com',
-            date: '20/20/2020',
-            time: '17h00',
-            status: 'Đang đợi lấy mẫu',
+            date: this.props.route.params.date ? this.props.route.params.date: '20/20/2020',
+            time: this.props.route.params.freeTime? this.props.route.params.freeTime: '17h00',
+            status: this.props.route.params.status? this.props.route.params.status:'Đang đợi lấy mẫu',
+            statusColor: this.props.route.params.statusColor? this.props.route.params.statusColor:'#7ab648',
             nurseName: 'Nguyễn Văn B'
-        };
+        };        
+        this.isSelected = this.isSelected.bind(this);
     }
+
+
+    isSelected(id) {
+        const found = this.props.route.params.selectedTest.findIndex(test => test == id);   
+        let result = false;     
+        found === -1 ? '' : result=true;     
+        return result;
+    }
+
     render(){
         return(
                 <View style={{flex:1}}>
@@ -69,9 +79,9 @@ constructor(props) {
                                     <Text style={styles.textInfor} >Trạng thái:</Text>
                                 </View>
                                 <View style={{
-                                    width:150
+                                    width:180
                                     }}>
-                                    <Text style={[styles.textInfor,{color:'#7ab648'}]} >{this.state.status}</Text>
+                                    <Text style={[styles.textInfor,{color:this.state.statusColor}]} >{this.state.status}</Text>
                                 </View>                                                             
                             </View> 
                             <View style={styles.doubleContainer}>
@@ -89,7 +99,32 @@ constructor(props) {
                                 </View>                                                             
                             </View>                            
                         </View>
-                        <RequestTestListArea></RequestTestListArea>
+                        <View style = {styles.TestListAreaBackground}>
+                            <View
+                                style = {styles.TestListArea}
+                                >
+                                <FlatList 
+                                    style ={styles.TestListAreaScrollView}                        
+                                    showsVerticalScrollIndicator={false}
+                                    scrollEnabled={false}
+                                    data={testList}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({item}) => {
+                                            return (
+                                                <TestCategoryItem 
+                                                    categoryName={item.testType}
+                                                    totalPrice='100.000d'
+                                                    test = {item.test}
+                                                    viewOnly = {true}
+                                                    isSelected = {this.isSelected}
+                                                    >
+                                                </TestCategoryItem>                                    
+                                            );
+                                        }}
+                                >                    
+                                </FlatList>
+                            </View>
+                        </View>
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity style={styles.btnConfirm}>
                                 <Text style={styles.textBtn}>Hủy đơn xét nghiệm</Text>
@@ -127,7 +162,6 @@ class RequestTestListArea extends Component{
                                 return (
                                     <TestCategoryItem 
                                         categoryName={item.testType}
-                                        totalPrice='100.000d'
                                         test = {item.test}
                                         viewOnly = {true}
                                         >

@@ -1,11 +1,25 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView} from 'react-native';
+import {View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView, FlatList} from 'react-native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import RequestListItem from './RequestListItem';
+import requestsList from './../../Data/RequestsList'
+import testList from './../../Data/Test'
+
 
 export default class RequestListScreen extends Component {
-    let 
+    constructor(props) {
+        super(props)
+        this.state = {
+            isDone: false
+        };
+        this.viewDone = this.viewDone.bind(this);
+    }
+    
+    viewDone(){
+        return this.state.isDone;
+    }
+
     render(){
         return(
                 <View style={{flex:1}}>
@@ -15,7 +29,70 @@ export default class RequestListScreen extends Component {
                         <View style={styles.titleArea}>     
                             <Text style={{fontSize:22,color:'#25345D'}}>Lịch sử xét nghiệm</Text>
                         </View>
-                        <RequestListArea></RequestListArea>
+                        <View style = {{flex:1}}>
+                            <View style={[styles.titleArea,{
+                                height:60,
+                                marginBottom:10
+                                }]}>     
+                                <TouchableOpacity
+                                    onPress={() => this.setState(previousState => (
+                                        { isDone: false }
+                                    ))}
+                                    style ={[styles.mainButton,{
+                                        backgroundColor:this.state.isDone?'#b1de8c':'#6fc02d',
+                                        borderWidth:this.state.isDone? 0:3,
+                                        borderBottomLeftRadius:10,
+                                        borderTopLeftRadius:10
+                                    }]}                                
+                                    >
+                                    <Text style={{fontSize:18}}>Đơn chưa xong</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => this.setState(previousState => (
+                                        { isDone: true }
+                                    ))}
+                                    style ={[styles.mainButton,{
+                                        backgroundColor:this.state.isDone?'#fba739':'#fccd90',
+                                        borderWidth:this.state.isDone? 3:0,
+                                        borderBottomRightRadius:10,
+                                        borderTopRightRadius:10                           
+                                    }]}                                
+                                    >
+                                    <Text style={{fontSize:18}}>Đơn đã xong</Text>
+                                </TouchableOpacity>                    
+                            </View>
+                            <FlatList style={{                    
+                                flex:1
+                                }}
+                                showsVerticalScrollIndicator={false}
+                                data={requestsList}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({item}) => {
+                                        return (
+                                            <View>                                
+                                            <RequestListItem
+                                                request_createTime={item.request_createTime}
+                                                cust_name={item.cust_name}
+                                                cust_phone={item.cust_phone}
+                                                cust_DOB={item.cust_DOB}
+                                                appoint_address={item.appoint_address}
+                                                appoint_date={item.appoint_date}
+                                                appoint_time={item.appoint_time}
+                                                nurse_name={item.nurse_name}
+                                                nurse_id={item.nurse_id}
+                                                selectedTest={item.selectedTest}
+                                                req_amount={item.req_amount}
+                                                req_status={item.req_status}
+                                                viewDone={this.viewDone}
+                                                testList={testList}
+                                                navigation={this.props.navigation}
+                                            />   
+                                            </View>                             
+                                        );
+                                    }}
+                                >                   
+                            </FlatList>
+                        </View>
                     </View>
                     
                     <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
@@ -24,91 +101,6 @@ export default class RequestListScreen extends Component {
     }
 }
 
-class RequestListArea extends Component{        
-    state = {
-        isDone: false
-    };    
-    render(){
-        return(
-            <View style = {{flex:1}}>
-                <View style={[styles.titleArea,{
-                    height:60,
-                    marginBottom:10
-                    }]}>     
-                    <TouchableOpacity
-                        onPress={() => this.setState(previousState => (
-                            { isDone: false }
-                        ))}
-                        style ={[styles.mainButton,{
-                            backgroundColor:this.state.isDone?'#b1de8c':'#6fc02d',
-                            borderWidth:this.state.isDone? 0:3,
-                            borderBottomLeftRadius:10,
-                            borderTopLeftRadius:10
-                        }]}                                
-                        >
-                        <Text style={{fontSize:18}}>Đơn chưa xong</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.setState(previousState => (
-                            { isDone: true }
-                        ))}
-                        style ={[styles.mainButton,{
-                            backgroundColor:this.state.isDone?'#fba739':'#fccd90',
-                            borderWidth:this.state.isDone? 3:0,
-                            borderBottomRightRadius:10,
-                            borderTopRightRadius:10                           
-                        }]}                                
-                        >
-                        <Text style={{fontSize:18}}>Đơn đã xong</Text>
-                    </TouchableOpacity>                    
-                </View>
-                <ScrollView style={{                    
-                    flex:1
-                    }}
-                    maximumZoomScale={1}
-                    minimumZoomScale={1}
-                    showsVerticalScrollIndicator={false}
-                    >
-
-                        {!this.state.isDone ? <RequestListItem
-                            createDate='20/12/2020'
-                            requestDate='20/12/2020'
-                            requestTime='19h30'
-                            status='Đang đợi y tá nhận đơn'
-                            statusColor='#ffd66f'
-                        />
-                        :<View/>}
-                        
-                        {!this.state.isDone ? <RequestListItem
-                            createDate='20/12/2020'
-                            requestDate='20/12/2020'
-                            requestTime='19h30'
-                            status='Đang đợi lấy mẫu'
-                            statusColor='#a4d57b'
-                        />
-                        :<View/>}
-
-                        {!this.state.isDone ? <RequestListItem
-                            createDate='20/12/2020'
-                            requestDate='20/12/2020'
-                            requestTime='19h30'
-                            status='Đang đợi kết quả'
-                            statusColor='#6398d6'
-                        />
-                        :<View/>}
-                        
-                        {this.state.isDone ? <RequestListItem
-                            createDate='20/12/2020'
-                            requestDate='20/12/2020'
-                            requestTime='19h30'
-                        />
-                        :<View/>}
-                        
-                </ScrollView>
-            </View>
-        );
-    }
-}
 
 
 

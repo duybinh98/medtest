@@ -8,16 +8,31 @@ export default class TestCategoryItem extends Component {
     constructor(props){
         super(props);
         this.state={
-            viewTest: false,
-            selected: (new Map(): Map<string, boolean>) 
-            
+            viewTest: true,            
+            visible: false
         }
-        
+        this.isVisible = this.isVisible.bind(this);
+    }
+
+    isVisible(){
+        // not view => hide if empty         
+        if (!this.props.viewOnly){
+            if (Array.isArray(this.props.test) && !this.props.test.length) return false;
+            return true;
+        }
+        // view => hide if no selected
+        let result = false;
+        this.props.test.forEach(test => {
+            this.props.isSelected(test.testId) == true ? result=true : '';  
+        });
+        return result;
     }
 
     render(){
         const testList = this.props.test;
         return(
+            <View>
+            {this.isVisible() ?
             <View>
                 <TouchableOpacity style={styles.testItem}
                     onPress={() =>{
@@ -51,12 +66,12 @@ export default class TestCategoryItem extends Component {
                             paddingRight:10
                         }}
                     >
-                        <Text
+                        {/* <Text
                             style={{
                                 fontSize:12,
                                 color:'#25345d'
                             }}    
-                            >{this.props.totalPrice}</Text>
+                            >{this.props.totalPrice}</Text> */}
                     </View>
                 </TouchableOpacity>
                 <FlatList 
@@ -87,6 +102,7 @@ export default class TestCategoryItem extends Component {
                             );
                         }}
                 />
+            </View> : null }
             </View>
         );
     }
