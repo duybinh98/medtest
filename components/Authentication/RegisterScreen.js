@@ -47,9 +47,9 @@ class RegisterScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: '',
-            phonenumber: '',
-            email: '',
+            name: 'a',
+            phonenumber: '0123456789',
+            email: 'binhpd@fpt.edu',
             dob: '',
             password: '',
             gender: 'Nữ',
@@ -60,6 +60,7 @@ class RegisterScreen extends Component {
         if (values.cfPassword !== values.password) {
             alert("Xác nhận mật khẩu không đúng!")
         } else {
+            this.callApi().then(
             this.props.navigation.dispatch(
                 CommonActions.navigate({
                     name: 'LoginScreen',
@@ -72,8 +73,39 @@ class RegisterScreen extends Component {
                         gender: this.state.gender,
                     },
                 })
-            )
+            ))
         }
+    }
+
+    callApi  = async () => {
+        fetch('http://192.168.1.11:8080/users/customers/register', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: this.state.name,
+            phoneNumber: this.state.phonenumber,
+            email: this.state.email,
+            dob : "1998-12-12T17:00:00.000+0000",
+            gender: '1',
+            password: this.state.password
+        }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                Alert.alert("hi"+result);
+            },
+            (error) => {
+            this.setState({                
+                error
+            });
+            Alert.alert("hi"+error);
+            }
+        )
+        ;
     }
 
     render() {
@@ -82,7 +114,7 @@ class RegisterScreen extends Component {
         return (
             <View style={styles.background}>
                 <ScrollView>
-                    <ScreenTopMenu></ScreenTopMenu>
+                    <ScreenTopMenu {...this.props}></ScreenTopMenu>
                     <View>
                         <View style={styles.logoContainer}>
                             <Text style={styles.logoText}>Đăng ký</Text>

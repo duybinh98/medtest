@@ -90,15 +90,17 @@ class UpdateInformationScreen extends Component {
         return ` ${townName}`;
     }
     submit = values => {
-        this.props.navigation.dispatch(
-            CommonActions.navigate({
-                name: 'CustomerInformation',
-                params: {
-                    address: this.state.address,
-                    town: this.state.town,
-                    district: this.state.district
-                },
-            })
+        this.callApi().then(
+            this.props.navigation.dispatch(
+                CommonActions.navigate({
+                    name: 'CustomerInformation',
+                    params: {
+                        address: this.state.address,
+                        town: this.state.town,
+                        district: this.state.district
+                    },
+                })
+            )
         )
     }
     selectItem(id) {
@@ -110,6 +112,39 @@ class UpdateInformationScreen extends Component {
             }
         });
     }
+    callApi  = async () => {
+        fetch('http://192.168.1.11:8080/users/customers/detail/update/2', {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: this.state.name,
+            address: this.state.address,
+            email: this.state.email,
+            dob : "1998-12-12T17:00:00.000+0000",
+            gender: '0',
+            townCode:null,
+            districtCode:null
+        }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                Alert.alert("hi"+result);
+            },
+            (error) => {
+            this.setState({                
+                error
+            });
+            Alert.alert("hi"+error);
+            }
+        )
+        ;
+    }
+
+
     render() {
         const { gender } = this.state;
         const { handleSubmit } = this.props;

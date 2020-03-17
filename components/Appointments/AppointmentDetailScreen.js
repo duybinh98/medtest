@@ -51,8 +51,12 @@ export default class ForgottenPassword extends Component {
                     <TouchableOpacity style={styles.buttonView}>
                         <Text style={styles.textBtn}>Hủy đơn</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonView}>
-                        <Text style={styles.textBtn}>Đặt lịch</Text>
+                    <TouchableOpacity style={styles.buttonView}
+                    onPress={() => {
+                        this.props.navigation.goBack()
+                    }}
+                    >
+                        <Text style={styles.textBtn}>Quay lại</Text>
                     </TouchableOpacity>
                 </View>
 
