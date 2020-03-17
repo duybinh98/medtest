@@ -136,7 +136,7 @@ export default class HomeScreen extends Component {
                                 style={styles.btnConfirm}
                                 onPress={() => this.props.navigation.dispatch(
                                     CommonActions.navigate({
-                                        name: 'RequestPersionalInformation',
+                                        name: 'RequestPersonalInformation',
                                         params: {
                                             selectedTest: this.state.selectedTest, 
                                             totalPrice: this.state.totalPrice, 

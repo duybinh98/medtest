@@ -97,7 +97,10 @@ class RequestPersonalInformation extends Component {
                 params: {                 
                     address: this.state.address,
                     town: this.state.town,
-                    district : this.state.district
+                    district : this.state.district,
+                    selectedTest: this.props.route.params.selectedTest,   
+                    testList: this.props.route.params.testList,
+                    totalPrice: this.props.route.params.totalPrice,
                 },
             })
         )              
