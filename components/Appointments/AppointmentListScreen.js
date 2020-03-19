@@ -3,13 +3,15 @@ import {View, StyleSheet, Dimensions, Text, TouchableOpacity, FlatList} from 're
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import AppointmentListItem from './AppointmentListItem';
-import appointmentsList from './../../Data/AppointmentList'
+// import appointmentsList from './../../Data/AppointmentList'
 
 export default class Request extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isDone: false
+            isDone: false,
+            // customerId: this.props.route.params.customerId ? this.props.route.params.customerId : '-1',
+            appointmentsList : null,
         };
         this.viewDone = this.viewDone.bind(this);
     }
@@ -17,7 +19,28 @@ export default class Request extends Component {
     viewDone(){
         return this.state.isDone;
     }
-  
+
+    componentDidMount() {
+        this.callApiAppointmentList();
+    }
+
+    callApiAppointmentList = async () =>  {
+        // fetch("http://192.168.1.11:8080/users/customers/"+this.state.customerId+"/appointments/list")
+        fetch("http://192.168.1.11:8080/users/customers/1/appointments/list")
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState(previousState => ({
+                appointmentsList: result,
+            }));
+            },            
+            (error) => {
+            this.setState({
+                error
+            });
+            }
+        )
+    }
     render(){
         return(
                 <View style={{flex:1}}>
@@ -63,18 +86,19 @@ export default class Request extends Component {
                         flex:1
                         }}
                         showsVerticalScrollIndicator={false}
-                        data={appointmentsList}
+                        data={this.state.appointmentsList}
                         keyExtractor={(item, index) => index.toString()}
                                 renderItem={({item}) => {
                                         return (
                                             <View>                                
                                             <AppointmentListItem
-                                                appointment_userName={item.appointment_userName}
+                                                appointment_userName={item.appointment_customerName}
                                                 appointment_phoneNumber={item.appointment_phoneNumber}
                                                 appointment_DOB={item.appointment_DOB}
                                                 appointment_meetingTime={item.appointment_meetingTime}
                                                 appointment_status={item.appointment_status}
                                                 appointment_note={item.appointment_note}
+                                                appointment_createdTime={item.appointment_createdTime}
                                                 viewDone={this.viewDone}
                                                 navigation={this.props.navigation}
                                             />   

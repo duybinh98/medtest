@@ -2,45 +2,71 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
+import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { CommonActions } from '@react-navigation/native';
 
-
-
-
 const { width: WIDTH } = Dimensions.get('window')
-
 export default class ForgottenPassword extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            id: '2',
             name: 'Nguyễn Văn A',
             dob: '01/01/1970',
             phone: '0123456789',
             gender: 'Nữ',
             address: 'Số 123 đường abc, xyz',
-            email: '123@123.com'
+            email: '123@123.com',
+            image: 'https://getdrawings.com/free-icon/react-icon-69.png',
+            districtCode: null,
+            // cityCode: null,
+            townCode: null,            
         };
     }
-    submit = values => {
-        this.props.navigation.dispatch(
-            CommonActions.navigate({
-                name: 'UpdateInformation',
-                params: {
-                    name: this.state.name
-                },
-            })
+
+    componentDidMount() {
+        this.getApiData();
+    }
+
+    getApiData() {
+        fetch("http://192.168.1.11:8080/users/customers/detail/"+this.state.id)
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState(previousState => ({
+                isLoaded: true,
+                name: result.name,
+                address: result.address,
+                email: result.email,
+                phone: result.phonenumber,
+                image: result.image,
+                districtCode: result.districtCode,
+                cityCode: result.cityCode,
+                townCode: result.townCode,
+                dob: result.dob.substring(0,10),
+                gender: result.gender,
+
+            }));
+            },            
+            (error) => {
+            this.setState({
+                isLoaded: true,
+                error
+            });
+            }
         )
     }
+
     render() {
         const { gender } = this.state;
         return (
             <ScrollView style={{ flex: 1 }}>
-                <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
+                <ScreenTopMenuBack navigation={this.props.navigation} backScreen='HomeScreen'></ScreenTopMenuBack>
                 <View>
                     <View style={styles.logoContainer}>
                         <ImageBackground
-                            source={{ uri: 'https://getdrawings.com/free-icon/react-icon-69.png' }}
+                            source={{ uri: this.state.image }}
                             style={styles.logo} >
                             <TouchableOpacity><Icon
                                 name='camera'
@@ -64,7 +90,7 @@ export default class ForgottenPassword extends Component {
                         <Text style={styles.textInfor} >Ngày sinh: {this.state.dob}</Text>
                     </View>
                     <View style={styles.genderContainer}>
-                        <Text style={styles.textInfor} >Giới tính: {this.state.gender}</Text>
+                        <Text style={styles.textInfor} >Giới tính: {this.state.gender?"Nữ": "Nam"}</Text>
                     </View>
                 </View>
 
@@ -75,8 +101,24 @@ export default class ForgottenPassword extends Component {
                     <Text style={styles.textInfor} >Email: {this.state.email}</Text>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.btnConfirm} 
-                        onPress = {this.submit}
+                    <TouchableOpacity style={styles.btnConfirm}
+                    onPress={() => this.props.navigation.dispatch(
+                        CommonActions.navigate({
+                            name: 'UpdateInformation',
+                            params: {                 
+                                name: this.state.name,
+                                address: this.state.address,
+                                email: this.state.email,
+                                phone: this.state.phonenumber,
+                                image: this.state.image,
+                                districtCode: this.state.districtCode,
+                                cityCode: this.state.cityCode,
+                                townCode: this.state.townCode,
+                                dob: this.state.dob,
+                                gender: this.state.gender,
+                            },
+                        })
+                    )  }
                     >
                         <Text style={styles.textBtn}>Chỉnh sửa thông tin</Text>
                     </TouchableOpacity>

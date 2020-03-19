@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Image, Text, Dimensions, FlatList, Alert} from 'react-native';
 import {Button} from 'react-native-elements';
+import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import ArticleListItem from './ArticleListItem';
@@ -10,33 +11,58 @@ export default class HomeScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            customerId:'2',
             error: null,
-            isLoaded: false,
-            articlesList: []
+            articlesList: [],
+            testsList:[],
         };
+        this.onPressCreateRequest = this.onPressCreateRequest.bind(this);
     }
 
     componentDidMount() {
-
+        this.callApiArticlesList();
     }
 
-    getApiData() {
-        fetch("https://medtestlp.herokuapp.com/article/list")
+    callApiArticlesList= async () =>  {
+        fetch("http://192.168.1.11:8080/articles/list")
         .then(res => res.json())
         .then(
             (result) => {
             this.setState(previousState => ({
-                isLoaded: true,
                 articlesList: result,
             }));
             },            
             (error) => {
             this.setState({
-                isLoaded: true,
                 error
             });
             }
         )
+    }
+
+    onPressCreateRequest(){
+        fetch("http://192.168.1.11:8080/test-types/type-test")
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'RequestTestListScreen',
+                params: {
+                    customerId: this.state.customerId,
+                    testsList: result,
+                    selectedTest: [], 
+                    totalPrice: '0',
+                },
+            }))  
+            },            
+            (error) => {
+            this.setState({
+                error
+            });
+            }
+        )
+        
     }
 
     render(){
@@ -60,7 +86,13 @@ export default class HomeScreen extends Component {
                                 }]}
                                 titleStyle={{color:'#0A6ADA'}} 
                                 title="Đặt khám"
-                                onPress={() => this.props.navigation.navigate('CreateAppointmentScreen')}
+                                onPress={() => this.props.navigation.dispatch(
+                                CommonActions.navigate({
+                                    name: 'CreateAppointmentScreen',
+                                    params: {
+                                        // customerId: this.state.customerId,
+                                    },
+                                }))}
                             >\</Button>  
 
                             <Button 
@@ -70,7 +102,9 @@ export default class HomeScreen extends Component {
                                 }]}
                                 titleStyle={{color:'#0A6ADA'}} 
                                 title="Đặt xét nghiệm"
-                                onPress={() => this.props.navigation.navigate('RequestTestListScreen')}
+                                onPress={() => {
+                                    this.onPressCreateRequest();
+                                }}
                             >\</Button>   
 
                         </View>
@@ -86,10 +120,10 @@ export default class HomeScreen extends Component {
                             renderItem={({item}) => {
                                 return (
                                     <ArticleListItem 
-                                        imageUri={article.imageUri}
-                                        title={article.cust_phone}
-                                        shortContent={article.dob}
-                                        content={article.dob}                                        
+                                        image={item.image}
+                                        title={item.tittle}
+                                        shortContent={item.content}
+                                        content={item.content}   
                                         navigation={this.props.navigation}
                                         >
                                     </ArticleListItem>

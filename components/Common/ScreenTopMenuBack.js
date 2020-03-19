@@ -15,7 +15,7 @@ export default class ScreenTopMenuBack extends Component {
                     size= {40}
                     iconStyle={[styles.button,{marginLeft:20}]}
                     onPress= {() => {
-                    this.props.navigation.goBack();
+                    this.props.backScreen ? this.props.navigation.navigate(this.props.backScreen) : this.props.navigation.goBack();
                     }}
                 ></Icon>
                 <Text style={styles.title}> MedTest</Text>

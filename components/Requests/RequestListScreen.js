@@ -23,7 +23,7 @@ export default class RequestListScreen extends Component {
     render(){
         return(
                 <View style={{flex:1}}>
-                    <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
+                    <ScreenTopMenuBack navigation={this.props.navigation} backScreen="HomeScreen"></ScreenTopMenuBack>
                     <View 
                         style ={styles.background}>            
                         <View style={styles.titleArea}>     

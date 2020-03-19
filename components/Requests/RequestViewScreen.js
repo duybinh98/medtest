@@ -35,7 +35,7 @@ constructor(props) {
     render(){
         return(
                 <View style={{flex:1}}>
-                    <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
+                    <ScreenTopMenuBack navigation={this.props.navigation} backScreen="RequestListScreen"></ScreenTopMenuBack>
                     <ScrollView 
                         style ={styles.background}                                            
                         showsVerticalScrollIndicator={false}
@@ -107,14 +107,13 @@ constructor(props) {
                                     style ={styles.TestListAreaScrollView}                        
                                     showsVerticalScrollIndicator={false}
                                     scrollEnabled={false}
-                                    data={testList}
+                                    data={this.props.route.params.testsList}
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={({item}) => {
                                             return (
                                                 <TestCategoryItem 
-                                                    categoryName={item.testType}
-                                                    totalPrice='100.000d'
-                                                    test = {item.test}
+                                                    categoryName={item.testTypeName}
+                                                    test = {item.listTest}
                                                     viewOnly = {true}
                                                     isSelected = {this.isSelected}
                                                     >

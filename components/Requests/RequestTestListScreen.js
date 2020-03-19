@@ -12,12 +12,14 @@ export default class HomeScreen extends Component {
     constructor(props){
         super(props);
         this.state={
+            customerId: this.props.route.params.customerId ? this.props.route.params.customerId : '-1',
             showFooter: true,
-            selectedTest:[],
-            testList:[],
-            totalPrice:'0',
+            selectedTest:this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [],
+            testsList: this.props.route.params.testsList ? this.props.route.params.testsList : testList,
+            totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0',
+            customerInformation: null,
         }
-        this.selectItem = this.selectItem.bind(this)
+        this.selectItem = this.selectItem.bind(this)        
     }
     
 
@@ -32,7 +34,6 @@ export default class HomeScreen extends Component {
             selectedTest: _selectedTest,
             totalPrice:_totalPrice
         })        
-        // Alert.alert("this "+ _totalPrice);
         
     }
     RenderFooter(){
@@ -48,16 +49,27 @@ export default class HomeScreen extends Component {
     componentDidMount(){
         this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
         this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+        this.callApiCustomerInformation();
     }
 
-    getApiData() {        
-        fetch("https://medtestlp.herokuapp.com/requests/tests/list")
+    callApiCustomerInformation() {
+        if (this.state.customerId == '-1') return ;
+        fetch("http://192.168.1.11:8080/users/customers/detail/"+this.state.customerId)
         .then(res => res.json())
         .then(
             (result) => {
             this.setState(previousState => ({
-                isLoaded: true,
-                testList: result,
+                customerInformation: result
+                // name: result.name,
+                // address: result.address,
+                // email: result.email,
+                // phone: result.phonenumber,
+                // image: result.image,
+                // districtCode: result.districtCode,
+                // cityCode: result.cityCode,
+                // townCode: result.townCode,
+                // dob: result.dob.substring(0,10),
+                // gender: result.gender,
             }));
             },            
             (error) => {
@@ -73,22 +85,21 @@ export default class HomeScreen extends Component {
     //     this.keyboardDidHideSub.remove();
     // }
 
+
+
     keyboardDidShow = (event) => {
-        console.log('keyboardDidShow')
         this.setState({
             showFooter: false
         })
     };
 
     keyboardDidHide = (event) => {
-        console.log('keyboardDidHide')
         this.setState({
             showFooter: true
         })
     };
 
     render(){
-        // const {testList} = this.state;
         return(
                 <View style={{
                     flex:1,
@@ -114,13 +125,13 @@ export default class HomeScreen extends Component {
                                 <FlatList 
                                     style ={styles.TestListAreaScrollView}                        
                                     showsVerticalScrollIndicator={false}
-                                    data={testList}
+                                    data={this.state.testsList}
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={({item}) => {
                                             return (
                                                 <TestCategoryItem 
-                                                    categoryName={item.testType}
-                                                    test = {item.test}
+                                                    categoryName={item.testTypeName}
+                                                    test = {item.listTest}
                                                     viewOnly = {false}
                                                     selectItem = {this.selectItem}
                                                 >
@@ -134,18 +145,19 @@ export default class HomeScreen extends Component {
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
                                 style={styles.btnConfirm}
-                                onPress={() => this.props.navigation.dispatch(
+                                onPress={() => this.state.customerId !='-1' ? this.props.navigation.dispatch(
                                     CommonActions.navigate({
                                         name: 'RequestPersonalInformation',
                                         params: {
                                             selectedTest: this.state.selectedTest, 
                                             totalPrice: this.state.totalPrice, 
-                                            
-                                            //testList: this.state.testList   
-                                            testList: testList
+                                            testsList: this.state.testsList,
+                                            customerInformation: this.state.customerInformation
                                         },
                                     })
-                                )}
+                                ): 
+                                    Alert.alert('Bạn cần đăng nhập để có thể sử dụng chức năng đặt xét nghiệm')
+                                }
                                 >
                                 <Text style={styles.textBtn}>Đặt xét nghiệm</Text>
                             </TouchableOpacity>
@@ -156,47 +168,6 @@ export default class HomeScreen extends Component {
         );
     }
 }
-
-
-
-class RequestTestListArea extends Component{        
-    state = {
-        isDone: false
-    };    
-    render(){        
-        return(
-            <View style = {styles.TestListAreaBackground}>
-                <View
-                    style = {styles.TestListArea}
-                    >
-                    <FlatList 
-                        style ={styles.TestListAreaScrollView}                        
-                        showsVerticalScrollIndicator={false}
-                        data={testList}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({item}) => {
-                                return (
-                                    <TestCategoryItem 
-                                        categoryName={item.testType}
-                                        totalPrice='100.000d'
-                                        test = {item.test}
-                                        viewOnly = {false}
-                                        onPressItem = {this.onPressAction}
-                                        selected={false} 
-                                    >
-                                    </TestCategoryItem>                                    
-                                );
-                            }}
-                    >                    
-                    </FlatList>
-                </View>
-            </View>
-        );
-    }
-}
-
-
-
 
 const styles = StyleSheet.create({
     background:{

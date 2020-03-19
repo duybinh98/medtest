@@ -1,38 +1,38 @@
 var testList = [
     {
         "testTypeId":"1",     
-        "testType":"Test type A",   
-        "test":[{
-            "testId":"1",
+        "testTypeName":"Test type A",   
+        "listTest":[{
+            "testID":"1",
             "testName":"test name 1",
             "price":"100000"
         },
         {
-            "testId":"2",
+            "testID":"2",
             "testName":"test name 2",
             "price":"200000"
         },
         {
-            "testId":"3",
+            "testID":"3",
             "testName":"test name 3",
             "price":"100000"
         }]
     },
     {
         "testTypeId":"2",     
-        "testType":"Test type B",   
-        "test":[{
-            "testId":"4",
+        "testTypeName":"Test type B",   
+        "listTest":[{
+            "testID":"4",
             "testName":"test name 4",
             "price":"100000"
         },
         {
-            "testId":"5",
+            "testID":"5",
             "testName":"test name 5",
-            "price":"200000"
+            "price":"100000"
         },
         {
-            "testId":"6",
+            "testID":"6",
             "testName":"test name 6",
             "price":"200000"
         }]

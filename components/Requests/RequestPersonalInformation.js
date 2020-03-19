@@ -71,7 +71,7 @@ class RequestPersonalInformation extends Component {
         this.state = {
             name: '',
             apointmentDate: '01/01/2020',
-            apointmentTime: '7h30',
+            apointmentTime: '07:30',
             selectTownList: [],
             address: '',
             district: '',
@@ -98,8 +98,10 @@ class RequestPersonalInformation extends Component {
                     address: this.state.address,
                     town: this.state.town,
                     district : this.state.district,
+                    date:this.state.apointmentDate,
+                    time:this.state.apointmentTime,
                     selectedTest: this.props.route.params.selectedTest,   
-                    testList: this.props.route.params.testList,
+                    testsList: this.props.route.params.testsList,
                     totalPrice: this.props.route.params.totalPrice,
                 },
             })

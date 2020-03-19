@@ -14,7 +14,7 @@ export default class RequestConfirmScreen extends Component {
             name: this.props.route.params.name,
             address: this.props.route.params.address + ", "  + this.props.route.params.town + ", " +  this.props.route.params.district, 
             date: this.props.route.params.date,
-            freeTime: this.props.route.params.freeTime,
+            freeTime: this.props.route.params.time,
         };
         this.isSelected = this.isSelected.bind(this);
     }
@@ -105,13 +105,13 @@ export default class RequestConfirmScreen extends Component {
                                     style ={styles.TestListAreaScrollView}                        
                                     showsVerticalScrollIndicator={false}
                                     //scrollEnabled={false}
-                                    data={this.props.route.params.testList}
+                                    data={this.props.route.params.testsList}
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={({item}) => {
                                             return (
                                                 <TestCategoryItem 
-                                                    categoryName={item.testType}
-                                                    test = {item.test}
+                                                    categoryName={item.testTypeName}
+                                                    test = {item.listTest}
                                                     viewOnly = {true}
                                                     isSelected = {this.isSelected}
                                                     >
@@ -137,7 +137,7 @@ export default class RequestConfirmScreen extends Component {
                                                 date: this.state.date,
                                                 freeTime: this.state.freeTime,
                                                 selectedTest: this.props.route.params.selectedTest,   
-                                                testList: this.props.route.params.testList,
+                                                testsList: this.props.route.params.testsList,
                                                 // customerInfo  = this.state.customerInfo,
                                             },
                                         })
@@ -155,42 +155,6 @@ export default class RequestConfirmScreen extends Component {
     }
 }
 
-
-
-class RequestTestListArea extends Component{        
-    state = {
-        isDone: false
-    };    
-    render(){
-        return(
-            <View style = {styles.TestListAreaBackground}>
-                <View
-                    style = {styles.TestListArea}
-                    >
-                    <FlatList 
-                        style ={styles.TestListAreaScrollView}                        
-                        showsVerticalScrollIndicator={false}
-                        //scrollEnabled={false}
-                        data={testList}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({item}) => {
-                                return (
-                                    <TestCategoryItem 
-                                        categoryName={item.testType}
-                                        totalPrice='100.000d'
-                                        test = {item.test}
-                                        viewOnly = {true}
-                                        >
-                                    </TestCategoryItem>                                    
-                                );
-                            }}
-                    >                    
-                    </FlatList>
-                </View>
-            </View>
-        );
-    }
-}
 
 
 

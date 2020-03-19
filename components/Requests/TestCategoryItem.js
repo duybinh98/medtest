@@ -23,13 +23,14 @@ export default class TestCategoryItem extends Component {
         // view => hide if no selected
         let result = false;
         this.props.test.forEach(test => {
-            this.props.isSelected(test.testId) == true ? result=true : '';  
+            this.props.isSelected(test.testID) == true ? result=true : '';  
         });
         return result;
     }
 
     render(){
         const testList = this.props.test;
+        let countHide = 0;
         return(
             <View>
             {this.isVisible() ?
@@ -81,19 +82,20 @@ export default class TestCategoryItem extends Component {
                     data={testList}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({item, index}) => {
+                            this.state.viewTest ? this.props.viewOnly ? this.props.isSelected(item.testID) ? null : countHide+=1 : null : null;
                             return ( 
                                 <View>                                 
-                                { this.state.viewTest ? this.props.viewOnly ? this.props.isSelected(item.testId) ?
+                                { this.state.viewTest ? this.props.viewOnly ? this.props.isSelected(item.testID) ?
                                     <TestViewItem 
                                     testName={item.testName}
                                     testPrice={item.price}
-                                    testId={item.testId}
-                                    backgroundColor={index % 2 == 0 ? '#EEE': '#FFF'}
+                                    testID={item.testID}
+                                    backgroundColor={index-countHide % 2 == 0 ? '#EEE': '#FFF'}
                                     /> : null :
                                     <TestSelectItem 
                                     testName={item.testName}
                                     testPrice={item.price}
-                                    testId={item.testId}
+                                    testID={item.testID}
                                     backgroundColor={index % 2 == 0 ? '#EEE': '#FFF'}
                                     onPressItem = {this.props.selectItem}
                                     /> 

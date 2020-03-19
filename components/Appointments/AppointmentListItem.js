@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, StyleSheet, Image, Text, Dimensions, TouchableOpacity} from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import {Button} from 'react-native-elements';
+import {convertDateTimeToDate, convertDateTimeToTime} from './../Common/CommonFunction';
 
 export default class AppointmentListItem extends Component {
     constructor(props) {
@@ -9,6 +10,7 @@ export default class AppointmentListItem extends Component {
         this.state = {
             statusName:'',
             statusColor:'',
+            createDate:'',
             appointmentDate:'',
             appointmentTime:'',
             appointmentDob:'',
@@ -17,27 +19,22 @@ export default class AppointmentListItem extends Component {
     }
     componentDidMount(){
         this.setState(previousState => ({ 
-            appointmentDate:this.props.appointment_meetingTime.substring(0, 10),
-            appointmentTime:this.props.appointment_meetingTime.substring(12, 17),
-            appointmentDob:this.props.appointment_DOB.substring(0, 10),
+            createDate:convertDateTimeToDate(this.props.appointment_createdTime),
+            appointmentDate:convertDateTimeToDate(this.props.appointment_meetingTime),
+            appointmentTime:convertDateTimeToTime(this.props.appointment_meetingTime),
+            appointmentDob:convertDateTimeToDate(this.props.appointment_DOB),
         }));
         switch (this.props.appointment_status) {
-        case '0':
+        case 'pending':
             this.setState(previousState => ({ 
                 statusName:'Đợi xác nhận',
                 statusColor:'#ffd66f'
             }));
             break;
-        case '1':
+        case 'closed':
             this.setState(previousState => ({ 
                 statusName:'Đã được xác nhận',
                 statusColor:'#a4d57b'
-            }));
-            break;
-        case '2':
-            this.setState(previousState => ({ 
-                statusName:'',
-                statusColor:''
             }));
             break;
         }
@@ -107,7 +104,7 @@ export default class AppointmentListItem extends Component {
                         justifyContent: 'space-between',
                         }}>
                         <View style={{width:100,height:25}}>
-                            <Text style={{fontSize:17}}>{this.state.appointmentDate}</Text>
+                            <Text style={{fontSize:17}}>{this.state.createDate}</Text>
                         </View>
                         <View style={{width:100,height:25}}>
                             <Text style={{fontSize:17}}>{this.state.appointmentDate}</Text>
