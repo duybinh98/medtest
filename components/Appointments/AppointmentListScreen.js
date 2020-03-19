@@ -92,6 +92,7 @@ export default class Request extends Component {
                                         return (
                                             <View>                                
                                             <AppointmentListItem
+                                                // appointment_id = {item.appointment_id}
                                                 appointment_userName={item.appointment_customerName}
                                                 appointment_phoneNumber={item.appointment_phoneNumber}
                                                 appointment_DOB={item.appointment_DOB}

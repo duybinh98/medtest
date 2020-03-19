@@ -121,7 +121,9 @@ export default class ForgottenPassword extends Component {
                     >
                         <Text style={styles.textBtn}>Chỉnh sửa thông tin</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnConfirm}>
+                    <TouchableOpacity style={styles.btnConfirm}
+                        onPress={() => this.props.navigation.navigate('ChangePassword')}
+                    >
                         <Text style={styles.textBtn}>Đổi mật khẩu</Text>
                     </TouchableOpacity>
                 </View>

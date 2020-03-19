@@ -14,7 +14,7 @@ export default class HomeScreen extends Component {
         this.state={
             customerId: this.props.route.params.customerId ? this.props.route.params.customerId : '-1',
             showFooter: true,
-            selectedTest:this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [],
+            selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [],
             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : testList,
             totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0',
             customerInformation: null,

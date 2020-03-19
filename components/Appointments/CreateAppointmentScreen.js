@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { CommonActions } from '@react-navigation/native';
+import {getApiUrl, convertDateAndTimeToDateTime} from './../Common/CommonFunction';
 
 //validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
@@ -43,34 +44,65 @@ class CreateAppointmentScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            // customerId: this.props.route.params.customerId ? this.props.route.params.customerId : '-1',
+            customerId: '1',
             name: '',
             phonenumber: '',
             dob: '',
             apointmentDate: '',
             apointmentTime: '',
+            customerInformation: this.props.route.params.customerInformation ? this.props.route.params.customerInformation : '-1',
         };
         this.submit = this.submit.bind(this)
     }
-    submit = values => {
-        this.props.navigation.dispatch(
-            CommonActions.navigate({
-                name: 'AppointmentDetailScreen',
-                params: {
-                    name: this.state.name,
-                    phonenumber: this.state.phonenumber,
-                    dob: this.state.dob,
-                    apointmentDate: this.state.apointmentDate,
-                    apointmentTime: this.state.apointmentTime,
-                },
-            })
-        )
+    submit = values => {        
+        fetch(getApiUrl()+'/appointments/create', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({            
+            meetingTime: convertDateAndTimeToDateTime(this.state.apointmentDate,this.state.apointmentTime),
+            customerID: this.state.customerId,
+        }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.props.navigation.dispatch(
+                    CommonActions.navigate({
+                        name: 'AppointmentDetailScreen',
+                        params: {
+                            appointment_userName: this.state.customerInformation.name,
+                            phonenumber: this.state.customerInformation,
+                            dob: this.state.customerInformation,
+                            appointment_date: this.state.apointmentDate,
+                            appointment_time: this.state.apointmentTime,
+                            backScreen: 'HomeScreen',
+                        },
+                    })
+                )
+            },
+            (error) => {
+            this.setState({                
+                error
+            });
+            Alert.alert("hi"+error);
+            }
+        );
+        
+        
+        
+        
+        
     }
     render() {
         const { handleSubmit } = this.props;
         return (
             <View style={styles.background}>
                 <ScrollView>
-                    <ScreenTopMenu></ScreenTopMenu>
+                    <ScreenTopMenuBack navigation={this.props.navigation} backScreen='HomeScreen'></ScreenTopMenuBack>
                     <View>
                         <View style={styles.logoContainer}>
                             <Text style={styles.logoText}>Đặt lịch khám</Text>

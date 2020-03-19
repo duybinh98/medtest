@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
+import {getApiUrl} from './../Common/CommonFunction';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -9,19 +11,56 @@ export default class ForgottenPassword extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            appointmentId:this.props.route.params.appointment_id? this.props.route.params.appointment_id: '1',
             name: this.props.route.params.appointment_userName? this.props.route.params.appointment_userName: 'Nguyễn Văn A',
             dob: this.props.route.params.appointment_DOB? this.props.route.params.appointment_DOB: '01/01/1970',
             phone: this.props.route.params.appointment_phoneNumber? this.props.route.params.appointment_phoneNumber: '0123456789',
             date: this.props.route.params.appointment_date? this.props.route.params.appointment_date: '01/01/2020',
             freeTime: this.props.route.params.appointment_time? this.props.route.params.appointment_time: '7h30-8h30',
-            status: this.props.route.params.appointment_status? this.props.route.params.appointment_status: 'Đang chờ xác nhận'
+            status: this.props.route.params.appointment_status? this.props.route.params.appointment_status: 'Đang chờ xác nhận',
+            backScreen: this.props.route.params.backScreen? this.props.route.params.backScreen: null,
         };
+        this.onCancelAppointment = this.onCancelAppointment.bind(this)
     }
+
+    onCancelAppointment(){
+        fetch(getApiUrl()+"/appointments/update/"+this.state.appointmentId, {
+                method: 'PUT',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    status: 'canceled',
+
+                }),
+                })
+        .then(res => res.json())
+        .then(
+            (result) => {
+            console.log('ok');
+            this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'HomeScreen',
+                params: {
+                    // customerId: this.state.customerId,
+                    // customerInformation: result,
+                },
+            }))  
+            },            
+            (error) => {
+            this.setState({
+                error
+            });
+            }
+        )  
+    }
+
     render() {
         const { gender } = this.state;
         return (
             <ScrollView style={{ flex: 1 }}>
-                <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
+                <ScreenTopMenuBack navigation={this.props.navigation} backScreen={this.state.backScreen}></ScreenTopMenuBack>
                 <View>
                     <View style={styles.logoContainer}>
                         <Text style={styles.logoText}>Lịch hẹn</Text>
@@ -48,12 +87,14 @@ export default class ForgottenPassword extends Component {
                     <Text style={styles.textInfor} >Trạng thái: {this.state.status}</Text>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.buttonView}>
+                    <TouchableOpacity style={styles.buttonView}
+                        onPress={() => this.onCancelAppointment()}
+                    >
                         <Text style={styles.textBtn}>Hủy đơn</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttonView}
-                    onPress={() => {
-                        this.props.navigation.goBack()
+                    onPress= {() => {
+                        this.state.backScreen ? this.props.navigation.navigate(this.state.backScreen) : this.props.navigation.goBack();
                     }}
                     >
                         <Text style={styles.textBtn}>Quay lại</Text>

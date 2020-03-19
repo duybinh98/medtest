@@ -5,6 +5,7 @@ import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import ArticleListItem from './ArticleListItem';
+import {getApiUrl} from './../Common/CommonFunction';
 // import articlesList from './../../Data/Articles'
 
 export default class HomeScreen extends Component {
@@ -17,6 +18,7 @@ export default class HomeScreen extends Component {
             testsList:[],
         };
         this.onPressCreateRequest = this.onPressCreateRequest.bind(this);
+        this.onPressCreateAppointment = this.onPressCreateAppointment.bind(this);
     }
 
     componentDidMount() {
@@ -24,7 +26,7 @@ export default class HomeScreen extends Component {
     }
 
     callApiArticlesList= async () =>  {
-        fetch("http://192.168.1.11:8080/articles/list")
+        fetch(getApiUrl()+"/articles/list")
         .then(res => res.json())
         .then(
             (result) => {
@@ -40,8 +42,31 @@ export default class HomeScreen extends Component {
         )
     }
 
+
+    onPressCreateAppointment(){
+        fetch(getApiUrl()+"/users/customers/detail/"+this.state.customerId)
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'CreateAppointmentScreen',
+                params: {
+                    customerId: this.state.customerId,
+                    customerInformation: result,
+                },
+            }))  
+            },            
+            (error) => {
+            this.setState({
+                error
+            });
+            }
+        )   
+    }
+
     onPressCreateRequest(){
-        fetch("http://192.168.1.11:8080/test-types/type-test")
+        fetch(getApiUrl()+"/test-types/type-test")
         .then(res => res.json())
         .then(
             (result) => {
@@ -61,8 +86,7 @@ export default class HomeScreen extends Component {
                 error
             });
             }
-        )
-        
+        )        
     }
 
     render(){
@@ -86,13 +110,7 @@ export default class HomeScreen extends Component {
                                 }]}
                                 titleStyle={{color:'#0A6ADA'}} 
                                 title="Đặt khám"
-                                onPress={() => this.props.navigation.dispatch(
-                                CommonActions.navigate({
-                                    name: 'CreateAppointmentScreen',
-                                    params: {
-                                        // customerId: this.state.customerId,
-                                    },
-                                }))}
+                                onPress={() => this.onPressCreateAppointment()}
                             >\</Button>  
 
                             <Button 
@@ -122,7 +140,7 @@ export default class HomeScreen extends Component {
                                     <ArticleListItem 
                                         image={item.image}
                                         title={item.tittle}
-                                        shortContent={item.content}
+                                        shortContent={item.shortContent}
                                         content={item.content}   
                                         navigation={this.props.navigation}
                                         >
