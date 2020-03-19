@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Dimensions, TouchableOpacity, ImageBackground }
 import { ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
+import { CommonActions } from '@react-navigation/native';
 
 
 
@@ -20,6 +21,16 @@ export default class ForgottenPassword extends Component {
             address: 'Số 123 đường abc, xyz',
             email: '123@123.com'
         };
+    }
+    submit = values => {
+        this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'UpdateInformation',
+                params: {
+                    name: this.state.name
+                },
+            })
+        )
     }
     render() {
         const { gender } = this.state;
@@ -64,7 +75,9 @@ export default class ForgottenPassword extends Component {
                     <Text style={styles.textInfor} >Email: {this.state.email}</Text>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.btnConfirm}>
+                    <TouchableOpacity style={styles.btnConfirm} 
+                        onPress = {this.submit}
+                    >
                         <Text style={styles.textBtn}>Chỉnh sửa thông tin</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.btnConfirm}>

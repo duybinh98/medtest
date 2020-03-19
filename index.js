@@ -20,13 +20,6 @@ export default class appForm extends Component {
     render(){
         return(
             <Provider store = {store}>
-                {/* <LoginForm/> */}
-                {/* <ContactForm/> */}
-                {/* <ChangePasswordForm/> */}
-                {/* <AppointmentForm/> */}
-                {/* <RegisterForm/> */}
-                {/* <ResetPasswordForm/> */}
-                {/* <RequestPersonalInformationForm/> */}
                 <Navigator/>
             </Provider>
         );

@@ -9,6 +9,10 @@ import { CommonActions } from '@react-navigation/native';
 import DatePicker from 'react-native-datepicker';
 import districtList from '../../Data/District';
 import ModalDropdown from 'react-native-modal-dropdown';
+import { connect } from 'react-redux';
+import {load as loadAccount} from '../Store/Reducers/InitialValue'
+import renderField from '../../Validate/RenderField'
+
 
 //validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
@@ -17,32 +21,6 @@ const isPhonenumber = values => values && values.length == 10 ? undefined : 'Ph�
 const isEmail = values =>
     values && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values) ? 'Email không hợp lệ' : undefined;
 const isWeakPassword = values => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
-
-//Field input for redux-form
-const renderField = ({
-    iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
-    input: { onChange, ...restInput }, placeholder, defaultText
-}) => {
-    return (
-        <View style={{ flex: 1 }}>
-            <View style={styles.inputContainer}>
-                <Icon
-                    name={iconName}
-                    type={iconType}
-                    color='black'
-                    size={32}
-                    iconStyle={styles.inputIcon}
-                ></Icon>
-                <TextInput style={styles.input} placeholder={placeholder} secureTextEntry={secureText} 
-                    keyboardType={keyboardType} defaultValue={defaultText}
-                    onChangeText={onChange} {...restInput} autoCapitalize='none'       
-                ></TextInput>
-            </View>
-            {touched && ((error && <Text style={{ color: 'red', paddingLeft: 35 }}>{error}</Text>) ||
-                (warning && <Text style={{ color: 'orange' }}>{warning}</Text>))}
-        </View>
-    );
-}
 
 //Render combobox selected value
 const _renderDistrictRow = rowData => {
@@ -68,16 +46,24 @@ class UpdateInformationScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: 'Nguyễn Văn A',
+            name: 'Nguyễn Văn ABC',
+            // name: this.props.route.params.name,
             dob: '01/01/1970',
             gender: 'Nữ',
             selectTownList: [],
             address: '',
             district: '',
             town: '',
-            email: '123@123.com'
+            email: '123@1234.com'
         };
         this.submit = this.submit.bind(this)
+    }
+    componentWillMount = value => {
+        const customerInfor =  {
+            username : this.state.name,
+            email: this.state.email
+        }
+        this.props.load(customerInfor)
     }
     _renderDistrictButtonText = rowData => {
         const { districtName } = rowData;
@@ -110,9 +96,12 @@ class UpdateInformationScreen extends Component {
             }
         });
     }
+    //  mapStateToProps = value => {
+    //     const name = this.state.name
+    // }
     render() {
         const { gender } = this.state;
-        const { handleSubmit } = this.props;
+        const { handleSubmit, load } = this.props;
         return (
             <ScrollView style={{ flex: 1 }}>
                 <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
@@ -123,9 +112,8 @@ class UpdateInformationScreen extends Component {
                 </View>
                 <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                     iconType="material-community" placeholder="Tên hiển thị" secureText={false}
-                    defaultText = {this.state.name}
-                    onChange={(text) => { this.setState({ name: text }) }}                    
-                    validate={[required]}
+                    onChange={(text) => { this.setState({ name: text }) }}
+                    validate={[required]} 
                 />
                 <View style={styles.inputContainer}>
                     <DatePicker
@@ -157,31 +145,31 @@ class UpdateInformationScreen extends Component {
                     />
                 </View>
                 <View style={styles.radioGroup} >
-                        <View style={styles.genderContainer}>
-                            <Icon
-                                name='human-male-female'
-                                type='material-community'
-                                color='black'
-                                size={32}
-                                iconStyle={styles.genderIcon}
-                            ></Icon>
-                            <View style={styles.RadioButton}>
-                                <RadioButton
-                                    value="Male"
-                                    gender={true}
-                                    status={gender === 'Nam' ? 'checked' : 'unchecked'}
-                                    onPress={() => { this.setState({ gender: 'Nam' }); }}
-                                />
-                                <Text style={styles.radioName}>Nam</Text>
-                                <RadioButton
-                                    value="Female"
-                                    status={gender === 'Nữ' ? 'checked' : 'unchecked'}
-                                    onPress={() => { this.setState({ gender: 'Nữ' }); }}
-                                />
-                                <Text style={styles.radioName}>Nữ</Text>
-                            </View>
+                    <View style={styles.genderContainer}>
+                        <Icon
+                            name='human-male-female'
+                            type='material-community'
+                            color='black'
+                            size={32}
+                            iconStyle={styles.genderIcon}
+                        ></Icon>
+                        <View style={styles.RadioButton}>
+                            <RadioButton
+                                value="Male"
+                                gender={true}
+                                status={gender === 'Nam' ? 'checked' : 'unchecked'}
+                                onPress={() => { this.setState({ gender: 'Nam' }); }}
+                            />
+                            <Text style={styles.radioName}>Nam</Text>
+                            <RadioButton
+                                value="Female"
+                                status={gender === 'Nữ' ? 'checked' : 'unchecked'}
+                                onPress={() => { this.setState({ gender: 'Nữ' }); }}
+                            />
+                            <Text style={styles.radioName}>Nữ</Text>
                         </View>
                     </View>
+                </View>
                 <Field name="address" keyboardType="default" component={renderField} iconName="map-marker"
                     iconType="material-community" placeholder="Địa chỉ" secureText={false}
                     onChange={(text) => { this.setState({ address: text }) }}
@@ -217,11 +205,11 @@ class UpdateInformationScreen extends Component {
                     />
                 </View>
                 <Field name="email" keyboardType="email-address" component={renderField} iconName="email-outline"
-                        defaultText = {this.state.email}
-                        onChange={(text) => { this.setState({ email: text }) }}  
-                        iconType="material-community" placeholder="Email" secureText={false}
-                        validate={[required, isEmail]}
-                    />  
+                    defaultText={this.state.email}
+                    onChange={(text) => { this.setState({ email: text }) }}
+                    iconType="material-community" placeholder="Email" secureText={false}
+                    validate={[required, isEmail]}
+                />
                 <TouchableOpacity style={styles.btnConfirm} onPress={handleSubmit(this.submit)}>
                     <Text style={styles.textBtn}>Xác nhận</Text>
                 </TouchableOpacity>
@@ -232,15 +220,23 @@ class UpdateInformationScreen extends Component {
     }
 }
 
-const UpdateInformationForm = reduxForm({
+let UpdateInformationForm = reduxForm({
     form: 'UpdateInformation',
+    enableReinitialize: true,
 })(UpdateInformationScreen);
+UpdateInformationForm = connect(
+    state => ({
+      initialValues: state.initialValue.data // pull initial values from account reducer
+    }),
+    { load: loadAccount } // bind account loading action creator
+  )(UpdateInformationForm);
 export default UpdateInformationForm;
+
 
 //#25345D
 //#0A6ADA
 //#27CDCB
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
     logoContainer: {
         marginTop: 10,
         alignItems: 'center',
@@ -314,7 +310,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 16,
     },
-    
+
     DatePicker: {
         width: WIDTH - 55,
         height: 45,
