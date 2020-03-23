@@ -5,12 +5,15 @@ import { Icon } from 'react-native-elements';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
+import { connect } from 'react-redux';
+import action from '../Store/Action/actions';
+import { login } from '../Store/Reducers/LoginReducer'
 
 //validate conditions
 const required = value => value ? undefined : 'Required';
 const isNumber = value => value && isNaN(Number(value)) ? 'Must be phone number' : undefined;
 const isPhonenumber = value => value && value.length == 10 ? undefined : 'Must be 10 digits';
-const isWeakPassword = value => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
+const isWeakPassword = value => value && value.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
 
 //Field input for redux-form
 const renderField = ({
@@ -46,22 +49,24 @@ class LoginComponent extends Component {
         };
         this.submit = this.submit.bind(this)
     }
-    submit = values => {
-        this.props.navigation.dispatch(
-            CommonActions.navigate({
-                name: 'HomeScreen',
-                params: {
-                    phonenumber: this.state.phoneNumber,
-                    password: this.state.password,
-                },
-            })
-        )
+    submit = value => {
+        let { phoneNumber, password } = this.state;
+        this.props.login(phoneNumber, password);
+        // this.props.navigation.dispatch(
+        //     CommonActions.navigate({
+        //         name: 'HomeScreen',
+        //         params: {
+        //             phonenumber: this.state.phoneNumber,
+        //             password: this.state.password,
+        //         },
+        //     })
+        // )
     }
     render() {
         const { handleSubmit } = this.props;
         return (
             <ScrollView style={{ flex: 1 }}>
-                <ScreenTopMenu ></ScreenTopMenu>
+                <ScreenTopMenu {...this.props} ></ScreenTopMenu>
                 <View>
                     <View style={styles.logoContainer}>
                         <Image
@@ -79,7 +84,7 @@ class LoginComponent extends Component {
                 <Field name="password" keyboardType="default" component={renderField} iconName="lock-question"
                     iconType="material-community" placeholder="Mật khẩu" secureText={true}
                     onChange={(text) => { this.setState({ password: text }) }}
-                    validate={[required,isWeakPassword]}                 
+                    validate={[required, isWeakPassword]}
                 />
                 <TouchableOpacity style={styles.btnLogin} onPress={handleSubmit(this.submit)}>
                     <Text style={styles.textBtn}>Đăng nhập</Text>
@@ -100,13 +105,23 @@ class LoginComponent extends Component {
         );
     }
 }
-
-
+const mapStateToProps = (state) => {
+    return {
+        isLoginPending: state.isLoginPending,
+        isLoginSuccess: state.isLoginSuccess,
+        LoginError: state.LoginError
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        login: (phoneNumber, password) => dispatch(login(phoneNumber, password))
+    };
+}
 const LoginForm = reduxForm({
     form: 'login',
-    // validate
 })(LoginComponent);
-export default LoginForm;
+export default connect(mapStateToProps, mapStateToDispatch)(LoginForm);
+
 const { width: WIDTH } = Dimensions.get('window')
 //#25345D
 //#0A6ADA
