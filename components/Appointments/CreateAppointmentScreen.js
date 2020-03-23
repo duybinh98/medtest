@@ -7,36 +7,14 @@ import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { CommonActions } from '@react-navigation/native';
 import {getApiUrl, convertDateAndTimeToDateTime} from './../Common/CommonFunction';
+import { connect } from 'react-redux';
+import {load as loadAccount} from '../Store/Reducers/InitialValue'
+import renderField from '../../Validate/RenderField'
 
 //validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
 const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
 const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
-
-//Field input for redux-form
-const renderField = ({
-    iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
-    input: { onChange, ...restInput }, placeholder
-}) => {
-    return (
-        <View style={{ flex: 1 }}>
-            <View style={styles.inputContainer}>
-                <Icon
-                    name={iconName}
-                    type={iconType}
-                    color='black'
-                    size={32}
-                    iconStyle={styles.inputIcon}
-                ></Icon>
-                <TextInput style={styles.input} placeholder={placeholder} secureTextEntry={secureText}
-                    keyboardType={keyboardType} onChangeText={onChange} {...restInput} autoCapitalize='none'
-                ></TextInput>
-            </View>
-            {touched && ((error && <Text style={{ color: 'red', paddingLeft: 35 }}>{error}</Text>) ||
-                (warning && <Text style={{ color: 'orange' }}>{warning}</Text>))}
-        </View>
-    );
-}
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -44,58 +22,34 @@ class CreateAppointmentScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            // customerId: this.props.route.params.customerId ? this.props.route.params.customerId : '-1',
-            customerId: '1',
-            name: '',
-            phonenumber: '',
-            dob: '',
-            apointmentDate: '',
-            apointmentTime: '',
-            customerInformation: this.props.route.params.customerInformation ? this.props.route.params.customerInformation : '-1',
+            name: 'Nguyễn Văn A',
+            phonenumber: '0123456789',
+            dob: '01/01/1970',
+            apointmentDate: '01/01/2020',
+            apointmentTime: '07:30',
         };
         this.submit = this.submit.bind(this)
     }
-    submit = values => {        
-        fetch(getApiUrl()+'/appointments/create', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({            
-            meetingTime: convertDateAndTimeToDateTime(this.state.apointmentDate,this.state.apointmentTime),
-            customerID: this.state.customerId,
-        }),
-        })
-        .then(res => res.json())
-        .then(
-            (result) => {
-                this.props.navigation.dispatch(
-                    CommonActions.navigate({
-                        name: 'AppointmentDetailScreen',
-                        params: {
-                            appointment_userName: this.state.customerInformation.name,
-                            phonenumber: this.state.customerInformation,
-                            dob: this.state.customerInformation,
-                            appointment_date: this.state.apointmentDate,
-                            appointment_time: this.state.apointmentTime,
-                            backScreen: 'HomeScreen',
-                        },
-                    })
-                )
-            },
-            (error) => {
-            this.setState({                
-                error
-            });
-            Alert.alert("hi"+error);
-            }
-        );
-        
-        
-        
-        
-        
+    componentWillMount = value => {
+        const customerInfor =  {
+            username : this.state.name,
+            phonenumber: this.state.phonenumber
+        }
+        this.props.load(customerInfor)
+    }
+    submit = values => {
+        this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'AppointmentDetailScreen',
+                params: {
+                    name: this.state.name,
+                    phonenumber: this.state.phonenumber,
+                    dob: this.state.dob,
+                    apointmentDate: this.state.apointmentDate,
+                    apointmentTime: this.state.apointmentTime,
+                },
+            })
+        )
     }
     render() {
         const { handleSubmit } = this.props;
@@ -110,12 +64,12 @@ class CreateAppointmentScreen extends Component {
                     </View>
                     <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                         iconType="material-community" placeholder="Tên hiển thị" secureText={false}
-                        onChange ={(text) => {this.setState({name : text})}}
+                        onChange ={(text) => {this.setState({name : text})}} editable={false}
                         validate={[required]}
                     />
                     <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
                         iconType="material-community" placeholder="Số điện thoại" secureText={false}
-                        onChange ={(text) => {this.setState({phonenumber : text})}}
+                        onChange ={(text) => {this.setState({phonenumber : text})}} editable={false}
                         validate={[required, isNumber, isPhonenumber]}
                     />
                     <View style={styles.inputContainer}>
@@ -213,9 +167,16 @@ class CreateAppointmentScreen extends Component {
     }
 }
 
-const AppointmentForm = reduxForm({
+let AppointmentForm = reduxForm({
     form: 'createAppointment',
+    enableReinitialize: true,
 })(CreateAppointmentScreen);
+AppointmentForm = connect(
+    state => ({
+      initialValues: state.initialValue.data // pull initial values from account reducer
+    }),
+    { load: loadAccount } // bind account loading action creator
+  )(AppointmentForm);
 export default AppointmentForm;
 //#25345D
 //#0A6ADA

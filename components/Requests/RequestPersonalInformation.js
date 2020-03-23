@@ -9,6 +9,9 @@ import DatePicker from 'react-native-datepicker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import districtList from '../../Data/District';
 import { CommonActions } from '@react-navigation/native';
+import { connect } from 'react-redux';
+import {load as loadAccount} from '../Store/Reducers/InitialValue'
+import renderField from '../../Validate/RenderField'
 
 
 //validate conditions
@@ -19,30 +22,6 @@ const isEmail = values =>
     values && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values) ? 'Email không hợp lệ' : undefined;
 const isWeakPassword = values => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
 
-//Field input for redux-form
-const renderField = ({
-    iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
-    input: { onChange, ...restInput }, placeholder
-}) => {
-    return (
-        <View style={{ flex: 1 }}>
-            <View style={styles.inputContainer}>
-                <Icon
-                    name={iconName}
-                    type={iconType}
-                    color='black'
-                    size={32}
-                    iconStyle={styles.inputIcon}
-                ></Icon>
-                <TextInput style={styles.input} placeholder={placeholder} secureTextEntry={secureText}
-                    keyboardType={keyboardType} onChangeText={onChange} {...restInput} autoCapitalize='none'
-                ></TextInput>
-            </View>
-            {touched && ((error && <Text style={{ color: 'red', paddingLeft: 35 }}>{error}</Text>) ||
-                (warning && <Text style={{ color: 'orange' }}>{warning}</Text>))}
-        </View>
-    );
-}
 
 const { width: WIDTH } = Dimensions.get('window');
 
@@ -69,7 +48,7 @@ class RequestPersonalInformation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: '',
+            name: 'Nguyễn Văn B',
             apointmentDate: '01/01/2020',
             apointmentTime: '07:30',
             selectTownList: [],
@@ -79,6 +58,13 @@ class RequestPersonalInformation extends Component {
         };
         this.selectItem = this.selectItem.bind(this)
         this.submit = this.submit.bind(this)
+    }
+    componentWillMount = value => {
+        const customerInfor =  {
+            username : this.state.name,
+            email: this.state.email
+        }
+        this.props.load(customerInfor)
     }
     _renderDistrictButtonText = rowData => {
         const { districtName } = rowData;
@@ -128,7 +114,7 @@ class RequestPersonalInformation extends Component {
                 </View>
                 <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                     iconType="material-community" placeholder="Tên hiển thị" secureText={false}
-                    onChange={(text) => { this.setState({ name: text }) }}
+                    onChange={(text) => { this.setState({ name: text }) }} editable={false}
                     validate={[required]}
                 />
                 <Field name="address" keyboardType="default" component={renderField} iconName="map-marker"
@@ -232,11 +218,17 @@ class RequestPersonalInformation extends Component {
         );
     }
 }
-const RequestPersonalInformationForm = reduxForm({
+let RequestPersonalInformationForm = reduxForm({
     form: 'RequestPersonalInformation',
+    enableReinitialize: true,
 })(RequestPersonalInformation);
+RequestPersonalInformationForm = connect(
+    state => ({
+      initialValues: state.initialValue.data // pull initial values from account reducer
+    }),
+    { load: loadAccount } // bind account loading action creator
+  )(RequestPersonalInformationForm);
 export default RequestPersonalInformationForm;
-
 //#25345D
 //#0A6ADA
 //#27CDCB

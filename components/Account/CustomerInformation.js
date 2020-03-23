@@ -5,6 +5,7 @@ import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 
+
 const { width: WIDTH } = Dimensions.get('window')
 export default class ForgottenPassword extends Component {
     constructor(props) {
