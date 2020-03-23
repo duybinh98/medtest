@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-nati
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { RadioButton } from 'react-native-paper';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { CommonActions } from '@react-navigation/native';
@@ -114,7 +114,7 @@ class RegisterScreen extends Component {
         return (
             <View style={styles.background}>
                 <ScrollView>
-                    <ScreenTopMenu {...this.props}></ScreenTopMenu>
+                    {/* <ScreenTopMenuBack navigation={this.props.navigation} backScreen={'LoginScreen'}></ScreenTopMenuBack> */}
                     <View>
                         <View style={styles.logoContainer}>
                             <Text style={styles.logoText}>Đăng ký</Text>

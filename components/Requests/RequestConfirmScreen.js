@@ -5,6 +5,7 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
+import {getApiUrl} from './../Common/CommonFunction'
 
 
 export default class RequestConfirmScreen extends Component {
@@ -17,6 +18,7 @@ export default class RequestConfirmScreen extends Component {
             freeTime: this.props.route.params.time,
         };
         this.isSelected = this.isSelected.bind(this);
+        this.onConfirm = this.onConfirm.bind(this);
     }
 
     isSelected(id) {
@@ -27,26 +29,28 @@ export default class RequestConfirmScreen extends Component {
     }
 
     onConfirm  = async () => {
-        fetch('https://medtestlp.herokuapp.com/requests/create', {
+        fetch(getApiUrl()+'/requests/create', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            test_ID: this.props.route.params.selectedTest,
-            cust_ID: this.props.route.params.cust_ID,
-            appoint_date: this.props.route.params.email,
-            appoint_time    : "",
-            appoint_address: this.props.route.params.address
+            userID: '2',
+            meetingTime: '2021-03-02T06:27:00.000+0000',
+            address: this.state.address,
+            townCode: 'T1',
+            districtCode: 'D1',
+            selectedTest: ["1","2"],
         }),
         })
         .then(res => res.json())
         .then(
             (result) => {
-                Alert.alert("hi"+result);
+                console.log(result)
             },
             (error) => {
+                console.log(error)
             this.setState({
                 error
             });
@@ -128,6 +132,7 @@ export default class RequestConfirmScreen extends Component {
                             </View>
                             <TouchableOpacity style={styles.btnConfirm} 
                                 onPress={() => {
+                                    this.onConfirm()
                                     this.props.navigation.dispatch(
                                         CommonActions.navigate({
                                             name: 'RequestViewScreen',
@@ -142,7 +147,7 @@ export default class RequestConfirmScreen extends Component {
                                             },
                                         })
                                     )
-                                    // this.onConfirm
+                                    
                                     }}                                                              
                                 >
                                 <Text style={styles.textBtn}>Xác nhận</Text>

@@ -5,16 +5,16 @@ import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
 import testList from './../../Data/Test'
+import {getStateName, getStateColor} from './../Common/CommonFunction'
 
 export default class RequestViewScreen extends Component {
 constructor(props) {
         super(props)
         this.state = {
             name: this.props.route.params.name? this.props.route.params.name : 'Nguyễn Văn A',
-            dob: '01/01/1970',
-            phone: '0123456789',
+            dob: this.props.route.params.dob? this.props.route.params.dob : '01/01/1970',
+            phone: this.props.route.params.phone? this.props.route.params.phone : '0123456789',
             address: this.props.route.params.address ? this.props.route.params.address :'Số 123 đường abc, xyz',
-            email: '123@123.com',
             date: this.props.route.params.date ? this.props.route.params.date: '20/20/2020',
             time: this.props.route.params.freeTime? this.props.route.params.freeTime: '17h00',
             status: this.props.route.params.status? this.props.route.params.status:'Đang đợi lấy mẫu',
@@ -22,6 +22,26 @@ constructor(props) {
             nurseName: 'Nguyễn Văn B'
         };        
         this.isSelected = this.isSelected.bind(this);
+    }
+
+
+    componentDidUpdate  (prevProps, prevState) {
+        
+         if (prevProps.route.params.name !== this.props.route.params.name) {
+            this.setState(previousState => ({ 
+                name: this.props.route.params.name? this.props.route.params.name : 'Nguyễn Văn A',
+                dob: this.props.route.params.dob? this.props.route.params.dob : '01/01/1970',
+                phone: this.props.route.params.phone? this.props.route.params.phone : '0123456789',
+                address: this.props.route.params.address ? this.props.route.params.address :'Số 123 đường abc, xyz',
+                date: this.props.route.params.date ? this.props.route.params.date: '20/20/2020',
+                time: this.props.route.params.freeTime? this.props.route.params.freeTime: '17h00',
+                status: this.props.route.params.status? this.props.route.params.status:'Đang đợi lấy mẫu',
+                statusName: this.props.route.params.status? getStateName(this.props.route.params.status):'Đang đợi lấy mẫu',
+                statusColor: this.props.route.params.status? getStateColor(this.props.route.params.status):'#7ab648',
+                nurseName: 'Nguyễn Văn B',
+                totalAmount: this.props.route.params.totalAmount? this.props.route.params.totalAmount:'free',
+            }));
+        }
     }
 
 

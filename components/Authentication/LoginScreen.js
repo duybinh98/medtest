@@ -61,7 +61,7 @@ class LoginComponent extends Component {
         const { handleSubmit } = this.props;
         return (
             <ScrollView style={{ flex: 1 }}>
-                <ScreenTopMenu ></ScreenTopMenu>
+                {/* <ScreenTopMenu ></ScreenTopMenu> */}
                 <View>
                     <View style={styles.logoContainer}>
                         <Image
@@ -87,13 +87,13 @@ class LoginComponent extends Component {
                 <View style={styles.textLinkView} >
                     <Text
                         style={styles.textLink}
-                        onPress={() => { alert("Change password") }}
+                        onPress={() => this.props.navigation.navigate('ResetPasswordScreen')}
                     >Quên mật khẩu?</Text>
                 </View>
                 <View style={styles.textLinkView} >
                     <Text
                         style={styles.textLink}
-                        onPress={() => { alert("Signup") }}
+                        onPress={() => this.props.navigation.navigate('RegisterScreen')}
                     >Đăng ký ngay</Text>
                 </View>
             </ScrollView>

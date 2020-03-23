@@ -108,8 +108,7 @@ export default class HomeScreen extends Component {
                     justifyContent: 'space-between',
                     }}>
                     <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
-                    <View 
-                        style ={styles.background}>            
+                    <View style ={styles.background}>            
                         <View style={styles.titleArea}>     
                             <Text style={{fontSize:22,color:'#25345D'}}>Đặt xét nghiệm</Text>
                         </View>
@@ -119,30 +118,31 @@ export default class HomeScreen extends Component {
                             underlineColorAndroid='transparent'
                         />                        
                         <View style = {styles.TestListAreaBackground}>
-                            <View
-                                style = {styles.TestListArea}
-                                >
+                            <View style = {styles.TestListArea}>
                                 <FlatList 
                                     style ={styles.TestListAreaScrollView}                        
                                     showsVerticalScrollIndicator={false}
                                     data={this.state.testsList}
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={({item}) => {
-                                            return (
-                                                <TestCategoryItem 
-                                                    categoryName={item.testTypeName}
-                                                    test = {item.listTest}
-                                                    viewOnly = {false}
-                                                    selectItem = {this.selectItem}
-                                                >
-                                                </TestCategoryItem>                                    
-                                            );
-                                        }}
+                                        return (
+                                            <TestCategoryItem 
+                                                categoryName={item.testTypeName}
+                                                test = {item.listTest}
+                                                viewOnly = {false}
+                                                selectItem = {this.selectItem}
+                                            >
+                                            </TestCategoryItem>                                    
+                                        );
+                                    }}
                                 >                    
                                 </FlatList>
                             </View>
                         </View>
                         <View style={styles.buttonContainer}>
+                            <View style={[styles.btnConfirm,{borderWidth:0, width:150}]}>
+                            <Text style={{fontSize:15}}>{'Tổng tiền: '+this.state.totalPrice+' đ'}</Text>
+                            </View>
                             <TouchableOpacity 
                                 style={styles.btnConfirm}
                                 onPress={() => this.state.customerId !='-1' ? this.props.navigation.dispatch(
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         alignItems: 'flex-end',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         width:Dimensions.get('window').width-20,
         height:54,
     },

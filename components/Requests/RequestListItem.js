@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, StyleSheet, Image, Text, Dimensions, TouchableOpacity} from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import {Button} from 'react-native-elements';
+import {getStateName, getStateColor} from './../Common/CommonFunction'
 
 export default class RequestListItem extends Component {
     constructor(props) {
@@ -95,7 +96,7 @@ export default class RequestListItem extends Component {
                     }}
             
             >
-                <View style={{
+                {/* <View style={{
                     width:185,
                     height:90,
                     flexDirection: 'row',
@@ -152,7 +153,27 @@ export default class RequestListItem extends Component {
                             <Text style={{fontSize:17}}>{this.props.appoint_time}</Text>
                         </View>
                     </View>
-                </View>                
+                </View>                 */}
+                <View style={[styles.requestListTextContainer,{
+                    paddingTop:10,
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                }]}>
+                    <View>
+                    <Text style={{fontSize:17}}>{"Ngày tạo:  "+this.props.appoint_date}</Text>
+                    </View>
+                    <View style={{backgroundColor:getStateColor(this.props.req_status), padding:4, width:130,alignItems: 'center',}}>
+                    <Text style={{fontSize:11}}>{getStateName(this.props.req_status)}</Text>
+                    </View>
+                </View>   
+                <View style={[styles.requestListTextContainer,{
+                    paddingBottom:10,
+                }]}>
+                    <Text style={{fontSize:17}}>{"Ngày hẹn: "+this.props.appoint_date+'  '+this.props.appoint_time}</Text>
+                </View>     
+
+
             </TouchableOpacity> 
             : null }  
             </View> 
@@ -161,16 +182,22 @@ export default class RequestListItem extends Component {
 }
 const styles = StyleSheet.create({
     requestListItem:{
-        height:90,
+        alignSelf: 'stretch',
         width: Dimensions.get('window').width-20,
         backgroundColor: 'white',
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
         justifyContent: 'space-between',
-        paddingBottom:2,
-        paddingLeft:10,        
+        paddingBottom:2,       
         borderRadius:10,
         marginBottom:10, 
     },
-
+    requestListTextContainer:{
+        alignSelf: 'stretch',
+        width:Dimensions.get('window').width-20,
+        paddingLeft:10,
+        paddingRight:10,
+        paddingBottom:3,
+        paddingTop:3,
+    }
 });

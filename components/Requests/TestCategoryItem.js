@@ -52,7 +52,8 @@ export default class TestCategoryItem extends Component {
                     >
                         <Text style={{
                                 fontSize:17,
-                                color:'#25345d'
+                                color:'#25345d',
+                                fontWeight:'bold'
                             }} >{this.props.categoryName}</Text>
                     
                     </View>
