@@ -1,4 +1,4 @@
-// Quack! This is a duck. https://github.com/erikras/ducks-modular-redux
+
 const LOAD = 'redux-form/account/LOAD';
 
 const reducer = (state = {}, action) => {

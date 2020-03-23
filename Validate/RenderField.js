@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Text, View, StyleSheet, Dimensions,  } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { TextInput, ScrollView } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 
 
 
 //Field input for redux-form
 const renderField = ({
     iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
-    input: { onChange, ...restInput }, placeholder
+    input: { onChange, ...restInput }, placeholder, editable
 }) => {
     //validate conditions
     const required = values => values ? undefined : 'Bắt buộc';
@@ -28,7 +28,7 @@ const renderField = ({
                     iconStyle={styles.inputIcon}
                 ></Icon>
                 <TextInput style={styles.input} placeholder={placeholder} secureTextEntry={secureText}
-                    keyboardType={keyboardType}
+                    keyboardType={keyboardType} editable={editable}
                     onChangeText={onChange} {...restInput} autoCapitalize='none'
                 ></TextInput>
             </View>

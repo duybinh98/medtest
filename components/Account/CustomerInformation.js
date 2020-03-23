@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
-import { CommonActions } from '@react-navigation/native';
+
 
 const { width: WIDTH } = Dimensions.get('window')
 export default class ForgottenPassword extends Component {
