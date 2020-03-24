@@ -6,14 +6,13 @@ import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import action from '../Store/Action/actions';
 import { login } from '../Store/Reducers/LoginReducer'
 
 //validate conditions
 const required = value => value ? undefined : 'Required';
 const isNumber = value => value && isNaN(Number(value)) ? 'Must be phone number' : undefined;
 const isPhonenumber = value => value && value.length == 10 ? undefined : 'Must be 10 digits';
-const isWeakPassword = value => value && value.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
+const isWeakPassword = value => value && value.length > 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
 
 //Field input for redux-form
 const renderField = ({
