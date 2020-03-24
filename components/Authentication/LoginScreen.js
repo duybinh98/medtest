@@ -6,8 +6,10 @@ import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import action from '../Store/Action/actions';
-import { login } from '../Store/Reducers/LoginReducer'
+// import action from '../Store/Action/actions';
+import { login } from '../Store/Reducers/LoginReducer';
+import {getApiUrl} from './../Common/CommonFunction';
+import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
 
 //validate conditions
 const required = value => value ? undefined : 'Required';
@@ -46,12 +48,28 @@ class LoginComponent extends Component {
         this.state = {
             phoneNumber: '',
             password: '',
+            customerInfo: null,
         };
         this.submit = this.submit.bind(this)
     }
     submit = value => {
         let { phoneNumber, password } = this.state;
         this.props.login(phoneNumber, password);
+        // callApiCustomerInfo = async () => {
+        //     fetch(getApiUrl()+"/users/customers/detail/"+ "2")
+        //     .then(res => res.json())
+        //     .then(
+        //         (result) => {
+        //         this.setState(previousState => ({
+        //             customerInfo: result,
+        //         }));
+        //         },            
+        //         (error) => {
+        //             console.log(error)
+        //         }
+        //     )   
+        // }
+        this.props.load(this.state.customerInfo);
         // this.props.navigation.dispatch(
         //     CommonActions.navigate({
         //         name: 'HomeScreen',
@@ -109,11 +127,13 @@ const mapStateToProps = (state) => {
     return {
         isLoginPending: state.isLoginPending,
         isLoginSuccess: state.isLoginSuccess,
-        LoginError: state.LoginError
+        LoginError: state.LoginError,
+        customerInfo : state.customerInfo
     };
 }
 const mapStateToDispatch = (dispatch) => {
     return {
+        load: (customerInfo) => dispatch(loadCustomerInfor(customerInfo)),
         login: (phoneNumber, password) => dispatch(login(phoneNumber, password))
     };
 }
