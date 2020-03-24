@@ -58,7 +58,7 @@ export default function reducer(state = {
                 ...state,
                 isLoginPending: action.isLoginPending
             };
-        case LOGIN_SUCCESS:
+        case LOGIN_ERROR:
             return {
                 ...state,
                 LoginError: action.LoginError
