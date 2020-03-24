@@ -20,9 +20,9 @@ export default class TestSelectItem extends Component {
             }]}  
                 onPress={() => {
                     this.setState(previousState => ({
-                        selected: !this.state.selected
+                        selected: this.props.onPressItem(this.props.testID,this.props.testPrice)
                     }));
-                    this.props.onPressItem(this.props.testID,this.props.testPrice)
+                    
                 }}              
             >
                 <View

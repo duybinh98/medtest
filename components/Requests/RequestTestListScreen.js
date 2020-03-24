@@ -18,6 +18,7 @@ export default class HomeScreen extends Component {
             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : testList,
             totalPrice: '0',
             customerInfo: this.props.route.params.customerInfo ? this.props.route.params.customerInfo : null,
+            resetList: true,
         }
         this.selectItem = this.selectItem.bind(this)
         this.resetSelectedTestOnConfirm = this.resetSelectedTestOnConfirm.bind(this)   
@@ -34,13 +35,15 @@ export default class HomeScreen extends Component {
         this.setState({            
             selectedTest: _selectedTest,
             totalPrice:_totalPrice
-        })        
+        })       
+        if (found === -1 ) return true; else return false;
     }
 
     resetSelectedTestOnConfirm(){
         this.setState({            
             selectedTest: [],
-            totalPrice: '0'
+            totalPrice: '0',
+            resetList: !this.state.resetList,
         }) 
     }
 
@@ -102,6 +105,7 @@ export default class HomeScreen extends Component {
                                     style ={styles.TestListAreaScrollView}                        
                                     showsVerticalScrollIndicator={false}
                                     data={this.state.testsList}
+                                    extraData={this.state.resetList}
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={({item}) => {
                                         return (

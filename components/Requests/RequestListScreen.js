@@ -27,6 +27,9 @@ export default class RequestListScreen extends Component {
     componentDidMount(){
         this.callApiRequestList();
         this.callApiTestList();
+        this.props.navigation.addListener("focus", () => {
+            this.callApiRequestList();
+        })
     }
 
     
