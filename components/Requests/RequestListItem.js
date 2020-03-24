@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, StyleSheet, Image, Text, Dimensions, TouchableOpacity} from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import {Button} from 'react-native-elements';
-import {getStateName, getStateColor} from './../Common/CommonFunction'
+import {getStateName, getStateColor, convertDateTimeToDate, convertDateTimeToTime} from './../Common/CommonFunction'
 
 export default class RequestListItem extends Component {
     constructor(props) {
@@ -82,78 +82,18 @@ export default class RequestListItem extends Component {
                             params: {
                                 name: this.props.cust_name,
                                 address: this.props.appoint_address,
-                                date: this.props.appoint_date,
-                                freeTime: this.props.appoint_time,
+                                date: convertDateTimeToDate(this.props.appoint_date),
+                                time: convertDateTimeToTime(this.props.appoint_date),
                                 selectedTest: this.props.selectedTest,   
-                                status: this.state.statusName,
-                                statusColor: this.state.statusColor,
-                                testList: this.props.testList,
-                                // customerInfo  = this.state.customerInfo,
+                                status: getStateName(this.props.req_status),
+                                statusColor: getStateColor(this.props.req_status),
+                                testsList: this.props.testList,
                             },
                         })
                     )
-                    // this.onConfirm
                     }}
             
-            >
-                {/* <View style={{
-                    width:185,
-                    height:90,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    }}>
-                    <View style={{
-                        width:70,
-                        height:60,
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        justifyContent: 'space-between'
-                        }}>
-                            <View style={{width:80,height:25}}>
-                                <Text style={{fontSize:17}}>Ngày tạo:</Text>
-                            </View>
-                            <View style={{width:80,height:25}}>
-                                <Text style={{fontSize:17}}>Ngày hẹn:</Text>
-                            </View>
-                    </View>
-                    <View style={
-                        {width:100,
-                        height:60,
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        justifyContent: 'space-between',
-                        }}>
-                        <View style={{width:100,height:25}}>
-                            <Text style={{fontSize:17}}>{this.props.request_createTime}</Text>
-                        </View>
-                        <View style={{width:100,height:25}}>
-                            <Text style={{fontSize:17}}>{this.props.appoint_date}</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={{
-                    width:140,
-                    height:90,
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    justifyContent: 'center',
-                    }}>
-                    <View style={{
-                        width:130,
-                        height:60,
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        justifyContent: 'space-between'
-                        }}>
-                        <View style={{width:130,height:25,backgroundColor:this.state.statusColor,alignItems: 'center',justifyContent: 'center',borderRadius:5}}>
-                            <Text style={{fontSize:11}}>{this.state.statusName}</Text>
-                        </View>
-                        <View style={{width:100,height:25,marginLeft:5}}>
-                            <Text style={{fontSize:17}}>{this.props.appoint_time}</Text>
-                        </View>
-                    </View>
-                </View>                 */}
+            >                
                 <View style={[styles.requestListTextContainer,{
                     paddingTop:10,
                     flexDirection: 'row',
@@ -161,16 +101,18 @@ export default class RequestListItem extends Component {
                     justifyContent: 'space-between',
                 }]}>
                     <View>
-                    <Text style={{fontSize:17}}>{"Ngày tạo:  "+this.props.appoint_date}</Text>
+                    <Text style={{fontSize:17}}>{"Ngày tạo:  "+convertDateTimeToDate(this.props.request_createTime)}</Text>
                     </View>
+                    {(getStateColor(this.props.req_status))!='#000' ?
                     <View style={{backgroundColor:getStateColor(this.props.req_status), padding:4, width:130,alignItems: 'center',}}>
                     <Text style={{fontSize:11}}>{getStateName(this.props.req_status)}</Text>
-                    </View>
+                    </View> :<View/>
+                    }
                 </View>   
                 <View style={[styles.requestListTextContainer,{
                     paddingBottom:10,
                 }]}>
-                    <Text style={{fontSize:17}}>{"Ngày hẹn: "+this.props.appoint_date+'  '+this.props.appoint_time}</Text>
+                    <Text style={{fontSize:17}}>{"Ngày hẹn: "+convertDateTimeToDate(this.props.appoint_date)+'  '+convertDateTimeToTime(this.props.appoint_date)}</Text>
                 </View>     
 
 

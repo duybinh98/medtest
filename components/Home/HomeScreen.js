@@ -13,7 +13,7 @@ export default class HomeScreen extends Component {
         super(props);
         this.state = {
             customerId:'2',
-            error: null,
+            customerInfo: null,
             articlesList: [],
             testsList:[],
         };
@@ -23,6 +23,8 @@ export default class HomeScreen extends Component {
 
     componentDidMount() {
         this.callApiArticlesList();
+        this.callApiTestList();
+        this.callApiCustomerInfo();
     }
 
     callApiArticlesList= async () =>  {
@@ -35,58 +37,103 @@ export default class HomeScreen extends Component {
             }));
             },            
             (error) => {
-            this.setState({
-                error
-            });
+                console.log(error)
             }
         )
     }
 
-
-    onPressCreateAppointment(){
-        fetch(getApiUrl()+"/users/customers/detail/"+this.state.customerId)
-        .then(res => res.json())
-        .then(
-            (result) => {
-            this.props.navigation.dispatch(
-            CommonActions.navigate({
-                name: 'CreateAppointmentScreen',
-                params: {
-                    customerId: this.state.customerId,
-                    customerInformation: result,
-                },
-            }))  
-            },            
-            (error) => {
-            this.setState({
-                error
-            });
-            }
-        )   
-    }
-
-    onPressCreateRequest(){
+    callApiTestList = async () => {
         fetch(getApiUrl()+"/test-types/type-test")
         .then(res => res.json())
         .then(
             (result) => {
-            this.props.navigation.dispatch(
-            CommonActions.navigate({
-                name: 'RequestTestListScreen',
-                params: {
-                    customerId: this.state.customerId,
-                    testsList: result,
-                    selectedTest: [], 
-                    totalPrice: '0',
-                },
-            }))  
+            this.setState(previousState => ({
+                testsList: result,
+            }));
             },            
             (error) => {
-            this.setState({
-                error
-            });
+                console.log(error)
             }
-        )        
+        )  
+    }
+
+    callApiCustomerInfo = async () => {
+        fetch(getApiUrl()+"/users/customers/detail/"+this.state.customerId)
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState(previousState => ({
+                customerInfo: result,
+            }));
+            },            
+            (error) => {
+                console.log(error)
+            }
+        )   
+    }
+
+
+
+    onPressCreateAppointment(){
+        // fetch(getApiUrl()+"/users/customers/detail/"+this.state.customerId)
+        // .then(res => res.json())
+        // .then(
+        //     (result) => {
+        //     this.props.navigation.dispatch(
+        //     CommonActions.navigate({
+        //         name: 'CreateAppointmentScreen',
+        //         params: {
+        //             customerId: this.state.customerId,
+        //             customerInformation: result,
+        //         },
+        //     }))  
+        //     },            
+        //     (error) => {
+        //         console.log(error)
+        //     }
+        // )
+        console.log(this.state.customerInfo)
+        this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'CreateAppointmentScreen',
+                params: {
+                    customerId: this.state.customerId,
+                    customerInfo: this.state.customerInfo,
+                },
+            })) 
+    }
+
+    onPressCreateRequest(){
+        // fetch(getApiUrl()+"/test-types/type-test")
+        // .then(res => res.json())
+        // .then(
+        //     (result) => {
+        //     this.props.navigation.dispatch(
+        //     CommonActions.navigate({
+        //         name: 'RequestTestListScreen',
+        //         params: {
+        //             customerId: this.state.customerId,
+        //             testsList: result,
+        //         },
+        //     }))  
+        //     },            
+        //     (error) => {
+        //     this.setState({
+        //         error
+        //     });
+        //     }
+        // )
+
+        this.props.navigation.dispatch(
+        CommonActions.navigate({
+            name: 'RequestTestListScreen',
+            params: {
+                customerId: this.state.customerId,
+                testsList: this.state.testsList,
+                customerInfo: this.state.customerInfo,
+            },
+        })) 
+
     }
 
     render(){

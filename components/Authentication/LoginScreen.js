@@ -47,6 +47,11 @@ class LoginComponent extends Component {
         this.submit = this.submit.bind(this)
     }
     submit = values => {
+
+        
+
+
+
         this.props.navigation.dispatch(
             CommonActions.navigate({
                 name: 'HomeScreen',

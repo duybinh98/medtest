@@ -1,10 +1,14 @@
 
 export function convertDateTimeToDate(inputString){
+    
     return inputString.substring(8,10)+'-'+inputString.substring(5,7)+'-'+inputString.substring(0,4);
+    
 }
 
 export function convertDateTimeToTime(inputString){
+    
     return inputString.substring(11,13)+':'+inputString.substring(14,16);
+    
 }
 
 export function convertDateAndTimeToDateTime(inputDate,inputTime){
