@@ -5,18 +5,43 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
+import {getApiUrl, convertDateAndTimeToDateTime} from './../Common/CommonFunction'
 
 
 export default class RequestConfirmScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            customerId: this.props.route.params.customerId,
             name: this.props.route.params.name,
-            address: this.props.route.params.address + ", "  + this.props.route.params.town + ", " +  this.props.route.params.district, 
+            address: this.props.route.params.address,
+            town: this.props.route.params.town,
+            district: this.props.route.params.district,
             date: this.props.route.params.date,
-            freeTime: this.props.route.params.time,
+            time: this.props.route.params.time,
+            selectedTest: this.props.route.params.selectedTest,
+            testsList: this.props.route.params.testsList,
+            totalPrice: this.props.route.params.totalPrice,
         };
         this.isSelected = this.isSelected.bind(this);
+        this.onConfirm = this.onConfirm.bind(this);
+    }
+
+    componentDidUpdate (prevProps, prevState) {        
+         if (prevProps.route.params !== this.props.route.params) {
+            this.setState(previousState => ({ 
+                customerId: this.props.route.params.customerId,
+                name: this.props.route.params.name,
+                address: this.props.route.params.address, 
+                town:this.props.route.params.town,
+                district:  this.props.route.params.district,
+                date: this.props.route.params.date,
+                time: this.props.route.params.time,
+                selectedTest: this.props.route.params.selectedTest,   
+                testsList: this.props.route.params.testsList,
+                totalPrice: this.props.route.params.totalPrice,
+            }));
+        }
     }
 
     isSelected(id) {
@@ -27,26 +52,43 @@ export default class RequestConfirmScreen extends Component {
     }
 
     onConfirm  = async () => {
-        fetch('https://medtestlp.herokuapp.com/requests/create', {
+        fetch(getApiUrl()+'/requests/create', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            test_ID: this.props.route.params.selectedTest,
-            cust_ID: this.props.route.params.cust_ID,
-            appoint_date: this.props.route.params.email,
-            appoint_time    : "",
-            appoint_address: this.props.route.params.address
+            userID: this.state.customerId,
+            meetingTime: convertDateAndTimeToDateTime(this.state.date, this.state.time),
+            address: this.state.address,
+            townCode: 'T1',
+            districtCode: 'D1',
+            selectedTest: this.state.selectedTest,
         }),
         })
         .then(res => res.json())
         .then(
             (result) => {
-                Alert.alert("hi"+result);
+                this.props.route.params.resetSelectedTestOnConfirm()
+                console.log(result)
+                this.props.navigation.dispatch(
+                    CommonActions.navigate({
+                        name: 'RequestViewScreen',
+                        params: {
+                            name: this.state.name,
+                            address: this.state.address,
+                            date: this.state.date,
+                            time: this.state.time,
+                            selectedTest: this.state.selectedTest,   
+                            testsList: this.state.testsList,
+                            // customerInfo  = this.state.customerInfo,
+                        },
+                    })
+                )
             },
             (error) => {
+                console.log(error)
             this.setState({
                 error
             });
@@ -70,7 +112,7 @@ export default class RequestConfirmScreen extends Component {
                                 <Text style={styles.textInfor} >Tên hiển thị:  {this.state.name}</Text>
                             </View>
                             <View style={styles.textContainer}>
-                                <Text style={styles.textInfor} >Địa chỉ: {this.state.address}</Text>
+                                <Text style={styles.textInfor} >Địa chỉ: {this.state.address+', '+this.state.town+', '+this.state.district}</Text>
                             </View>
                             <View
                                 style={[styles.textContainer,{
@@ -93,7 +135,7 @@ export default class RequestConfirmScreen extends Component {
                                     height:20,
                                 }}
                             >
-                                <Text style={styles.textInfor} >Giờ hẹn: {this.state.freeTime}</Text>
+                                <Text style={styles.textInfor} >Giờ hẹn: {this.state.time}</Text>
                             </View>
                             </View>
                         </View>
@@ -128,21 +170,9 @@ export default class RequestConfirmScreen extends Component {
                             </View>
                             <TouchableOpacity style={styles.btnConfirm} 
                                 onPress={() => {
-                                    this.props.navigation.dispatch(
-                                        CommonActions.navigate({
-                                            name: 'RequestViewScreen',
-                                            params: {
-                                                name: this.state.name,
-                                                address: this.state.address,
-                                                date: this.state.date,
-                                                freeTime: this.state.freeTime,
-                                                selectedTest: this.props.route.params.selectedTest,   
-                                                testsList: this.props.route.params.testsList,
-                                                // customerInfo  = this.state.customerInfo,
-                                            },
-                                        })
-                                    )
-                                    // this.onConfirm
+                                    this.onConfirm()
+                                    
+                                    
                                     }}                                                              
                                 >
                                 <Text style={styles.textBtn}>Xác nhận</Text>

@@ -12,6 +12,7 @@ import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import {load as loadAccount} from '../Store/Reducers/InitialValue'
 import renderField from '../../Validate/RenderField'
+import {getApiUrl, convertDateTimeToTime, convertDateTimeToDate} from './../Common/CommonFunction'
 
 
 //validate conditions
@@ -48,13 +49,17 @@ class RequestPersonalInformation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: 'Nguyễn Văn B',
+            customerId: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.id : '-1',
+            name: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.name : 'Nguyễn Văn B',
             apointmentDate: '01/01/2020',
             apointmentTime: '07:30',
             selectTownList: [],
-            address: '',
-            district: '',
-            town: ''
+            address: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.address : 'a',
+            district: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.districtCode : '0',
+            town: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.townCode : '1',
+            selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [], 
+            totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0', 
+            testsList: this.props.route.params.testsList ? this.props.route.params.testsList : [],
         };
         this.selectItem = this.selectItem.bind(this)
         this.submit = this.submit.bind(this)
@@ -62,7 +67,8 @@ class RequestPersonalInformation extends Component {
     componentWillMount = value => {
         const customerInfor =  {
             username : this.state.name,
-            email: this.state.email
+            email: this.state.email,
+            address: this.state.address,
         }
         this.props.load(customerInfor)
     }
@@ -80,7 +86,9 @@ class RequestPersonalInformation extends Component {
         this.props.navigation.dispatch(
             CommonActions.navigate({
                 name: 'RequestConfirmScreen',
-                params: {                 
+                params: {
+                    customerId: this.state.customerId,
+                    name: this.state.name,       
                     address: this.state.address,
                     town: this.state.town,
                     district : this.state.district,
@@ -89,9 +97,10 @@ class RequestPersonalInformation extends Component {
                     selectedTest: this.props.route.params.selectedTest,   
                     testsList: this.props.route.params.testsList,
                     totalPrice: this.props.route.params.totalPrice,
+                    resetSelectedTestOnConfirm: this.props.route.params.resetSelectedTestOnConfirm,
                 },
             })
-        )              
+        )
     }
     selectItem(id) {
         districtList.forEach(district => {

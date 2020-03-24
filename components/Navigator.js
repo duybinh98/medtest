@@ -66,7 +66,7 @@ function CustomDrawerContent(props){
     <View style ={{flex:1}}>
       <TouchableOpacity 
         style ={{
-        height:130,        
+        height:130,
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'flex-end',

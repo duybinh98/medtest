@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { CommonActions } from '@react-navigation/native';
+import {getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate} from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import {load as loadAccount} from '../Store/Reducers/InitialValue'
 import renderField from '../../Validate/RenderField'
@@ -21,9 +22,9 @@ class CreateAppointmentScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: 'Nguyễn Văn A',
-            phonenumber: '0123456789',
-            dob: '01/01/1970',
+            name: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.name : 'Nguyễn Văn A',
+            phonenumber: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.phoneNumber : '0123456789',
+            dob: this.props.route.params.customerInfo ? convertDateTimeToDate(this.props.route.params.customerInfo.dob) : '01/01/1970',
             apointmentDate: '01/01/2020',
             apointmentTime: '07:30',
         };
@@ -55,7 +56,7 @@ class CreateAppointmentScreen extends Component {
         return (
             <View style={styles.background}>
                 <ScrollView>
-                    <ScreenTopMenu></ScreenTopMenu>
+                    <ScreenTopMenuBack navigation={this.props.navigation} backScreen='HomeScreen'></ScreenTopMenuBack>
                     <View>
                         <View style={styles.logoContainer}>
                             <Text style={styles.logoText}>Đặt lịch khám</Text>

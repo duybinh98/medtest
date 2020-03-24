@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
+import {getApiUrl, convertDateTimeToDate} from './../Common/CommonFunction'
 
 
 const { width: WIDTH } = Dimensions.get('window')
@@ -30,7 +31,7 @@ export default class ForgottenPassword extends Component {
     }
 
     getApiData() {
-        fetch("http://192.168.1.11:8080/users/customers/detail/"+this.state.id)
+        fetch(getApiUrl()+"/users/customers/detail/"+this.state.id)
         .then(res => res.json())
         .then(
             (result) => {
@@ -39,12 +40,12 @@ export default class ForgottenPassword extends Component {
                 name: result.name,
                 address: result.address,
                 email: result.email,
-                phone: result.phonenumber,
+                phone: result.phoneNumber,
                 image: result.image,
                 districtCode: result.districtCode,
                 cityCode: result.cityCode,
                 townCode: result.townCode,
-                dob: result.dob.substring(0,10),
+                dob: result.dob,
                 gender: result.gender,
 
             }));
@@ -87,7 +88,7 @@ export default class ForgottenPassword extends Component {
                 </View>
                 <View style={styles.dobGenderContainer}>
                     <View style={styles.dobContainer}>
-                        <Text style={styles.textInfor} >Ngày sinh: {this.state.dob}</Text>
+                        <Text style={styles.textInfor} >Ngày sinh: {convertDateTimeToDate(this.state.dob)}</Text>
                     </View>
                     <View style={styles.genderContainer}>
                         <Text style={styles.textInfor} >Giới tính: {this.state.gender?"Nữ": "Nam"}</Text>
@@ -109,7 +110,7 @@ export default class ForgottenPassword extends Component {
                                 name: this.state.name,
                                 address: this.state.address,
                                 email: this.state.email,
-                                phone: this.state.phonenumber,
+                                phone: this.state.phone,
                                 image: this.state.image,
                                 districtCode: this.state.districtCode,
                                 cityCode: this.state.cityCode,
@@ -122,7 +123,9 @@ export default class ForgottenPassword extends Component {
                     >
                         <Text style={styles.textBtn}>Chỉnh sửa thông tin</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnConfirm}>
+                    <TouchableOpacity style={styles.btnConfirm}
+                        onPress={() => this.props.navigation.navigate('ChangePassword')}
+                    >
                         <Text style={styles.textBtn}>Đổi mật khẩu</Text>
                     </TouchableOpacity>
                 </View>

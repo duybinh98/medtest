@@ -5,6 +5,7 @@ import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import ArticleListItem from './ArticleListItem';
+import {getApiUrl} from './../Common/CommonFunction';
 // import articlesList from './../../Data/Articles'
 
 export default class HomeScreen extends Component {
@@ -12,19 +13,22 @@ export default class HomeScreen extends Component {
         super(props);
         this.state = {
             customerId:'2',
-            error: null,
+            customerInfo: null,
             articlesList: [],
             testsList:[],
         };
         this.onPressCreateRequest = this.onPressCreateRequest.bind(this);
+        this.onPressCreateAppointment = this.onPressCreateAppointment.bind(this);
     }
 
     componentDidMount() {
         this.callApiArticlesList();
+        this.callApiTestList();
+        this.callApiCustomerInfo();
     }
 
     callApiArticlesList= async () =>  {
-        fetch("http://192.168.1.11:8080/articles/list")
+        fetch(getApiUrl()+"/articles/list")
         .then(res => res.json())
         .then(
             (result) => {
@@ -33,36 +37,103 @@ export default class HomeScreen extends Component {
             }));
             },            
             (error) => {
-            this.setState({
-                error
-            });
+                console.log(error)
             }
         )
     }
 
-    onPressCreateRequest(){
-        fetch("http://192.168.1.11:8080/test-types/type-test")
+    callApiTestList = async () => {
+        fetch(getApiUrl()+"/test-types/type-test")
         .then(res => res.json())
         .then(
             (result) => {
-            this.props.navigation.dispatch(
-            CommonActions.navigate({
-                name: 'RequestTestListScreen',
-                params: {
-                    customerId: this.state.customerId,
-                    testsList: result,
-                    selectedTest: [], 
-                    totalPrice: '0',
-                },
-            }))  
+            this.setState(previousState => ({
+                testsList: result,
+            }));
             },            
             (error) => {
-            this.setState({
-                error
-            });
+                console.log(error)
             }
-        )
-        
+        )  
+    }
+
+    callApiCustomerInfo = async () => {
+        fetch(getApiUrl()+"/users/customers/detail/"+this.state.customerId)
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState(previousState => ({
+                customerInfo: result,
+            }));
+            },            
+            (error) => {
+                console.log(error)
+            }
+        )   
+    }
+
+
+
+    onPressCreateAppointment(){
+        // fetch(getApiUrl()+"/users/customers/detail/"+this.state.customerId)
+        // .then(res => res.json())
+        // .then(
+        //     (result) => {
+        //     this.props.navigation.dispatch(
+        //     CommonActions.navigate({
+        //         name: 'CreateAppointmentScreen',
+        //         params: {
+        //             customerId: this.state.customerId,
+        //             customerInformation: result,
+        //         },
+        //     }))  
+        //     },            
+        //     (error) => {
+        //         console.log(error)
+        //     }
+        // )
+        console.log(this.state.customerInfo)
+        this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'CreateAppointmentScreen',
+                params: {
+                    customerId: this.state.customerId,
+                    customerInfo: this.state.customerInfo,
+                },
+            })) 
+    }
+
+    onPressCreateRequest(){
+        // fetch(getApiUrl()+"/test-types/type-test")
+        // .then(res => res.json())
+        // .then(
+        //     (result) => {
+        //     this.props.navigation.dispatch(
+        //     CommonActions.navigate({
+        //         name: 'RequestTestListScreen',
+        //         params: {
+        //             customerId: this.state.customerId,
+        //             testsList: result,
+        //         },
+        //     }))  
+        //     },            
+        //     (error) => {
+        //     this.setState({
+        //         error
+        //     });
+        //     }
+        // )
+
+        this.props.navigation.dispatch(
+        CommonActions.navigate({
+            name: 'RequestTestListScreen',
+            params: {
+                customerId: this.state.customerId,
+                testsList: this.state.testsList,
+                customerInfo: this.state.customerInfo,
+            },
+        })) 
+
     }
 
     render(){
@@ -86,13 +157,7 @@ export default class HomeScreen extends Component {
                                 }]}
                                 titleStyle={{color:'#0A6ADA'}} 
                                 title="Đặt khám"
-                                onPress={() => this.props.navigation.dispatch(
-                                CommonActions.navigate({
-                                    name: 'CreateAppointmentScreen',
-                                    params: {
-                                        // customerId: this.state.customerId,
-                                    },
-                                }))}
+                                onPress={() => this.onPressCreateAppointment()}
                             >\</Button>  
 
                             <Button 
@@ -122,7 +187,7 @@ export default class HomeScreen extends Component {
                                     <ArticleListItem 
                                         image={item.image}
                                         title={item.tittle}
-                                        shortContent={item.content}
+                                        shortContent={item.shortContent}
                                         content={item.content}   
                                         navigation={this.props.navigation}
                                         >

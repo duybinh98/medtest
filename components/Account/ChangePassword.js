@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
-import ScreenTopMenu from './../Common/ScreenTopMenu';
+import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
+import {getApiUrl} from './../Common/CommonFunction'
 
 //validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
@@ -41,6 +42,7 @@ class changePassword extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            customerId:'4',
             password: '',
             newPassword: '',
         };
@@ -52,23 +54,64 @@ class changePassword extends Component {
         } else if (values.cfNewPassword !== values.newPassword) {
             alert("Xác nhận mật khẩu mới không đúng!")
         } else {
-            this.props.navigation.dispatch(
-                CommonActions.navigate({
-                    name: 'LoginScreen',
-                    params: {
-                        password: this.state.password,
-                        newPassword: this.state.newPassword,
-                    },
+
+            fetch(getApiUrl()+'/users/customers/change-password/'+this.state.customerId, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    oldPassword: this.state.password,
+                    newPassword: this.state.newPassword,
+
+                }),
                 })
-            )
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.props.navigation.dispatch(
+                        CommonActions.navigate({
+                            // name: 'LoginScreen',
+                            // params: {
+                            //     password: this.state.password,
+                            //     newPassword: this.state.newPassword,
+                            // },
+                            name: 'HomeScreen',
+                            params: {
+
+                            },
+                        })
+                    )
+                },
+                (error) => {
+                this.setState({                
+                    error
+                });
+                console.log(error)
+                }
+            );
+
+            // this.props.navigation.dispatch(
+            //     CommonActions.navigate({
+            //         name: 'LoginScreen',
+            //         params: {
+            //             password: this.state.password,
+            //             newPassword: this.state.newPassword,
+            //         },
+            //     })
+            // )
         }
     }
+
+
+
     render() {
         const { handleSubmit } = this.props;
         return (
             <View style={styles.background}>
                 <ScrollView>
-                    <ScreenTopMenu></ScreenTopMenu>
+                    <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                     <View>
                         <View style={styles.logoContainer}>
                             <Text style={styles.logoText}>Đổi mật khẩu</Text>

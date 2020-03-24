@@ -9,6 +9,7 @@ import { CommonActions } from '@react-navigation/native';
 import DatePicker from 'react-native-datepicker';
 import districtList from '../../Data/District';
 import ModalDropdown from 'react-native-modal-dropdown';
+import {getApiUrl} from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import {load as loadAccount} from '../Store/Reducers/InitialValue'
 import renderField from '../../Validate/RenderField'
@@ -46,15 +47,15 @@ class UpdateInformationScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: 'Nguyễn Văn ABC',
-            // name: this.props.route.params.name,
+            // name: 'Nguyễn Văn ABC',
+            name: this.props.route.params.name ? this.props.route.params.name : '',
             dob: '01/01/1970',
-            gender: 'Nữ',
+            gender: this.props.route.params.gender ? this.props.route.params.gender=='1' ? 'Nam' : 'Nữ' : 'Nam',
             selectTownList: [],
-            address: '',
+            address: this.props.route.params.address ? this.props.route.params.address : '',
             district: '',
             town: '',
-            email: '123@1234.com'
+            email: this.props.route.params.email ? this.props.route.params.email :'123@1234.com'
         };
         this.submit = this.submit.bind(this)
     }
@@ -99,7 +100,7 @@ class UpdateInformationScreen extends Component {
         });
     }
     callApi  = async () => {
-        fetch('http://192.168.1.11:8080/users/customers/detail/update/2', {
+        fetch(getApiUrl()+'/users/customers/detail/update/2', {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
@@ -126,8 +127,7 @@ class UpdateInformationScreen extends Component {
             });
             Alert.alert("hi"+error);
             }
-        )
-        ;
+        );
     }
 
 

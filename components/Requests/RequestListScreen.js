@@ -5,13 +5,17 @@ import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import RequestListItem from './RequestListItem';
 import requestsList from './../../Data/RequestsList'
 import testList from './../../Data/Test'
+import {getApiUrl} from './../Common/CommonFunction'
 
 
 export default class RequestListScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isDone: false
+            customerId: '2',
+            isDone: false,
+            requestsList: requestsList,
+            testsList: testList,
         };
         this.viewDone = this.viewDone.bind(this);
     }
@@ -19,6 +23,46 @@ export default class RequestListScreen extends Component {
     viewDone(){
         return this.state.isDone;
     }
+
+    componentDidMount(){
+        this.callApiRequestList();
+        this.callApiTestList();
+    }
+
+    
+    callApiTestList = async () => {
+        fetch(getApiUrl()+"/test-types/type-test")
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState(previousState => ({
+                testsList: result,
+            }));
+            },            
+            (error) => {
+                console.log(error)
+            }
+        )  
+    }
+
+
+    callApiRequestList(){
+        fetch(getApiUrl()+'/users/customers/'+this.state.customerId+'/requests/list')
+        .then(res => res.json())
+        .then(
+            (result) => {
+            console.log(result)
+            this.setState(previousState => ({
+                requestsList: result,
+            }));
+            },            
+            (error) => {
+                console.log(error)
+            }
+        )  
+
+    }
+
 
     render(){
         return(
@@ -65,26 +109,26 @@ export default class RequestListScreen extends Component {
                                 flex:1
                                 }}
                                 showsVerticalScrollIndicator={false}
-                                data={requestsList}
+                                data={this.state.requestsList}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({item}) => {
                                         return (
                                             <View>                                
                                             <RequestListItem
-                                                request_createTime={item.request_createTime}
-                                                cust_name={item.cust_name}
-                                                cust_phone={item.cust_phone}
-                                                cust_DOB={item.cust_DOB}
-                                                appoint_address={item.appoint_address}
-                                                appoint_date={item.appoint_date}
-                                                appoint_time={item.appoint_time}
-                                                nurse_name={item.nurse_name}
-                                                nurse_id={item.nurse_id}
-                                                selectedTest={item.selectedTest}
-                                                req_amount={item.req_amount}
-                                                req_status={item.req_status}
+                                                request_createTime={item.requestCreatedTime}
+                                                cust_name={item.customerName}
+                                                cust_phone={item.customerPhoneNumber}
+                                                cust_DOB={item.customerDOB}
+                                                appoint_address={item.customerAddress}
+                                                appoint_date={item.requestMeetingTime}
+                                                appoint_time={item.requestMeetingTime}
+                                                nurse_name={item.nurseName}
+                                                nurse_id={item.nurseID}
+                                                selectedTest={item.lsSelectedTest}
+                                                req_amount={item.requestAmount}
+                                                req_status={item.requestStatus}
                                                 viewDone={this.viewDone}
-                                                testList={testList}
+                                                testList={this.state.testsList}
                                                 navigation={this.props.navigation}
                                             />   
                                             </View>                             
