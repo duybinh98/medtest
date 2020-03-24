@@ -4,11 +4,15 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
-import {getApiUrl, convertDateTimeToDate} from './../Common/CommonFunction'
+import {getApiUrl, convertDateTimeToDate} from './../Common/CommonFunction';
+import { connect } from 'react-redux';
+import { login } from '../Store/Reducers/LoginReducer';
+// import { getApiUrl } from './../Common/CommonFunction';
+import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
 
 
 const { width: WIDTH } = Dimensions.get('window')
-export default class ForgottenPassword extends Component {
+class customerInformation extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -22,42 +26,54 @@ export default class ForgottenPassword extends Component {
             image: 'https://getdrawings.com/free-icon/react-icon-69.png',
             districtCode: null,
             // cityCode: null,
-            townCode: null,            
+            townCode: null,          
+            customerInfor: null,  
         };
     }
+    componentWillMount(){
+        console.log(this.props.customerInfor);
+        console.log(this.props.isLoadSuccess);
 
+        console.log(this.props.isLoginPending);
+        this.setState({
+           
+            customerInfor : this.props.customerInfor
+        })
+    }
     componentDidMount() {
-        this.getApiData();
+        // this.getApiData();
+       
+
     }
 
-    getApiData() {
-        fetch(getApiUrl()+"/users/customers/detail/"+this.state.id)
-        .then(res => res.json())
-        .then(
-            (result) => {
-            this.setState(previousState => ({
-                isLoaded: true,
-                name: result.name,
-                address: result.address,
-                email: result.email,
-                phone: result.phoneNumber,
-                image: result.image,
-                districtCode: result.districtCode,
-                cityCode: result.cityCode,
-                townCode: result.townCode,
-                dob: result.dob,
-                gender: result.gender,
+    // getApiData() {
+    //     fetch(getApiUrl()+"/users/customers/detail/"+this.state.id)
+    //     .then(res => res.json())
+    //     .then(
+    //         (result) => {
+    //         this.setState(previousState => ({
+    //             isLoaded: true,
+    //             name: result.name,
+    //             address: result.address,
+    //             email: result.email,
+    //             phone: result.phoneNumber,
+    //             image: result.image,
+    //             districtCode: result.districtCode,
+    //             cityCode: result.cityCode,
+    //             townCode: result.townCode,
+    //             dob: result.dob,
+    //             gender: result.gender,
 
-            }));
-            },            
-            (error) => {
-            this.setState({
-                isLoaded: true,
-                error
-            });
-            }
-        )
-    }
+    //         }));
+    //         },            
+    //         (error) => {
+    //         this.setState({
+    //             isLoaded: true,
+    //             error
+    //         });
+    //         }
+    //     )
+    // }
 
     render() {
         const { gender } = this.state;
@@ -81,7 +97,7 @@ export default class ForgottenPassword extends Component {
                     </View>
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Tên hiển thị:  {this.state.name}</Text>
+                    <Text style={styles.textInfor} >Tên hiển thị:  {this.state.customerInfor.name}</Text>
                 </View>
                 <View style={styles.textContainer}>
                     <Text style={styles.textInfor} >Số điện thoại: {this.state.phone}</Text>
@@ -134,7 +150,24 @@ export default class ForgottenPassword extends Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        isLoginPending: state.login.isLoginPending,
+        isLoginSuccess: state.login.isLoginSuccess,
+        LoginError: state.login.LoginError,
+        customerInfor: state.loadCustomer.customerInfor,
+        isLoadSuccess: state.loadCustomer.isLoadSuccess,
+        loadError : state.loadCustomer.LoadError
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+        login: (phoneNumber, password) => dispatch(login(phoneNumber, password))
+    };
+}
 
+export default connect(mapStateToProps, mapStateToDispatch)(customerInformation);
 
 //#25345D
 //#0A6ADA
