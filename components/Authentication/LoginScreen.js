@@ -8,7 +8,7 @@ import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 // import action from '../Store/Action/actions';
 import { login } from '../Store/Reducers/LoginReducer';
-import {getApiUrl} from './../Common/CommonFunction';
+// import { getApiUrl } from './../Common/CommonFunction';
 import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
 
 //validate conditions
@@ -48,7 +48,21 @@ class LoginComponent extends Component {
         this.state = {
             phoneNumber: '',
             password: '',
-            customerInfo: null,
+            customerInfo: {
+                "id": 1,
+                "phoneNumber": "0123456789",
+                "name": "Phạm Lê Quỳnh La",
+                "dob": "1998-12-13T00:00:00.000+0000",
+                "address": "1 Nguyễn Chí Thanh",
+                "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+                "active": 0,
+                "email": "lamplq@email.com",
+                "role": "CUSTOMER",
+                "gender": 1,
+                "image": "https://www.kindpng.com/picc/m/10-104902_simple-user-icon-user-icon-white-png-transparent.png",
+                "townCode": null,
+                "districtCode": null
+            },
         };
         this.submit = this.submit.bind(this)
     }
@@ -70,15 +84,15 @@ class LoginComponent extends Component {
         //     )   
         // }
         this.props.load(this.state.customerInfo);
-        // this.props.navigation.dispatch(
-        //     CommonActions.navigate({
-        //         name: 'HomeScreen',
-        //         params: {
-        //             phonenumber: this.state.phoneNumber,
-        //             password: this.state.password,
-        //         },
-        //     })
-        // )
+        this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'CustomerInformation',
+                params: {
+                    phonenumber: this.state.phoneNumber,
+                    password: this.state.password,
+                },
+            })
+        )
     }
     render() {
         const { handleSubmit } = this.props;
@@ -128,12 +142,12 @@ const mapStateToProps = (state) => {
         isLoginPending: state.isLoginPending,
         isLoginSuccess: state.isLoginSuccess,
         LoginError: state.LoginError,
-        customerInfo : state.customerInfo
+        customerInfor: state.loadCustomer.customerInfor,
     };
 }
 const mapStateToDispatch = (dispatch) => {
     return {
-        load: (customerInfo) => dispatch(loadCustomerInfor(customerInfo)),
+        load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
         login: (phoneNumber, password) => dispatch(login(phoneNumber, password))
     };
 }

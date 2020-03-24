@@ -28,18 +28,31 @@ function setLoadError(LoadError) {
 }
 
 function loadCustomerFromState(customerInfor) {
-    setTimeout(() => {
-        try {
-            Promise.resolve(true);
-        } catch (error) {
-            Promise.reject(new Error('Load customer information failed'));
-        }
-    },3000)   
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (customerInfor !== null) {
+                return resolve(true);
+            } else {
+                return reject(new Error('Load customer information failed'));
+            }
+        },5000)
+
+    }); 
 }
+
+// function loadCustomerFromState(customerInfor) {
+//     setTimeout(() => {
+//         try {
+//             return new Promise.resolve(true);
+//         } catch (error) {
+//             return new  Promise.reject(new Error('Load customer information failed'));
+//         }
+//     },3000)   
+// }
 export function loadCustomerInfor(customerInfor){
     return dispatch => {
         dispatch(setLoadPending(true));
-        dispatch(setLoadSuccess(false,null));
+        // dispatch(setLoadSuccess(false,null));
         dispatch(setLoadError(null));
         // dispatch(setCustomerInfor(null));
         loadCustomerFromState(customerInfor)
