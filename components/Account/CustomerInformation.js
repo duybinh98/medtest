@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
-import {getApiUrl, convertDateTimeToDate} from './../Common/CommonFunction';
+import { getApiUrl, convertDateTimeToDate } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import { login } from '../Store/Reducers/LoginReducer';
 // import { getApiUrl } from './../Common/CommonFunction';
@@ -26,24 +26,37 @@ class customerInformation extends Component {
             image: 'https://getdrawings.com/free-icon/react-icon-69.png',
             districtCode: null,
             // cityCode: null,
-            townCode: null,          
-            customerInfor: null,  
+            townCode: null,
+            customerInfor: null,
+            token: null,
         };
     }
-    componentWillMount(){
-        console.log(this.props.customerInfor);
-        console.log(this.props.isLoadSuccess);
+    componentWillMount() {
 
-        console.log(this.props.isLoginPending);
-        this.setState({
-           
-            customerInfor : this.props.customerInfor
-        })
+
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+            console.log(this.props.customerInfor);
+            console.log(this.props.isLoadSuccess);
+            console.log(this.props.token)
+            console.log(this.props.isLoginPending);
+            console.log(this.props.isLoginPending);
+            console.log(this.props.isLoginPending);
+            console.log(this.props.isLoginPending);
+            console.log(this.props.isLoginSuccess);
+            this.setState({
+                token: this.props.token,
+                customerInfor: this.props.customerInfor
+            })
+        }
     }
     componentDidMount() {
         // this.getApiData();
-       
-
+        this.setState({
+            token: this.props.token,
+            customerInfor: this.props.customerInfor
+        })
     }
 
     // getApiData() {
@@ -97,17 +110,18 @@ class customerInformation extends Component {
                     </View>
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Tên hiển thị:  {this.state.customerInfor.name}</Text>
+                    {/* <Text style={styles.textInfor} >Tên hiển thị:  {this.state.customerInfor.name}</Text> */}
+                    <Text style={styles.textInfor} >Tên hiển thị:  {this.props.customerInfor?this.props.customerInfor.name:""}</Text>
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Số điện thoại: {this.state.phone}</Text>
+                    <Text style={styles.textInfor} >Số điện thoại: {this.props.token}</Text>
                 </View>
                 <View style={styles.dobGenderContainer}>
                     <View style={styles.dobContainer}>
                         <Text style={styles.textInfor} >Ngày sinh: {convertDateTimeToDate(this.state.dob)}</Text>
                     </View>
                     <View style={styles.genderContainer}>
-                        <Text style={styles.textInfor} >Giới tính: {this.state.gender?"Nữ": "Nam"}</Text>
+                        <Text style={styles.textInfor} >Giới tính: {this.state.gender ? "Nữ" : "Nam"}</Text>
                     </View>
                 </View>
 
@@ -119,23 +133,23 @@ class customerInformation extends Component {
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.btnConfirm}
-                    onPress={() => this.props.navigation.dispatch(
-                        CommonActions.navigate({
-                            name: 'UpdateInformation',
-                            params: {                 
-                                name: this.state.name,
-                                address: this.state.address,
-                                email: this.state.email,
-                                phone: this.state.phone,
-                                image: this.state.image,
-                                districtCode: this.state.districtCode,
-                                cityCode: this.state.cityCode,
-                                townCode: this.state.townCode,
-                                dob: this.state.dob,
-                                gender: this.state.gender,
-                            },
-                        })
-                    )  }
+                        onPress={() => this.props.navigation.dispatch(
+                            CommonActions.navigate({
+                                name: 'UpdateInformation',
+                                params: {
+                                    name: this.state.name,
+                                    address: this.state.address,
+                                    email: this.state.email,
+                                    phone: this.state.phone,
+                                    image: this.state.image,
+                                    districtCode: this.state.districtCode,
+                                    cityCode: this.state.cityCode,
+                                    townCode: this.state.townCode,
+                                    dob: this.state.dob,
+                                    gender: this.state.gender,
+                                },
+                            })
+                        )}
                     >
                         <Text style={styles.textBtn}>Chỉnh sửa thông tin</Text>
                     </TouchableOpacity>
@@ -155,9 +169,10 @@ const mapStateToProps = (state) => {
         isLoginPending: state.login.isLoginPending,
         isLoginSuccess: state.login.isLoginSuccess,
         LoginError: state.login.LoginError,
+        token: state.login.token,
         customerInfor: state.loadCustomer.customerInfor,
         isLoadSuccess: state.loadCustomer.isLoadSuccess,
-        loadError : state.loadCustomer.LoadError
+        loadError: state.loadCustomer.LoadError
     };
 }
 const mapStateToDispatch = (dispatch) => {

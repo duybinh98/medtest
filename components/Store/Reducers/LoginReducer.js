@@ -12,10 +12,11 @@ function setLoginPending(isLoginPending) {
         isLoginPending
     };
 }
-function setLoginSuccess(isLoginSuccess) {
+function setLoginSuccess(isLoginSuccess, token) {
     return {
         type: LOGIN_SUCCESS,
-        isLoginSuccess
+        isLoginSuccess,
+        token
     };
 }
 function setLoginError(LoginError) {
@@ -32,7 +33,7 @@ export function login(phonenumber, password) {
         sendLoginRequest(phonenumber, password)
         .then(success => {
             dispatch(setLoginPending(false));
-            dispatch(setLoginSuccess(true));
+            dispatch(setLoginSuccess(true,success ));
         })
         .catch(err => {
             dispatch(setLoginPending(false));
@@ -45,13 +46,15 @@ export function login(phonenumber, password) {
 export default function reducer(state = {
     isLoginPending: false,
     isLoginSuccess: false,
-    LoginError: null
+    LoginError: null,
+    token : null,
 }, action) {
     switch (action.type) {
         case LOGIN_SUCCESS:
             return {
                 ...state,
-                isLoginSuccess: action.isLoginSuccess
+                isLoginSuccess: action.isLoginSuccess,
+                token : action.token
             };
         case LOGIN_PENDING:
             return {
@@ -72,11 +75,12 @@ function sendLoginRequest(phoneNumber, password) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             if (phoneNumber === '0123456789' && password === '123456') {
-                return resolve(true);
+                // return resolve("123456");
+                return resolve("123456");
             } else {
                 return reject(new Error('Invalid email or password'));
-            }
-        },5000)
+            }   
+        },1000)
 
     });
 }

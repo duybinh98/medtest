@@ -35,7 +35,7 @@ function loadCustomerFromState(customerInfor) {
             } else {
                 return reject(new Error('Load customer information failed'));
             }
-        },5000)
+        },1000)
 
     }); 
 }
