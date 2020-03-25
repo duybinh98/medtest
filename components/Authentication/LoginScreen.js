@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
@@ -15,7 +15,7 @@ import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
 const required = value => value ? undefined : 'Required';
 const isNumber = value => value && isNaN(Number(value)) ? 'Must be phone number' : undefined;
 const isPhonenumber = value => value && value.length == 10 ? undefined : 'Must be 10 digits';
-const isWeakPassword = value => value && value.length > 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
+const isWeakPassword = value => value && value.length >= 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
 
 //Field input for redux-form
 const renderField = ({
@@ -48,57 +48,44 @@ class LoginComponent extends Component {
         this.state = {
             phoneNumber: '',
             password: '',
-            customerInfo: {
-                "id": 1,
-                "phoneNumber": "0123456789",
-                "name": "Phạm Lê Quỳnh La",
-                "dob": "1998-12-13T00:00:00.000+0000",
-                "address": "1 Nguyễn Chí Thanh",
-                "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
-                "active": 0,
-                "email": "lamplq@email.com",
-                "role": "CUSTOMER",
-                "gender": 1,
-                "image": "https://www.kindpng.com/picc/m/10-104902_simple-user-icon-user-icon-white-png-transparent.png",
-                "townCode": null,
-                "districtCode": null
-            },
+            
+            customerInfoFromLogin: null,
         };
         this.submit = this.submit.bind(this)
     }
+    
     submit = value => {
-        let { phoneNumber, password } = this.state;
-        this.props.login(phoneNumber, password);
-        // callApiCustomerInfo = async () => {
-        //     fetch(getApiUrl()+"/users/customers/detail/"+ "2")
-        //     .then(res => res.json())
-        //     .then(
-        //         (result) => {
-        //         this.setState(previousState => ({
-        //             customerInfo: result,
-        //         }));
-        //         },            
-        //         (error) => {
-        //             console.log(error)
-        //         }
-        //     )   
-        // }
-        this.props.load(this.state.customerInfo);
-        this.props.navigation.dispatch(
-            CommonActions.navigate({
-                name: 'CustomerInformation',
-                params: {
-                    phonenumber: this.state.phoneNumber,
-                    password: this.state.password,
-                },
-            })
-        )
+        const { phoneNumber, password } = this.state;
+        this.props.login(phoneNumber, password)
+        
+        setTimeout(() => {
+            if (this.props.customerInfoFromLogin != null ) {
+                this.setState(previousState => ({
+                    phoneNumber: '',
+                    password: '',
+                }));
+                this.props.load(this.props.customerInfoFromLogin)
+                this.props.navigation.dispatch(
+                    CommonActions.navigate({
+                        name: 'HomeScreen',
+                        params: {
+                        },
+                    })
+                )                
+            }  
+            else {
+                console.log(this.props.LoginError)
+                Alert.alert('wrong phone number or password');
+                }
+        },1000)
+
+        
     }
     render() {
         const { handleSubmit } = this.props;
         return (
             <ScrollView style={{ flex: 1 }}>
-                <ScreenTopMenu {...this.props} ></ScreenTopMenu>
+                {/* <ScreenTopMenu {...this.props} ></ScreenTopMenu> */}
                 <View>
                     <View style={styles.logoContainer}>
                         <Image
@@ -139,10 +126,10 @@ class LoginComponent extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        isLoginPending: state.isLoginPending,
-        isLoginSuccess: state.isLoginSuccess,
-        LoginError: state.LoginError,
-        customerInfor: state.loadCustomer.customerInfor,
+        isLoginPending: state.login.isLoginPending,
+        isLoginSuccess: state.login.isLoginSuccess,
+        LoginError: state.login.LoginError,
+        customerInfoFromLogin: state.login.customerInfo,
     };
 }
 const mapStateToDispatch = (dispatch) => {

@@ -44,7 +44,8 @@ export default class HomeScreen extends Component {
             selectedTest: [],
             totalPrice: '0',
             resetList: !this.state.resetList,
-        }) 
+        });
+        this.forceUpdate(); 
     }
 
     RenderFooter(){

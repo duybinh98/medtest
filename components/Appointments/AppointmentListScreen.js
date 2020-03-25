@@ -3,14 +3,17 @@ import {View, StyleSheet, Dimensions, Text, TouchableOpacity, FlatList} from 're
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import AppointmentListItem from './AppointmentListItem';
-// import appointmentsList from './../../Data/AppointmentList'
+import {getApiUrl} from './../Common/CommonFunction'
+import { connect } from 'react-redux';
 
-export default class Request extends Component {
+// import appointmentsList from './../../Data/AppointmentList'
+class AppointmentListScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
             isDone: false,
             // customerId: this.props.route.params.customerId ? this.props.route.params.customerId : '-1',
+            customerId: '1',
             appointmentsList : null,
         };
         this.viewDone = this.viewDone.bind(this);
@@ -20,13 +23,16 @@ export default class Request extends Component {
         return this.state.isDone;
     }
 
-    componentDidMount() {
+    componentDidMount(){
         this.callApiAppointmentList();
+        this.props.navigation.addListener("focus", () => {
+            this.callApiAppointmentList();
+        })
     }
 
     callApiAppointmentList = async () =>  {
         // fetch("http://192.168.1.11:8080/users/customers/"+this.state.customerId+"/appointments/list")
-        fetch("http://192.168.1.11:8080/users/customers/1/appointments/list")
+        fetch(getApiUrl()+"/users/customers/"+this.state.customerId+"/appointments/list")
         .then(res => res.json())
         .then(
             (result) => {
@@ -116,6 +122,22 @@ export default class Request extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        token: state.login.token,
+        customerInfor: state.loadCustomer.customerInfor,
+        isLoadSuccess: state.loadCustomer.isLoadSuccess,
+        loadError: state.loadCustomer.LoadError
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+    };
+}
+
+export default connect(mapStateToProps, mapStateToDispatch)(AppointmentListScreen);
 
 
 

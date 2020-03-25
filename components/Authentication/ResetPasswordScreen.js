@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
+import { CommonActions } from '@react-navigation/native';
 import { RadioButton } from 'react-native-paper';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { format } from 'date-fns';
+import {getApiUrl} from './../Common/CommonFunction'
 
 
 const required = values => values ? undefined : 'Bắt buộc';
@@ -40,18 +42,53 @@ const renderField = ({
     );
 }
 
-
-const submit = values => {
-    alert(`Validation success. Values = ~${JSON.stringify(values)}`);
-}
-
 const { width: WIDTH } = Dimensions.get('window')
 
-class ResetPasswordScreen extends Component {
-    state = {
-        name: '',
-        phonenumber: '',
-    };
+class ResetPasswordScreen extends Component {    
+    constructor(props) {
+        super(props)
+        this.state = {
+            name: '',
+            phonenumber: '',
+        };
+    }
+
+
+    submit = values => {
+    // alert(`Validation success. Values = ~${JSON.stringify(values)}`);
+    console.log(values.phonenumber)
+    console.log(values.phonenumber)
+    console.log(values)
+    
+    fetch(getApiUrl()+'/users/forgot-password', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            phoneNumber: values.phonenumber.toString(),
+        }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result)
+                this.props.navigation.dispatch(
+                    CommonActions.navigate({
+                        name: 'LoginScreen',
+                        params: {
+                        },
+                    })
+                )
+            },
+            (error) => {
+                console.log(error)
+            }
+        );
+    }
+
+
     render() {
         const { handleSubmit } = this.props;
         return (
@@ -67,11 +104,11 @@ class ResetPasswordScreen extends Component {
                         iconType="material-community" placeholder="Số điện thoại" secureText={false}
                         validate={[required, isNumber, isPhonenumber]}
                     />
-                    <Field name="email" keyboardType="email-address" component={renderField} iconName="email-outline"
+                    {/* <Field name="email" keyboardType="email-address" component={renderField} iconName="email-outline"
                         iconType="material-community" placeholder="Email" secureText={false}
                         validate={[required, isEmail]}
-                    />               
-                    <TouchableOpacity style={styles.btnResetPassword} onPress={handleSubmit(submit)}>
+                    /> */}
+                    <TouchableOpacity style={styles.btnResetPassword} onPress={handleSubmit(this.submit)}>
                         <Text style={styles.textBtn}>Thay đổi mật khẩu</Text>
                     </TouchableOpacity>
                     <View>

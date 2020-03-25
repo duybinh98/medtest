@@ -3,6 +3,9 @@ import {View, Text, TouchableOpacity, StyleSheet, Linking} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
+import { connect } from 'react-redux';
+import { login } from './Store/Reducers/LoginReducer';
+import { loadCustomerInfor } from './Store/Reducers/LoadInforReducer';
 
 import ChangePassword from './Account/ChangePassword';
 import CustomerInformation from './Account/CustomerInformation';
@@ -23,14 +26,39 @@ import NotificationListScreen from './Home/NotificationListScreen';
 import RequestConfirmScreen from './Requests/RequestConfirmScreen';
 import RequestListScreen from './Requests/RequestListScreen';
 import RequestPersonalInformation from './Requests/RequestPersonalInformation';
+import RequestResultScreen from './Requests/RequestResultScreen';
 import RequestTestListScreen from './Requests/RequestTestListScreen';
 import RequestViewScreen from './Requests/RequestViewScreen';
 
-export default class Navigator extends Component {    
+class Navigator extends Component {    
+    constructor(props) {
+        super(props)
+        this.state = {
+            token: null,
+            customerInfor: null,
+            isLoadSuccess: null,
+            loadError: null
+        };
+    }
+
+    
+    componentDidUpdate  (prevProps, prevState) {        
+         if (prevProps !== this.props) {
+            this.setState(previousState => ({ 
+                token: this.props.token,
+                customerInfor: this.props.customerInfor,
+                isLoadSuccess: this.props.isLoadSuccess,
+                loadError: this.props.loadError
+            }));
+        }
+    }
+
+
+
     render(){
         return(
             <NavigationContainer>
-              <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => CustomDrawerContent(props)}>
+              <Drawer.Navigator initialRouteName="LoginScreen" drawerContent={props => CustomDrawerContent(props,this.state)}>
                 <Drawer.Screen name="ChangePassword" component={ChangePassword} />
                 <Drawer.Screen name="CustomerInformation" component={CustomerInformation} />
                 <Drawer.Screen name="UpdateInformation" component={UpdateInformation} />
@@ -49,7 +77,8 @@ export default class Navigator extends Component {
 
                 <Drawer.Screen name="RequestConfirmScreen" component={RequestConfirmScreen} />
                 <Drawer.Screen name="RequestListScreen" component={RequestListScreen} />                
-                <Drawer.Screen name="RequestPersonalInformation" component={RequestPersonalInformation} />                
+                <Drawer.Screen name="RequestPersonalInformation" component={RequestPersonalInformation} /> 
+                <Drawer.Screen name="RequestResultScreen" component={RequestResultScreen} />                
                 <Drawer.Screen name="RequestTestListScreen" component={RequestTestListScreen} />                
                 <Drawer.Screen name="RequestViewScreen" component={RequestViewScreen} />
               </Drawer.Navigator>                                        
@@ -61,7 +90,7 @@ export default class Navigator extends Component {
 
 const Drawer = createDrawerNavigator();
 
-function CustomDrawerContent(props){
+function CustomDrawerContent(props,state){
   return(
     <View style ={{flex:1}}>
       <TouchableOpacity 
@@ -91,11 +120,11 @@ function CustomDrawerContent(props){
           <Text style={{
             fontSize: 15,
             color: 'black',
-          }}>+84123456789</Text>
+          }}>{state?state.customerInfor?state.customerInfor.phoneNumber:'0000000000':'0000000000'}</Text>
           <Text style={{
             fontSize: 20,
             color: 'black',
-          }}>Nguyen Van An</Text>
+          }}>{state?state.customerInfor?state.customerInfor.name:'A guest':'A guest'}</Text>
       </TouchableOpacity>
       <View style ={{
         marginLeft:10}}>
@@ -192,6 +221,23 @@ function MenuButtonLinkingContainer({ iconName, iconType, iconColor, iconSize, s
       
   );
 }
+
+const mapStateToProps = (state) => {
+    return {
+        token: state.login.token,
+        customerInfor: state.loadCustomer.customerInfor,
+        isLoadSuccess: state.loadCustomer.isLoadSuccess,
+        loadError: state.loadCustomer.LoadError
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+    };
+}
+
+export default connect(mapStateToProps, mapStateToDispatch)(Navigator);
+
 
 const styles = StyleSheet.create({
   navigatorButton:{

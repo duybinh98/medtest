@@ -75,62 +75,24 @@ export default class HomeScreen extends Component {
 
 
     onPressCreateAppointment(){
-        // fetch(getApiUrl()+"/users/customers/detail/"+this.state.customerId)
-        // .then(res => res.json())
-        // .then(
-        //     (result) => {
-        //     this.props.navigation.dispatch(
-        //     CommonActions.navigate({
-        //         name: 'CreateAppointmentScreen',
-        //         params: {
-        //             customerId: this.state.customerId,
-        //             customerInformation: result,
-        //         },
-        //     }))  
-        //     },            
-        //     (error) => {
-        //         console.log(error)
-        //     }
-        // )
-        console.log(this.state.customerInfo)
         this.props.navigation.dispatch(
             CommonActions.navigate({
                 name: 'CreateAppointmentScreen',
                 params: {
                     customerId: this.state.customerId,
-                    customerInfo: this.state.customerInfo,
+                    // customerInfo: this.state.customerInfo,
                 },
             })) 
     }
 
     onPressCreateRequest(){
-        // fetch(getApiUrl()+"/test-types/type-test")
-        // .then(res => res.json())
-        // .then(
-        //     (result) => {
-        //     this.props.navigation.dispatch(
-        //     CommonActions.navigate({
-        //         name: 'RequestTestListScreen',
-        //         params: {
-        //             customerId: this.state.customerId,
-        //             testsList: result,
-        //         },
-        //     }))  
-        //     },            
-        //     (error) => {
-        //     this.setState({
-        //         error
-        //     });
-        //     }
-        // )
-
         this.props.navigation.dispatch(
         CommonActions.navigate({
             name: 'RequestTestListScreen',
             params: {
                 customerId: this.state.customerId,
                 testsList: this.state.testsList,
-                customerInfo: this.state.customerInfo,
+                // customerInfo: this.state.customerInfo,
             },
         })) 
 

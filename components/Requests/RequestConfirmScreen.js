@@ -5,7 +5,7 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
-import {getApiUrl, convertDateAndTimeToDateTime} from './../Common/CommonFunction'
+import {getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate} from './../Common/CommonFunction'
 
 
 export default class RequestConfirmScreen extends Component {
@@ -15,6 +15,7 @@ export default class RequestConfirmScreen extends Component {
             customerId: this.props.route.params.customerId,
             name: this.props.route.params.name,
             address: this.props.route.params.address,
+            dob: this.props.route.params.dob,
             town: this.props.route.params.town,
             district: this.props.route.params.district,
             date: this.props.route.params.date,
@@ -33,6 +34,7 @@ export default class RequestConfirmScreen extends Component {
                 customerId: this.props.route.params.customerId,
                 name: this.props.route.params.name,
                 address: this.props.route.params.address, 
+                dob: this.props.route.params.dob,
                 town:this.props.route.params.town,
                 district:  this.props.route.params.district,
                 date: this.props.route.params.date,
@@ -78,8 +80,10 @@ export default class RequestConfirmScreen extends Component {
                         params: {
                             name: this.state.name,
                             address: this.state.address,
+                            dob: convertDateTimeToDate(this.state.dob),
                             date: this.state.date,
                             time: this.state.time,
+                            status: 'pending',
                             selectedTest: this.state.selectedTest,   
                             testsList: this.state.testsList,
                             // customerInfo  = this.state.customerInfo,
@@ -89,12 +93,11 @@ export default class RequestConfirmScreen extends Component {
             },
             (error) => {
                 console.log(error)
-            this.setState({
-                error
-            });
+                this.setState({
+                    error
+                });
             }
-        )
-        ;
+        );
     }
 
     render(){

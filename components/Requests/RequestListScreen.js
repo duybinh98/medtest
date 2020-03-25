@@ -6,15 +6,15 @@ import RequestListItem from './RequestListItem';
 import requestsList from './../../Data/RequestsList'
 import testList from './../../Data/Test'
 import {getApiUrl} from './../Common/CommonFunction'
+import { connect } from 'react-redux';
 
-
-export default class RequestListScreen extends Component {
+class RequestListScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            customerId: '2',
+            customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
             isDone: false,
-            requestsList: requestsList,
+            requestsList: [],
             testsList: testList,
         };
         this.viewDone = this.viewDone.bind(this);
@@ -118,6 +118,7 @@ export default class RequestListScreen extends Component {
                                         return (
                                             <View>                                
                                             <RequestListItem
+                                                requestId={item.requestID}
                                                 request_createTime={item.requestCreatedTime}
                                                 cust_name={item.customerName}
                                                 cust_phone={item.customerPhoneNumber}
@@ -147,6 +148,21 @@ export default class RequestListScreen extends Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        token: state.login.token,
+        customerInfor: state.loadCustomer.customerInfor,
+        isLoadSuccess: state.loadCustomer.isLoadSuccess,
+        loadError: state.loadCustomer.LoadError
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+    };
+}
+
+export default connect(mapStateToProps, mapStateToDispatch)(RequestListScreen);
 
 
 

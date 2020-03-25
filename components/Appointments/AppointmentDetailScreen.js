@@ -12,16 +12,32 @@ export default class ForgottenPassword extends Component {
         super(props)
         this.state = {
             appointmentId:this.props.route.params.appointment_id? this.props.route.params.appointment_id: '1',
-            name: this.props.route.params.appointment_userName? this.props.route.params.appointment_userName: 'Nguyễn Văn A',
-            dob: this.props.route.params.appointment_DOB? this.props.route.params.appointment_DOB: '01/01/1970',
-            phone: this.props.route.params.appointment_phoneNumber? this.props.route.params.appointment_phoneNumber: '0123456789',
-            date: this.props.route.params.appointment_date? this.props.route.params.appointment_date: '01/01/2020',
-            freeTime: this.props.route.params.appointment_time? this.props.route.params.appointment_time: '7h30-8h30',
+            name: this.props.route.params.appointment_userName? this.props.route.params.appointment_userName: '',
+            dob: this.props.route.params.appointment_DOB? this.props.route.params.appointment_DOB: '',
+            phone: this.props.route.params.appointment_phoneNumber? this.props.route.params.appointment_phoneNumber: '',
+            date: this.props.route.params.appointment_date? this.props.route.params.appointment_date: '',
+            freeTime: this.props.route.params.appointment_time? this.props.route.params.appointment_time: '',
             status: this.props.route.params.appointment_status? this.props.route.params.appointment_status: 'Đang chờ xác nhận',
             backScreen: this.props.route.params.backScreen? this.props.route.params.backScreen: null,
         };
         this.onCancelAppointment = this.onCancelAppointment.bind(this)
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+            this.setState({
+                appointmentId:this.props.route.params.appointment_id? this.props.route.params.appointment_id: '1',
+                name: this.props.route.params.appointment_userName? this.props.route.params.appointment_userName: '',
+                dob: this.props.route.params.appointment_DOB? this.props.route.params.appointment_DOB: '',
+                phone: this.props.route.params.appointment_phoneNumber? this.props.route.params.appointment_phoneNumber: '',
+                date: this.props.route.params.appointment_date? this.props.route.params.appointment_date: '',
+                freeTime: this.props.route.params.appointment_time? this.props.route.params.appointment_time: '',
+                status: this.props.route.params.appointment_status? this.props.route.params.appointment_status: 'Đang chờ xác nhận',
+                backScreen: this.props.route.params.backScreen? this.props.route.params.backScreen: null,
+            })
+        }
+    }
+
 
     onCancelAppointment(){
         fetch(getApiUrl()+"/appointments/update/"+this.state.appointmentId, {

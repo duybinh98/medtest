@@ -1,4 +1,5 @@
 import Promise from 'es6-promise';
+import {getApiUrl} from './../../Common/CommonFunction'
 // import actions from "redux-form/lib/actions"
 // import action from '../Action/actions';
 
@@ -12,11 +13,12 @@ function setLoginPending(isLoginPending) {
         isLoginPending
     };
 }
-function setLoginSuccess(isLoginSuccess, token) {
+function setLoginSuccess(isLoginSuccess, setToken, setCustomerInfo) {
     return {
         type: LOGIN_SUCCESS,
         isLoginSuccess,
-        token
+        setToken,
+        setCustomerInfo
     };
 }
 function setLoginError(LoginError) {
@@ -25,6 +27,8 @@ function setLoginError(LoginError) {
         LoginError
     };
 }
+
+
 export function login(phonenumber, password) {
     return dispatch => {
         dispatch(setLoginPending(true));
@@ -33,14 +37,13 @@ export function login(phonenumber, password) {
         sendLoginRequest(phonenumber, password)
         .then(success => {
             dispatch(setLoginPending(false));
-            dispatch(setLoginSuccess(true,success ));
+            dispatch(setLoginSuccess(true,success.token,success.customerInfo));
         })
         .catch(err => {
             dispatch(setLoginPending(false));
             dispatch(setLoginError(err));
         })
-    }
-    
+    }    
 }
 
 export default function reducer(state = {
@@ -48,13 +51,15 @@ export default function reducer(state = {
     isLoginSuccess: false,
     LoginError: null,
     token : null,
+    customerInfo: null,
 }, action) {
     switch (action.type) {
         case LOGIN_SUCCESS:
             return {
                 ...state,
                 isLoginSuccess: action.isLoginSuccess,
-                token : action.token
+                token : action.setToken,
+                customerInfo: action.setCustomerInfo
             };
         case LOGIN_PENDING:
             return {
@@ -73,14 +78,35 @@ export default function reducer(state = {
 
 function sendLoginRequest(phoneNumber, password) {
     return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (phoneNumber === '0123456789' && password === '123456') {
-                // return resolve("123456");
-                return resolve("123456");
-            } else {
-                return reject(new Error('Invalid email or password'));
-            }   
-        },1000)
-
+    if (phoneNumber === '0123456789' && password === '123456') {
+        fetch(getApiUrl()+"/users/customers/detail/1")
+        .then(res => res.json())
+        .then(
+            (result) => {
+                const token='12345';
+                const customerInfo = result;
+                return resolve({token,customerInfo});
+            },            
+            (error) => {
+                return reject(new Error(error));
+            }
+        ) 
+    } else if (phoneNumber === '0123456799' && password === '123456') {
+        fetch(getApiUrl()+"/users/customers/detail/2")
+        .then(res => res.json())
+        .then(
+            (result) => {
+                const token='12345';
+                const customerInfo = result;
+                return resolve({token,customerInfo});
+            },            
+            (error) => {
+                return reject(new Error(error));
+            }
+        )       
+    } else {
+        return reject(new Error('Invalid email or password'));
+    }    
+           
     });
 }

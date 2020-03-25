@@ -80,13 +80,17 @@ export default class RequestListItem extends Component {
                         CommonActions.navigate({
                             name: 'RequestViewScreen',
                             params: {
+                                id: this.props.requestId,
                                 name: this.props.cust_name,
+                                dob: convertDateTimeToDate(this.props.cust_DOB),
+                                phone: this.props.cust_phone,
                                 address: this.props.appoint_address,
                                 date: convertDateTimeToDate(this.props.appoint_date),
                                 time: convertDateTimeToTime(this.props.appoint_date),
                                 selectedTest: this.props.selectedTest,   
-                                status: getStateName(this.props.req_status),
-                                statusColor: getStateColor(this.props.req_status),
+                                status: this.props.req_status,                                
+                                nurseName: this.props.nurse_name,
+                                totalAmount: this.props.req_amount,
                                 testsList: this.props.testList,
                             },
                         })

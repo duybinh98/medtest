@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, FlatList} from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
@@ -11,38 +12,42 @@ export default class RequestViewScreen extends Component {
 constructor(props) {
         super(props)
         this.state = {
-            name: this.props.route.params.name? this.props.route.params.name : 'Nguyễn Văn A',
-            dob: this.props.route.params.dob? this.props.route.params.dob : '01/01/1970',
-            phone: this.props.route.params.phone? this.props.route.params.phone : '0123456789',
-            address: this.props.route.params.address ? this.props.route.params.address :'Số 123 đường abc, xyz',
-            date: this.props.route.params.date ? this.props.route.params.date: '20/20/2020',
-            time: this.props.route.params.time? this.props.route.params.time: '17h00',
+            requestId: this.props.route.params.id? this.props.route.params.id : '',
+            name: this.props.route.params.name? this.props.route.params.name : '',
+            dob: this.props.route.params.dob? this.props.route.params.dob : '',
+            phone: this.props.route.params.phone? this.props.route.params.phone : '',
+            address: this.props.route.params.address ? this.props.route.params.address :'',
+            date: this.props.route.params.date ? this.props.route.params.date: '',
+            time: this.props.route.params.time? this.props.route.params.time: '',
             selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest: [],
-            status: this.props.route.params.status? this.props.route.params.status:'Đang đợi lấy mẫu',
-            statusColor: this.props.route.params.statusColor? this.props.route.params.statusColor:'#7ab648',
+            status: this.props.route.params.status? this.props.route.params.status:'pending',
+            statusName: this.props.route.params.status? getStateName(this.props.route.params.status):'',
+            statusColor: this.props.route.params.status? getStateColor(this.props.route.params.status):'#000',
+            nurseName: this.props.route.params.nurseName ? this.props.route.params.nurseName:  '',
+            totalAmount: this.props.route.params.totalAmount? this.props.route.params.totalAmount:'free',
             testsList: this.props.route.params.testsList? this.props.route.params.testsList: testList,
-            nurseName: 'Nguyễn Văn B'
         };        
         this.isSelected = this.isSelected.bind(this);
+        this.viewResult = this.viewResult.bind(this);
     }
 
 
     componentDidUpdate  (prevProps, prevState) {        
          if (prevProps.route.params !== this.props.route.params) {
             this.setState(previousState => ({ 
-                name: this.props.route.params.name? this.props.route.params.name : 'Nguyễn Văn A',
-                dob: this.props.route.params.dob? this.props.route.params.dob : '01/01/1970',
-                phone: this.props.route.params.phone? this.props.route.params.phone : '0123456789',
-                address: this.props.route.params.address ? this.props.route.params.address :'Số 123 đường abc, xyz',
-                date: this.props.route.params.date ? this.props.route.params.date: '20/20/2020',
-                time: this.props.route.params.time? this.props.route.params.time: '17h00',
+                requestId: this.props.route.params.id? this.props.route.params.id : '',
+                name: this.props.route.params.name? this.props.route.params.name : '',
+                dob: this.props.route.params.dob? this.props.route.params.dob : '',
+                phone: this.props.route.params.phone? this.props.route.params.phone : '',
+                address: this.props.route.params.address ? this.props.route.params.address :'',
+                date: this.props.route.params.date ? this.props.route.params.date: '',
+                time: this.props.route.params.time? this.props.route.params.time: '',
                 selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest: [],
-                status: this.props.route.params.status? this.props.route.params.status:'Đang đợi lấy mẫu',
-                statusName: this.props.route.params.status? getStateName(this.props.route.params.status):'Đang đợi lấy mẫu',
-                statusColor: this.props.route.params.status? getStateColor(this.props.route.params.status):'#7ab648',
+                status: this.props.route.params.status? this.props.route.params.status:'pending',
+                statusName: this.props.route.params.status? getStateName(this.props.route.params.status):'',
+                statusColor: this.props.route.params.status? getStateColor(this.props.route.params.status):'#000',
                 nurseName: this.props.route.params.nurseName ? this.props.route.params.nurseName:  '',
                 totalAmount: this.props.route.params.totalAmount? this.props.route.params.totalAmount:'free',
-                testsList: this.props.route.params.testsList? this.props.route.params.testsList: testList,
             }));
         }
     }
@@ -54,6 +59,19 @@ constructor(props) {
         found === -1 ? '' : result=true;     
         return result;
     }
+
+    viewResult(){
+        this.props.navigation.dispatch(
+            CommonActions.navigate({
+                name: 'RequestResultScreen',
+                params: {
+                    id: this.state.requestId,
+                },
+            })
+        )
+    }
+
+
 
     render(){
         return(
@@ -104,9 +122,10 @@ constructor(props) {
                                 <View style={{
                                     width:180
                                     }}>
-                                    <Text style={[styles.textInfor,{color:this.state.statusColor}]} >{this.state.status}</Text>
+                                    <Text style={[styles.textInfor,{color:this.state.statusColor}]} >{this.state.statusName}</Text>
                                 </View>                                                             
                             </View> 
+                            {this.state.status !== 'pending' ? this.state.status !== 'coordinatorlostsample'?
                             <View style={styles.doubleContainer}>
                                 <View style={{
                                     width:205
@@ -119,8 +138,10 @@ constructor(props) {
                                     <TouchableOpacity style={[styles.btnConfirm,{height:26,width:100}]} onPress={() => this.props.navigation.navigate('CustomerInformation')}>
                                         <Text style={[styles.textBtn,{fontSize:12}]}>Xem thông tin</Text>
                                     </TouchableOpacity>
-                                </View>                                                             
-                            </View>                            
+                                </View>                                                       
+                            </View>  
+                            : null : null
+                            }                          
                         </View>
                         <View style = {styles.TestListAreaBackground}>
                             <View
@@ -149,9 +170,15 @@ constructor(props) {
                             </View>
                         </View>
                         <View style={styles.buttonContainer}>
+                            {this.state.status=='pending' ? 
                             <TouchableOpacity style={styles.btnConfirm}>
-                                <Text style={styles.textBtn}>Hủy đơn xét nghiệm</Text>
+                                <Text style={styles.textBtn}>{'Hủy đơn xét nghiệm'}</Text>
                             </TouchableOpacity>
+                            : this.state.status=='closed' ? 
+                            <TouchableOpacity style={styles.btnConfirm} onPress={() => this.viewResult()}>
+                                <Text style={styles.textBtn}>{'Xem kết quả'}</Text>
+                            </TouchableOpacity>
+                            : <View/>}
                             <TouchableOpacity style={styles.btnConfirm} onPress={() => this.props.navigation.navigate('HomeScreen')}>
                                 <Text style={styles.textBtn} >Ok</Text>
                             </TouchableOpacity>
@@ -162,43 +189,6 @@ constructor(props) {
         );
     }
 }
-
-
-
-class RequestTestListArea extends Component{        
-    state = {
-        isDone: false
-    };    
-    render(){
-        return(
-            <View style = {styles.TestListAreaBackground}>
-                <View
-                    style = {styles.TestListArea}
-                    >
-                    <FlatList 
-                        style ={styles.TestListAreaScrollView}                        
-                        showsVerticalScrollIndicator={false}
-                        scrollEnabled={false}
-                        data={testList}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({item}) => {
-                                return (
-                                    <TestCategoryItem 
-                                        categoryName={item.testType}
-                                        test = {item.test}
-                                        viewOnly = {true}
-                                        >
-                                    </TestCategoryItem>                                    
-                                );
-                            }}
-                    >                    
-                    </FlatList>
-                </View>
-            </View>
-        );
-    }
-}
-
 
 
 
@@ -221,21 +211,24 @@ const styles = StyleSheet.create({
         borderRadius:10
     },
     infoArea:{
-        height: 224,
+        alignSelf: 'stretch',
         width: Dimensions.get('window').width-20,
         backgroundColor: 'white',
-        marginTop:5,
-        marginBottom:5,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
         borderRadius:10,
-        paddingTop:3
+        marginTop:5,
+        marginBottom:5,
+        paddingTop:3,
+        marginLeft:10,
+        paddingBottom:10,
     },
     textContainer: {
         marginTop: 5,
         width: Dimensions.get('window').width - 55,
-        height: 25,
+        alignSelf: 'stretch',
+        paddingLeft:3,
         marginHorizontal: 15,
         justifyContent: 'center',
     },
@@ -245,7 +238,8 @@ const styles = StyleSheet.create({
     doubleContainer:{
         marginTop: 5,
         width: Dimensions.get('window').width - 55,
-        height: 25,
+        alignSelf: 'stretch',
+        paddingLeft:3,
         marginHorizontal: 15,
         flexDirection: 'row',
         alignItems: 'center',

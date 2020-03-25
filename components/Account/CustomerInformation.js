@@ -15,36 +15,18 @@ const { width: WIDTH } = Dimensions.get('window')
 class customerInformation extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            id: '2',
-            name: 'Nguyễn Văn A',
-            dob: '01/01/1970',
-            phone: '0123456789',
-            gender: 'Nữ',
-            address: 'Số 123 đường abc, xyz',
-            email: '123@123.com',
-            image: 'https://getdrawings.com/free-icon/react-icon-69.png',
-            districtCode: null,
-            // cityCode: null,
-            townCode: null,
+        this.state = {            
             customerInfor: null,
             token: null,
         };
     }
+    
     componentWillMount() {
-
-
     }
+
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
-            console.log(this.props.customerInfor);
-            console.log(this.props.isLoadSuccess);
-            console.log(this.props.token)
-            console.log(this.props.isLoginPending);
-            console.log(this.props.isLoginPending);
-            console.log(this.props.isLoginPending);
-            console.log(this.props.isLoginPending);
-            console.log(this.props.isLoginSuccess);
+            // console.log(this.props.token)
             this.setState({
                 token: this.props.token,
                 customerInfor: this.props.customerInfor
@@ -52,41 +34,11 @@ class customerInformation extends Component {
         }
     }
     componentDidMount() {
-        // this.getApiData();
         this.setState({
             token: this.props.token,
             customerInfor: this.props.customerInfor
         })
     }
-
-    // getApiData() {
-    //     fetch(getApiUrl()+"/users/customers/detail/"+this.state.id)
-    //     .then(res => res.json())
-    //     .then(
-    //         (result) => {
-    //         this.setState(previousState => ({
-    //             isLoaded: true,
-    //             name: result.name,
-    //             address: result.address,
-    //             email: result.email,
-    //             phone: result.phoneNumber,
-    //             image: result.image,
-    //             districtCode: result.districtCode,
-    //             cityCode: result.cityCode,
-    //             townCode: result.townCode,
-    //             dob: result.dob,
-    //             gender: result.gender,
-
-    //         }));
-    //         },            
-    //         (error) => {
-    //         this.setState({
-    //             isLoaded: true,
-    //             error
-    //         });
-    //         }
-    //     )
-    // }
 
     render() {
         const { gender } = this.state;
@@ -96,7 +48,7 @@ class customerInformation extends Component {
                 <View>
                     <View style={styles.logoContainer}>
                         <ImageBackground
-                            source={{ uri: this.state.image }}
+                            source={{ uri: this.state.customerInfor?this.props.customerInfor.image:'' }}
                             style={styles.logo} >
                             <TouchableOpacity><Icon
                                 name='camera'
@@ -110,26 +62,26 @@ class customerInformation extends Component {
                     </View>
                 </View>
                 <View style={styles.textContainer}>
-                    {/* <Text style={styles.textInfor} >Tên hiển thị:  {this.state.customerInfor.name}</Text> */}
-                    <Text style={styles.textInfor} >Tên hiển thị:  {this.props.customerInfor?this.props.customerInfor.name:""}</Text>
+                    {/* <Text style={styles.textInfor} >Tên hiển thị:  {this.props.customerInfoFromLogin?this.props.customerInfoFromLogin.name:""}</Text> */}
+                    <Text style={styles.textInfor} >Tên hiển thị:  {this.state.customerInfor?this.props.customerInfor.name:""}</Text>
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Số điện thoại: {this.props.token}</Text>
+                    <Text style={styles.textInfor} >Số điện thoại: {this.state.customerInfor?this.props.customerInfor.phoneNumber:""}</Text>
                 </View>
                 <View style={styles.dobGenderContainer}>
                     <View style={styles.dobContainer}>
-                        <Text style={styles.textInfor} >Ngày sinh: {convertDateTimeToDate(this.state.dob)}</Text>
+                        <Text style={styles.textInfor} >Ngày sinh: {this.state.customerInfor?convertDateTimeToDate(this.props.customerInfor.dob):""}</Text>
                     </View>
                     <View style={styles.genderContainer}>
-                        <Text style={styles.textInfor} >Giới tính: {this.state.gender ? "Nữ" : "Nam"}</Text>
+                        <Text style={styles.textInfor} >Giới tính: {this.state.customerInfor?this.state.customerInfor.gender? "Nữ" : "Nam":''}</Text>
                     </View>
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Địa chỉ: {this.state.address}</Text>
+                    <Text style={styles.textInfor} >Địa chỉ: {this.state.customerInfor?this.state.customerInfor.address:''}</Text>
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Email: {this.state.email}</Text>
+                    <Text style={styles.textInfor} >Email: {this.state.customerInfor?this.state.customerInfor.email:''}</Text>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.btnConfirm}
@@ -137,16 +89,7 @@ class customerInformation extends Component {
                             CommonActions.navigate({
                                 name: 'UpdateInformation',
                                 params: {
-                                    name: this.state.name,
-                                    address: this.state.address,
-                                    email: this.state.email,
-                                    phone: this.state.phone,
-                                    image: this.state.image,
-                                    districtCode: this.state.districtCode,
-                                    cityCode: this.state.cityCode,
-                                    townCode: this.state.townCode,
-                                    dob: this.state.dob,
-                                    gender: this.state.gender,
+                                    customerInfo: this.state.customerInfor
                                 },
                             })
                         )}
@@ -159,16 +102,12 @@ class customerInformation extends Component {
                         <Text style={styles.textBtn}>Đổi mật khẩu</Text>
                     </TouchableOpacity>
                 </View>
-
             </ScrollView>
         );
     }
 }
 const mapStateToProps = (state) => {
     return {
-        isLoginPending: state.login.isLoginPending,
-        isLoginSuccess: state.login.isLoginSuccess,
-        LoginError: state.login.LoginError,
         token: state.login.token,
         customerInfor: state.loadCustomer.customerInfor,
         isLoadSuccess: state.loadCustomer.isLoadSuccess,
@@ -178,7 +117,6 @@ const mapStateToProps = (state) => {
 const mapStateToDispatch = (dispatch) => {
     return {
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
-        login: (phoneNumber, password) => dispatch(login(phoneNumber, password))
     };
 }
 
@@ -226,13 +164,13 @@ const styles = StyleSheet.create({
         marginLeft: 25,
     },
     genderContainer: {
-        flex: 40,
+        flex: 45,
         borderWidth: 1,
         width: WIDTH - 55,
         height: 45,
         justifyContent: 'center',
         paddingLeft: 10,
-        marginLeft: 15,
+        marginLeft: 10,
         marginRight: 30,
     },
     textInfor: {

@@ -29,14 +29,11 @@ function setLoadError(LoadError) {
 
 function loadCustomerFromState(customerInfor) {
     return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (customerInfor !== null) {
-                return resolve(true);
-            } else {
-                return reject(new Error('Load customer information failed'));
-            }
-        },1000)
-
+        if (customerInfor !== null) {
+            return resolve(true);
+        } else {
+            return reject(new Error('Load customer information failed'));
+        }
     }); 
 }
 

@@ -49,17 +49,23 @@ class RequestPersonalInformation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            customerId: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.id : '-1',
-            name: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.name : 'Nguyễn Văn B',
+            
+
+            customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
+            name: this.props.customerInfor ? this.props.customerInfor.name : '',
+            dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
             apointmentDate: '01/01/2020',
             apointmentTime: '07:30',
             selectTownList: [],
-            address: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.address : 'a',
-            district: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.districtCode : '0',
-            town: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.townCode : '1',
+            address: this.props.customerInfor ? this.props.customerInfor.address : '',
+            district: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
+            town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
+            customerInfor: this.props.customerInfor,
+
             selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [], 
             totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0', 
             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : [],
+
         };
         this.selectItem = this.selectItem.bind(this)
         this.submit = this.submit.bind(this)
@@ -72,6 +78,24 @@ class RequestPersonalInformation extends Component {
         }
         this.props.load(customerInfor)
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+            this.setState({
+                customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
+                name: this.props.customerInfor ? this.props.customerInfor.name : '',
+                dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
+                apointmentDate: '01/01/2020',
+                apointmentTime: '07:30',
+                selectTownList: [],
+                address: this.props.customerInfor ? this.props.customerInfor.address : '',
+                district: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
+                town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
+                customerInfor: this.props.customerInfor,
+            })
+        }
+    }
+
     _renderDistrictButtonText = rowData => {
         const { districtName } = rowData;
         this.setState({ district: districtName })
@@ -90,6 +114,7 @@ class RequestPersonalInformation extends Component {
                     customerId: this.state.customerId,
                     name: this.state.name,       
                     address: this.state.address,
+                    dob: this.state.dob,
                     town: this.state.town,
                     district : this.state.district,
                     date:this.state.apointmentDate,
@@ -233,7 +258,8 @@ let RequestPersonalInformationForm = reduxForm({
 })(RequestPersonalInformation);
 RequestPersonalInformationForm = connect(
     state => ({
-      initialValues: state.initialValue.data // pull initial values from account reducer
+      initialValues: state.initialValue.data, // pull initial values from account reducer
+      customerInfor: state.loadCustomer.customerInfor,
     }),
     { load: loadAccount } // bind account loading action creator
   )(RequestPersonalInformationForm);

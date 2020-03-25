@@ -22,9 +22,10 @@ class CreateAppointmentScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.name : 'Nguyễn Văn A',
-            phonenumber: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.phoneNumber : '0123456789',
-            dob: this.props.route.params.customerInfo ? convertDateTimeToDate(this.props.route.params.customerInfo.dob) : '01/01/1970',
+            customerInfor: this.props.customerInfor,
+            name: this.props.customerInfor ? this.props.customerInfor.name : '',
+            phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '',
+            dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
             apointmentDate: '01/01/2020',
             apointmentTime: '07:30',
         };
@@ -37,20 +38,58 @@ class CreateAppointmentScreen extends Component {
         }
         this.props.load(customerInfor)
     }
-    submit = values => {
-        this.props.navigation.dispatch(
-            CommonActions.navigate({
-                name: 'AppointmentDetailScreen',
-                params: {
-                    name: this.state.name,
-                    phonenumber: this.state.phonenumber,
-                    dob: this.state.dob,
-                    apointmentDate: this.state.apointmentDate,
-                    apointmentTime: this.state.apointmentTime,
-                },
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+            this.setState({
+                customerInfor: this.props.customerInfor,
+                name: this.props.customerInfor ? this.props.customerInfor.name : '',
+                phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '',
+                dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
             })
-        )
+        }
     }
+
+
+    submit = values => {
+        fetch(getApiUrl()+'/appointments/create', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            customerID: this.state.customerInfor.id,
+            meetingTime: convertDateAndTimeToDateTime(this.state.apointmentDate, this.state.apointmentTime),
+        }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.props.navigation.dispatch(
+                    CommonActions.navigate({
+                        name: 'AppointmentDetailScreen',
+                        params: {
+                            appointment_userName: this.state.name,
+                            appointment_phoneNumber: this.state.phonenumber,
+                            dob: this.state.dob,
+                            appointment_date: this.state.apointmentDate,
+                            appointment_time: this.state.apointmentTime,
+                            status:'Đang chờ xác nhận',
+                            backScreen:'HomeScreen',
+                        },
+                    })
+                )
+            },
+            (error) => {
+                console.log(error)
+                this.setState({
+                    error
+                });
+            }
+        );
+    }
+    
     render() {
         const { handleSubmit } = this.props;
         return (
@@ -173,7 +212,8 @@ let AppointmentForm = reduxForm({
 })(CreateAppointmentScreen);
 AppointmentForm = connect(
     state => ({
-      initialValues: state.initialValue.data // pull initial values from account reducer
+      initialValues: state.initialValue.data, // pull initial values from account reducer
+      customerInfor: state.loadCustomer.customerInfor,
     }),
     { load: loadAccount } // bind account loading action creator
   )(AppointmentForm);

@@ -9,7 +9,7 @@ import { CommonActions } from '@react-navigation/native';
 import DatePicker from 'react-native-datepicker';
 import districtList from '../../Data/District';
 import ModalDropdown from 'react-native-modal-dropdown';
-import {getApiUrl} from './../Common/CommonFunction';
+import {getApiUrl, convertDateTimeToDate, convertDateToDateTime} from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import {load as loadAccount} from '../Store/Reducers/InitialValue'
 import renderField from '../../Validate/RenderField'
@@ -47,25 +47,49 @@ class UpdateInformationScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            // name: 'Nguyễn Văn ABC',
-            name: this.props.route.params.name ? this.props.route.params.name : '',
-            dob: '01/01/1970',
-            gender: this.props.route.params.gender ? this.props.route.params.gender=='1' ? 'Nam' : 'Nữ' : 'Nam',
+            customerId: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.id : '-1',
+            name: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.name : '',
+            dob: this.props.route.params.customerInfo? convertDateTimeToDate(this.props.route.params.customerInfo.dob): '01/01/1970',
+            gender: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.gender=='1' ? 'Nữ':  'Nam'  : 'Nam',
             selectTownList: [],
-            address: this.props.route.params.address ? this.props.route.params.address : '',
+            address: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.address : '',
             district: '',
             town: '',
-            email: this.props.route.params.email ? this.props.route.params.email :'123@1234.com'
+            email: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.email :'123@1234.com'
         };
         this.submit = this.submit.bind(this)
     }
     componentWillMount = value => {
         const customerInfor =  {
             username : this.state.name,
-            email: this.state.email
+            email: this.state.email,
+            address: this.state.address
         }
         this.props.load(customerInfor)
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+            this.setState({
+                customerId: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.id : '-1',
+                name: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.name : '',
+                dob: this.props.route.params.customerInfo? convertDateTimeToDate(this.props.route.params.customerInfo.dob): '01/01/1970',
+                gender: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.gender=='1' ? 'Nữ':  'Nam'  : 'Nam',
+                selectTownList: [],
+                address: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.address : '',
+                district: '',
+                town: '',
+                email: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.email :'123@1234.com',
+            })
+            const customerInfor =  {
+                username : this.props.route.params.customerInfo ? this.props.route.params.customerInfo.name : '',
+                email: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.email :'123@1234.com',
+                address: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.address : '',
+            }
+            this.props.load(customerInfor)
+        }
+    }
+
     _renderDistrictButtonText = rowData => {
         const { districtName } = rowData;
         this.setState({ district: districtName })
@@ -100,7 +124,7 @@ class UpdateInformationScreen extends Component {
         });
     }
     callApi  = async () => {
-        fetch(getApiUrl()+'/users/customers/detail/update/2', {
+        fetch(getApiUrl()+'/users/customers/detail/update/'+this.state.customerId, {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
@@ -110,22 +134,20 @@ class UpdateInformationScreen extends Component {
             name: this.state.name,
             address: this.state.address,
             email: this.state.email,
-            dob : "1998-12-12T17:00:00.000+0000",
-            gender: '0',
-            townCode:null,
-            districtCode:null
+            dob : convertDateToDateTime(this.state.dob),
+            gender: this.state.gender?'0':'1',
+            townCode: null,
+            districtCode: null
         }),
         })
         .then(res => res.json())
         .then(
             (result) => {
-                Alert.alert("hi"+result);
+                console.log(result)
+                this.props.loadCustomer(result)
             },
             (error) => {
-            this.setState({                
-                error
-            });
-            Alert.alert("hi"+error);
+            console.log(error);
             }
         );
     }
@@ -213,7 +235,7 @@ class UpdateInformationScreen extends Component {
                         renderSeparator={() => <View />}
                         renderRow={_renderTownRow.bind(this)}
                         renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
-                        defaultIndex='3'
+                        defaultIndex='1'
                         defaultValue='Phường:'
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
@@ -227,7 +249,7 @@ class UpdateInformationScreen extends Component {
                         renderSeparator={() => <View />}
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
-                        defaultIndex='3'
+                        defaultIndex='1'
                         defaultValue='Quận:'
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
@@ -253,14 +275,17 @@ class UpdateInformationScreen extends Component {
 }
 
 let UpdateInformationForm = reduxForm({
-    form: 'UpdateInformation',
-    enableReinitialize: true,
-})(UpdateInformationScreen);
+        form: 'UpdateInformation',
+        enableReinitialize: true,
+    })(UpdateInformationScreen);
+
 UpdateInformationForm = connect(
     state => ({
       initialValues: state.initialValue.data // pull initial values from account reducer
     }),
-    { load: loadAccount } // bind account loading action creator
+    { load: loadAccount,
+        loadCustomer: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+     } // bind account loading action creator
   )(UpdateInformationForm);
 export default UpdateInformationForm;
 
