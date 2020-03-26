@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import {View, StyleSheet, Image, Text, Dimensions, FlatList, Alert} from 'react-native';
 import {Button} from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
+import { connect } from 'react-redux';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import ArticleListItem from './ArticleListItem';
 import {getApiUrl} from './../Common/CommonFunction';
 // import articlesList from './../../Data/Articles'
 
-export default class HomeScreen extends Component {
+class HomeScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,6 +17,7 @@ export default class HomeScreen extends Component {
             customerInfo: null,
             articlesList: [],
             testsList:[],
+            token:null,
         };
         this.onPressCreateRequest = this.onPressCreateRequest.bind(this);
         this.onPressCreateAppointment = this.onPressCreateAppointment.bind(this);
@@ -32,9 +34,12 @@ export default class HomeScreen extends Component {
         .then(res => res.json())
         .then(
             (result) => {
-            this.setState(previousState => ({
-                articlesList: result,
-            }));
+                let success = false
+                result ? result.message? result.message=='Access Denied'? null :null : success=true : null;
+                if (success)
+                this.setState(previousState => ({
+                    articlesList: result,
+                }));
             },            
             (error) => {
                 console.log(error)
@@ -165,6 +170,22 @@ export default class HomeScreen extends Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        token: state.login.token,
+        customerInfor: state.loadCustomer.customerInfor,
+        isLoadSuccess: state.loadCustomer.isLoadSuccess,
+        loadError: state.loadCustomer.LoadError
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+        login: (phoneNumber, password) => dispatch(login(phoneNumber, password))
+    };
+}
+
+export default connect(mapStateToProps, mapStateToDispatch)(HomeScreen);
 const styles = StyleSheet.create({
     background:{
         flex:1, 

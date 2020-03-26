@@ -29,6 +29,8 @@ import RequestPersonalInformation from './Requests/RequestPersonalInformation';
 import RequestResultScreen from './Requests/RequestResultScreen';
 import RequestTestListScreen from './Requests/RequestTestListScreen';
 import RequestViewScreen from './Requests/RequestViewScreen';
+import ViewNurseScreen from './Requests/ViewNurseScreen';
+
 
 class Navigator extends Component {    
     constructor(props) {
@@ -58,7 +60,7 @@ class Navigator extends Component {
     render(){
         return(
             <NavigationContainer>
-              <Drawer.Navigator initialRouteName="LoginScreen" drawerContent={props => CustomDrawerContent(props,this.state)}>
+              <Drawer.Navigator initialRouteName="LoginScreen" drawerContent={props => CustomDrawerContent(props,this.state? this.state:null)}>
                 <Drawer.Screen name="ChangePassword" component={ChangePassword} />
                 <Drawer.Screen name="CustomerInformation" component={CustomerInformation} />
                 <Drawer.Screen name="UpdateInformation" component={UpdateInformation} />
@@ -81,6 +83,7 @@ class Navigator extends Component {
                 <Drawer.Screen name="RequestResultScreen" component={RequestResultScreen} />                
                 <Drawer.Screen name="RequestTestListScreen" component={RequestTestListScreen} />                
                 <Drawer.Screen name="RequestViewScreen" component={RequestViewScreen} />
+                <Drawer.Screen name="ViewNurseScreen" component={ViewNurseScreen} />
               </Drawer.Navigator>                                        
             </NavigationContainer>
             

@@ -4,10 +4,11 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import {getApiUrl} from './../Common/CommonFunction';
+import { connect } from 'react-redux';
 
 const { width: WIDTH } = Dimensions.get('window')
 
-export default class ForgottenPassword extends Component {
+class AppointmentDetailScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -17,7 +18,8 @@ export default class ForgottenPassword extends Component {
             phone: this.props.route.params.appointment_phoneNumber? this.props.route.params.appointment_phoneNumber: '',
             date: this.props.route.params.appointment_date? this.props.route.params.appointment_date: '',
             freeTime: this.props.route.params.appointment_time? this.props.route.params.appointment_time: '',
-            status: this.props.route.params.appointment_status? this.props.route.params.appointment_status: 'Đang chờ xác nhận',
+            status: this.props.route.params.appointment_status? this.props.route.params.appointment_status: '',
+            statusName: this.props.route.params.appointment_statusName? this.props.route.params.appointment_statusName: '',
             backScreen: this.props.route.params.backScreen? this.props.route.params.backScreen: null,
         };
         this.onCancelAppointment = this.onCancelAppointment.bind(this)
@@ -45,6 +47,7 @@ export default class ForgottenPassword extends Component {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
+                    Authorization: 'Bearer '+this.props.token,
                 },
                 body: JSON.stringify({
                     status: 'canceled',
@@ -54,20 +57,15 @@ export default class ForgottenPassword extends Component {
         .then(res => res.json())
         .then(
             (result) => {
-            console.log('ok');
             this.props.navigation.dispatch(
             CommonActions.navigate({
-                name: 'HomeScreen',
+                name: 'AppointmentListScreen',
                 params: {
-                    // customerId: this.state.customerId,
-                    // customerInformation: result,
                 },
             }))  
             },            
             (error) => {
-            this.setState({
-                error
-            });
+                console.log(error)
             }
         )  
     }
@@ -100,14 +98,17 @@ export default class ForgottenPassword extends Component {
                     </View>
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Trạng thái: {this.state.status}</Text>
+                    <Text style={styles.textInfor} >Trạng thái: {this.state.statusName}</Text>
                 </View>
                 <View style={styles.buttonContainer}>
+                {this.state.status =='pending'?
                     <TouchableOpacity style={styles.buttonView}
                         onPress={() => this.onCancelAppointment()}
                     >
                         <Text style={styles.textBtn}>Hủy đơn</Text>
                     </TouchableOpacity>
+                    : <View/>
+                    }
                     <TouchableOpacity style={styles.buttonView}
                     onPress= {() => {
                         this.state.backScreen ? this.props.navigation.navigate(this.state.backScreen) : this.props.navigation.goBack();
@@ -121,7 +122,21 @@ export default class ForgottenPassword extends Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        token: state.login.token,
+        customerInfor: state.loadCustomer.customerInfor,
+        isLoadSuccess: state.loadCustomer.isLoadSuccess,
+        loadError: state.loadCustomer.LoadError
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+    };
+}
 
+export default connect(mapStateToProps, mapStateToDispatch)(AppointmentDetailScreen);
 
 //#25345D
 //#0A6ADA
@@ -178,8 +193,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     buttonContainer: {
+        marginLeft: 20,
+        width: WIDTH-40,
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
     },
     buttonView: {
         width: 130,

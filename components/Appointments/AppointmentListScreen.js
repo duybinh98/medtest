@@ -31,8 +31,14 @@ class AppointmentListScreen extends Component {
     }
 
     callApiAppointmentList = async () =>  {
-        // fetch("http://192.168.1.11:8080/users/customers/"+this.state.customerId+"/appointments/list")
-        fetch(getApiUrl()+"/users/customers/"+this.state.customerId+"/appointments/list")
+        fetch(getApiUrl()+"/users/customers/"+this.state.customerId+"/appointments/list", {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer '+this.props.token,
+            }
+        })
         .then(res => res.json())
         .then(
             (result) => {

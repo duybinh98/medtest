@@ -6,9 +6,10 @@ import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
 import {getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate} from './../Common/CommonFunction'
+import { connect } from 'react-redux';
 
 
-export default class RequestConfirmScreen extends Component {
+class RequestConfirmScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -59,6 +60,7 @@ export default class RequestConfirmScreen extends Component {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            Authorization: 'Bearer '+this.props.token,
         },
         body: JSON.stringify({
             userID: this.state.customerId,
@@ -187,7 +189,22 @@ export default class RequestConfirmScreen extends Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        token: state.login.token,
+        customerInfor: state.loadCustomer.customerInfor,
+        isLoadSuccess: state.loadCustomer.isLoadSuccess,
+        loadError: state.loadCustomer.LoadError,
+        token: state.login.token
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+    };
+}
 
+export default connect(mapStateToProps, mapStateToDispatch)(RequestConfirmScreen);
 
 
 

@@ -57,6 +57,7 @@ class CreateAppointmentScreen extends Component {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            Authorization: 'Bearer '+this.props.token,
         },
         body: JSON.stringify({
             customerID: this.state.customerInfor.id,
@@ -75,7 +76,8 @@ class CreateAppointmentScreen extends Component {
                             dob: this.state.dob,
                             appointment_date: this.state.apointmentDate,
                             appointment_time: this.state.apointmentTime,
-                            status:'Đang chờ xác nhận',
+                            status: 'pending',
+                            statusName:'Đang chờ xác nhận',
                             backScreen:'HomeScreen',
                         },
                     })
@@ -214,6 +216,7 @@ AppointmentForm = connect(
     state => ({
       initialValues: state.initialValue.data, // pull initial values from account reducer
       customerInfor: state.loadCustomer.customerInfor,
+      token: state.login.token
     }),
     { load: loadAccount } // bind account loading action creator
   )(AppointmentForm);

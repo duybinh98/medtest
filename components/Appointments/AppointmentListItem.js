@@ -31,17 +31,29 @@ export default class AppointmentListItem extends Component {
                 statusColor:'#ffd66f'
             }));
             break;
-        case 'closed':
+        case 'accepted':
             this.setState(previousState => ({ 
                 statusName:'Đã được xác nhận',
                 statusColor:'#a4d57b'
+            }));
+            break;
+        case 'rejected':
+            this.setState(previousState => ({ 
+                statusName:'Đơn bị từ chối',
+                statusColor:'#f97867'
+            }));
+            break;
+        case 'canceled':
+            this.setState(previousState => ({ 
+                statusName:'Đơn đã hủy',
+                statusColor:'#ffd66f'
             }));
             break;
         }
     }
 
     isVisible(){
-        if (this.props.appointment_status ==='2'){
+        if (this.props.appointment_status ==='canceled' || this.props.appointment_status ==='accepted' || this.props.appointment_status ==='rejected' ){
             if (this.props.viewDone() == true) return true;
             return false;
         }
@@ -65,7 +77,8 @@ export default class AppointmentListItem extends Component {
                                 appointment_DOB: this.state.appointmentDob,
                                 appointment_date: this.state.appointmentDate,
                                 appointment_time: this.state.appointmentTime,
-                                appointment_status: this.state.statusName,   
+                                appointment_statusName: this.state.statusName,   
+                                appointment_status: this.props.appointment_status,   
                                 appointment_note: this.props.appointment_note,
                                 // customerInfo  = this.state.customerInfo,
                             },

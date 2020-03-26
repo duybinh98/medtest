@@ -61,7 +61,7 @@ export default class RequestListItem extends Component {
     }
 
     isVisible(){
-        if (this.props.req_status ==='closed'){
+        if (this.props.req_status ==='closed' || this.props.req_status ==='canceled' ){
             if (this.props.viewDone() == true) return true;
             return false;
         }
@@ -88,7 +88,8 @@ export default class RequestListItem extends Component {
                                 date: convertDateTimeToDate(this.props.appoint_date),
                                 time: convertDateTimeToTime(this.props.appoint_date),
                                 selectedTest: this.props.selectedTest,   
-                                status: this.props.req_status,                                
+                                status: this.props.req_status,   
+                                nurseId: this.props.nurse_id,                              
                                 nurseName: this.props.nurse_name,
                                 totalAmount: this.props.req_amount,
                                 testsList: this.props.testList,
@@ -107,11 +108,9 @@ export default class RequestListItem extends Component {
                     <View>
                     <Text style={{fontSize:17}}>{"Ngày tạo:  "+convertDateTimeToDate(this.props.request_createTime)}</Text>
                     </View>
-                    {(getStateColor(this.props.req_status))!='#000' ?
                     <View style={{backgroundColor:getStateColor(this.props.req_status), padding:4, width:130,alignItems: 'center',}}>
                     <Text style={{fontSize:11}}>{getStateName(this.props.req_status)}</Text>
-                    </View> :<View/>
-                    }
+                    </View> 
                 </View>   
                 <View style={[styles.requestListTextContainer,{
                     paddingBottom:10,

@@ -45,7 +45,9 @@ export function getStateName(status){
         case 'closed':
             return 'Đã xong';
             break;
-        
+        case 'canceled':
+            return 'Đã hủy';
+            break;
         } 
 }
 export function getStateColor(status){
@@ -69,7 +71,10 @@ export function getStateColor(status){
             return '#6398d6';
             break;
         case 'closed':
-            return '#000';
+            return '#a4d57b';
+            break;
+        case 'canceled':
+            return '#6398d6';
             break;
     } 
 }

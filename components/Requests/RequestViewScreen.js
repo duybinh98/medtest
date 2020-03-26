@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, FlatList} from 'react-native';
 import { CommonActions } from '@react-navigation/native';
+import { connect } from 'react-redux';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
 import testList from './../../Data/Test'
-import {getStateName, getStateColor} from './../Common/CommonFunction'
+import {getApiUrl, getStateName, getStateColor} from './../Common/CommonFunction'
 
-export default class RequestViewScreen extends Component {
+
+class RequestViewScreen extends Component {
 constructor(props) {
         super(props)
         this.state = {
@@ -23,12 +25,15 @@ constructor(props) {
             status: this.props.route.params.status? this.props.route.params.status:'pending',
             statusName: this.props.route.params.status? getStateName(this.props.route.params.status):'',
             statusColor: this.props.route.params.status? getStateColor(this.props.route.params.status):'#000',
+            nurseId: this.props.route.params.nurseId ? this.props.route.params.nurseId:  '',
             nurseName: this.props.route.params.nurseName ? this.props.route.params.nurseName:  '',
             totalAmount: this.props.route.params.totalAmount? this.props.route.params.totalAmount:'free',
             testsList: this.props.route.params.testsList? this.props.route.params.testsList: testList,
         };        
         this.isSelected = this.isSelected.bind(this);
         this.viewResult = this.viewResult.bind(this);
+        this.cancelRequest = this.cancelRequest.bind(this);
+        this.viewNurse = this.viewNurse.bind(this);
     }
 
 
@@ -47,6 +52,7 @@ constructor(props) {
                 statusName: this.props.route.params.status? getStateName(this.props.route.params.status):'',
                 statusColor: this.props.route.params.status? getStateColor(this.props.route.params.status):'#000',
                 nurseName: this.props.route.params.nurseName ? this.props.route.params.nurseName:  '',
+                nurseId: this.props.route.params.nurseId ? this.props.route.params.nurseId:  '',
                 totalAmount: this.props.route.params.totalAmount? this.props.route.params.totalAmount:'free',
             }));
         }
@@ -59,6 +65,71 @@ constructor(props) {
         found === -1 ? '' : result=true;     
         return result;
     }
+
+    cancelRequest(){
+        fetch(getApiUrl()+"/requests/update/"+this.state.requestId, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer '+this.props.token,
+                },
+                body: JSON.stringify({
+                    status: 'canceled',
+                    userID: '1',
+                    note: 'I want to cancel this request',
+                }),
+                })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result)
+                this.props.navigation.dispatch(
+                CommonActions.navigate({
+                    name: 'RequestListScreen',
+                    params: {
+                    },
+                }))  
+            },            
+            (error) => {
+                console.log(error)
+            }
+        )  
+    }
+
+    viewNurse(){
+        fetch(getApiUrl()+"/users/nurses/detail/"+this.state.nurseId, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer '+this.props.token,
+                }})
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result)
+                this.props.navigation.dispatch(
+                CommonActions.navigate({
+                    name: 'ViewNurseScreen',
+                    params: {
+                        id: result.id,
+                        phoneNumber: result.phoneNumber,
+                        name: result.name,
+                        dob: result.dob,
+                        address: result.address,
+                        email: result.email,
+                        gender: result.gender,
+                        image: result.image
+                    },
+                }))  
+            },            
+            (error) => {
+                console.log(error)
+            }
+        )  
+    }
+
 
     viewResult(){
         this.props.navigation.dispatch(
@@ -125,7 +196,7 @@ constructor(props) {
                                     <Text style={[styles.textInfor,{color:this.state.statusColor}]} >{this.state.statusName}</Text>
                                 </View>                                                             
                             </View> 
-                            {this.state.status !== 'pending' ? this.state.status !== 'coordinatorlostsample'?
+                            {this.state.status !== 'pending' ? this.state.status !== 'coordinatorlostsample'? this.state.nurseName !=='NOT HAVE ANY NURSE YET!'?
                             <View style={styles.doubleContainer}>
                                 <View style={{
                                     width:205
@@ -135,12 +206,12 @@ constructor(props) {
                                 <View style={{
                                     width:110
                                     }}>
-                                    <TouchableOpacity style={[styles.btnConfirm,{height:26,width:100}]} onPress={() => this.props.navigation.navigate('CustomerInformation')}>
+                                    <TouchableOpacity style={[styles.btnConfirm,{height:26,width:100}]} onPress={() => this.viewNurse()}>
                                         <Text style={[styles.textBtn,{fontSize:12}]}>Xem thông tin</Text>
                                     </TouchableOpacity>
                                 </View>                                                       
                             </View>  
-                            : null : null
+                            : null : null : null
                             }                          
                         </View>
                         <View style = {styles.TestListAreaBackground}>
@@ -171,7 +242,7 @@ constructor(props) {
                         </View>
                         <View style={styles.buttonContainer}>
                             {this.state.status=='pending' ? 
-                            <TouchableOpacity style={styles.btnConfirm}>
+                            <TouchableOpacity style={styles.btnConfirm} onPress={() => this.cancelRequest()}>
                                 <Text style={styles.textBtn}>{'Hủy đơn xét nghiệm'}</Text>
                             </TouchableOpacity>
                             : this.state.status=='closed' ? 
@@ -189,7 +260,21 @@ constructor(props) {
         );
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        token: state.login.token,
+        customerInfor: state.loadCustomer.customerInfor,
+        isLoadSuccess: state.loadCustomer.isLoadSuccess,
+        loadError: state.loadCustomer.LoadError
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+    };
+}
 
+export default connect(mapStateToProps, mapStateToDispatch)(RequestViewScreen);
 
 
 const styles = StyleSheet.create({

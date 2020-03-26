@@ -48,7 +48,6 @@ class LoginComponent extends Component {
         this.state = {
             phoneNumber: '',
             password: '',
-            
             customerInfoFromLogin: null,
         };
         this.submit = this.submit.bind(this)
@@ -57,9 +56,8 @@ class LoginComponent extends Component {
     submit = value => {
         const { phoneNumber, password } = this.state;
         this.props.login(phoneNumber, password)
-        
         setTimeout(() => {
-            if (this.props.customerInfoFromLogin != null ) {
+            if (this.props.customerInfoFromLogin != null ) {                
                 this.setState(previousState => ({
                     phoneNumber: '',
                     password: '',
@@ -74,10 +72,10 @@ class LoginComponent extends Component {
                 )                
             }  
             else {
-                console.log(this.props.LoginError)
-                Alert.alert('wrong phone number or password');
+                // console.log('error at screen'+this.props.LoginError)
+                // Alert.alert(this.props.LoginError.message);
                 }
-        },1000)
+        },2000)
 
         
     }
@@ -130,6 +128,7 @@ const mapStateToProps = (state) => {
         isLoginSuccess: state.login.isLoginSuccess,
         LoginError: state.login.LoginError,
         customerInfoFromLogin: state.login.customerInfo,
+        // token: state.login.token
     };
 }
 const mapStateToDispatch = (dispatch) => {

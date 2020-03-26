@@ -60,6 +60,7 @@ class changePassword extends Component {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
+                    Authorization: 'Bearer '+this.props.token,
                 },
                 body: JSON.stringify({
                     oldPassword: this.state.password,

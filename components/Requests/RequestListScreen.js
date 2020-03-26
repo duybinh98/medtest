@@ -50,7 +50,14 @@ class RequestListScreen extends Component {
 
 
     callApiRequestList(){
-        fetch(getApiUrl()+'/users/customers/'+this.state.customerId+'/requests/list')
+        fetch(getApiUrl()+'/users/customers/'+this.state.customerId+'/requests/list', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer '+this.props.token,
+            }
+        })
         .then(res => res.json())
         .then(
             (result) => {
@@ -123,7 +130,7 @@ class RequestListScreen extends Component {
                                                 cust_name={item.customerName}
                                                 cust_phone={item.customerPhoneNumber}
                                                 cust_DOB={item.customerDOB}
-                                                appoint_address={item.customerAddress}
+                                                appoint_address={item.requestAddress}
                                                 appoint_date={item.requestMeetingTime}
                                                 appoint_time={item.requestMeetingTime}
                                                 nurse_name={item.nurseName}
@@ -142,7 +149,6 @@ class RequestListScreen extends Component {
                             </FlatList>
                         </View>
                     </View>
-                    
                     <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
                 </View>  
         );
@@ -153,7 +159,8 @@ const mapStateToProps = (state) => {
         token: state.login.token,
         customerInfor: state.loadCustomer.customerInfor,
         isLoadSuccess: state.loadCustomer.isLoadSuccess,
-        loadError: state.loadCustomer.LoadError
+        loadError: state.loadCustomer.LoadError,
+        token: state.login.token
     };
 }
 const mapStateToDispatch = (dispatch) => {

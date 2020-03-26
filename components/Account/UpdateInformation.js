@@ -106,9 +106,10 @@ class UpdateInformationScreen extends Component {
                 CommonActions.navigate({
                     name: 'CustomerInformation',
                     params: {
+                        name: this.state.name,
                         address: this.state.address,
                         town: this.state.town,
-                        district: this.state.district
+                        district: this.state.district,
                     },
                 })
             )
@@ -129,6 +130,7 @@ class UpdateInformationScreen extends Component {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            Authorization: 'Bearer '+this.props.token,
         },
         body: JSON.stringify({
             name: this.state.name,
@@ -281,7 +283,8 @@ let UpdateInformationForm = reduxForm({
 
 UpdateInformationForm = connect(
     state => ({
-      initialValues: state.initialValue.data // pull initial values from account reducer
+      initialValues: state.initialValue.data, // pull initial values from account reducer
+      token: state.login.token
     }),
     { load: loadAccount,
         loadCustomer: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
