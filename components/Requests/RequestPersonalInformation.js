@@ -7,7 +7,7 @@ import ScreenBottomMenu from '../Common/ScreenBottomMenu';
 import ScreenTopMenuBack from '../Common/ScreenTopMenuBack';
 import DatePicker from 'react-native-datepicker';
 import ModalDropdown from 'react-native-modal-dropdown';
-import districtList from '../../Data/District';
+// import districtList from '../../Data/District';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import {load as loadAccount} from '../Store/Reducers/InitialValue'
@@ -61,7 +61,8 @@ class RequestPersonalInformation extends Component {
             district: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
             town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
             customerInfor: this.props.customerInfor,
-
+            townName1: '',
+            districtName1: '',
             selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [], 
             totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0', 
             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : [],
@@ -78,7 +79,9 @@ class RequestPersonalInformation extends Component {
         }
         this.props.load(customerInfor)
     }
-
+    componentDidMount = value => {
+        this.callApiGetDistrictCode();
+    }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
             this.setState({
@@ -92,19 +95,43 @@ class RequestPersonalInformation extends Component {
                 district: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
                 town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
                 customerInfor: this.props.customerInfor,
+                districtList : [],
             })
         }
     }
 
     _renderDistrictButtonText = rowData => {
-        const { districtName } = rowData;
-        this.setState({ district: districtName })
+        const { districtCode,districtName } = rowData;
+        this.setState({ 
+            district: districtCode,
+            districtName1 : districtName
+        })
         return ` ${districtName}`;
     }
     _renderTownButtonText = listTown => {
         const { townCode, townName } = listTown;
-        this.setState({ town: townName })
+        this.setState({ 
+            town: townCode,
+            townName1 : townName
+        })
         return ` ${townName}`;
+    }
+    callApiGetDistrictCode(){
+        fetch(getApiUrl()+"/management/districts/district-town-list")
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result)
+                this.setState(previousState => ({
+                    districtList: result,
+                }));
+            },            
+            (error) => {
+            this.setState({
+                error
+            });
+            }
+        )
     }
     submit = values => {
         this.props.navigation.dispatch(
@@ -163,7 +190,7 @@ class RequestPersonalInformation extends Component {
                         renderRow={_renderTownRow.bind(this)}
                         renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
                         defaultIndex='3'
-                        defaultValue='Phường:'
+                        defaultValue={this.state.townName1}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
                         dropdownStyle={{ width: 200, borderWidth: 2 }}
@@ -177,7 +204,7 @@ class RequestPersonalInformation extends Component {
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
                         defaultIndex='3'
-                        defaultValue='Quận:'
+                        defaultValue={this.state.districtName1}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
                         dropdownStyle={{ width: 200, borderWidth: 2 }}
