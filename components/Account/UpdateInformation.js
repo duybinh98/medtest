@@ -55,7 +55,12 @@ class UpdateInformationScreen extends Component {
             address: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.address : '',
             district: '',
             town: '',
-            email: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.email :'123@1234.com'
+            email: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.email :'123@1234.com',
+
+            selectTownList: [],
+            townName1: '',
+            districtName1: '',
+            districtList : [],
         };
         this.submit = this.submit.bind(this)
     }
@@ -68,6 +73,10 @@ class UpdateInformationScreen extends Component {
         this.props.load(customerInfor)
     }
 
+    componentDidMount = value => {
+        this.callApiGetDistrictCode();
+    }
+
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
             this.setState({
@@ -77,8 +86,8 @@ class UpdateInformationScreen extends Component {
                 gender: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.gender=='1' ? 'Nữ':  'Nam'  : 'Nam',
                 selectTownList: [],
                 address: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.address : '',
-                district: '',
-                town: '',
+                district: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.districtCode : '',
+                town: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.townCode : '',
                 email: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.email :'123@1234.com',
             })
             const customerInfor =  {
@@ -89,6 +98,25 @@ class UpdateInformationScreen extends Component {
             this.props.load(customerInfor)
         }
     }
+
+    callApiGetDistrictCode(){
+        fetch(getApiUrl()+"/management/districts/district-town-list")
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result)
+                this.setState(previousState => ({
+                    districtList: result,
+                }));
+            },            
+            (error) => {
+            this.setState({
+                error
+            });
+            }
+        )
+    }
+
 
     _renderDistrictButtonText = rowData => {
         const { districtName } = rowData;
@@ -116,13 +144,16 @@ class UpdateInformationScreen extends Component {
         )
     }
     selectItem(id) {
-        districtList.forEach(district => {
-            if (district.districtCode === id) {
-                this.setState({
-                    selectTownList: district.listTown
-                })
-            }
-        });
+        // districtList.forEach(district => {
+        //     if (district.districtCode === id) {
+        //         this.setState({
+        //             selectTownList: district.listTown
+        //         })
+        //     }
+        // });
+        this.setState({
+            selectTownList: this.state.districtList[id].listTown
+        })
     }
     callApi  = async () => {
         fetch(getApiUrl()+'/users/customers/detail/update/'+this.state.customerId, {
@@ -138,8 +169,8 @@ class UpdateInformationScreen extends Component {
             email: this.state.email,
             dob : convertDateToDateTime(this.state.dob),
             gender: this.state.gender?'0':'1',
-            townCode: null,
-            districtCode: null
+            townCode: this.state.townCode,
+            districtCode: this.state.districtCode
         }),
         })
         .then(res => res.json())
@@ -247,7 +278,7 @@ class UpdateInformationScreen extends Component {
                 </View>
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
-                        options={districtList}
+                        options={this.state.districtList}
                         renderSeparator={() => <View />}
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}

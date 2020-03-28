@@ -12,8 +12,8 @@ class AppointmentListScreen extends Component {
         super(props)
         this.state = {
             isDone: false,
-            // customerId: this.props.route.params.customerId ? this.props.route.params.customerId : '-1',
-            customerId: '1',
+            customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
+            // customerId: '1',
             appointmentsList : null,
         };
         this.viewDone = this.viewDone.bind(this);
@@ -42,6 +42,7 @@ class AppointmentListScreen extends Component {
         .then(res => res.json())
         .then(
             (result) => {
+                console.log(result)
             this.setState(previousState => ({
                 appointmentsList: result,
             }));
@@ -104,7 +105,7 @@ class AppointmentListScreen extends Component {
                                         return (
                                             <View>                                
                                             <AppointmentListItem
-                                                // appointment_id = {item.appointment_id}
+                                                appointment_id = {item.appointment_id}
                                                 appointment_userName={item.appointment_customerName}
                                                 appointment_phoneNumber={item.appointment_phoneNumber}
                                                 appointment_DOB={item.appointment_DOB}

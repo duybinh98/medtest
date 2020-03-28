@@ -36,8 +36,8 @@ export function login(phonenumber, password) {
         dispatch(setLoginError(null));
         sendLoginRequest(phonenumber, password)
         .then(success => {
-            dispatch(setLoginPending(false));
             dispatch(setLoginSuccess(true,success.token,success.customerInfo));
+            dispatch(setLoginPending(false));
         })
         .catch(err => {
             dispatch(setLoginPending(false));

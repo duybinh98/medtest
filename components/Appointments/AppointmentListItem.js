@@ -24,32 +24,48 @@ export default class AppointmentListItem extends Component {
             appointmentTime:convertDateTimeToTime(this.props.appointment_meetingTime),
             appointmentDob:convertDateTimeToDate(this.props.appointment_DOB),
         }));
-        switch (this.props.appointment_status) {
-        case 'pending':
-            this.setState(previousState => ({ 
-                statusName:'Đợi xác nhận',
-                statusColor:'#ffd66f'
-            }));
-            break;
-        case 'accepted':
-            this.setState(previousState => ({ 
-                statusName:'Đã được xác nhận',
-                statusColor:'#a4d57b'
-            }));
-            break;
-        case 'rejected':
-            this.setState(previousState => ({ 
-                statusName:'Đơn bị từ chối',
-                statusColor:'#f97867'
-            }));
-            break;
-        case 'canceled':
-            this.setState(previousState => ({ 
-                statusName:'Đơn đã hủy',
-                statusColor:'#ffd66f'
-            }));
-            break;
+        this.setStatusNameAndColor(this.props.appointment_status)
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+            this.setState({
+                createDate:convertDateTimeToDate(this.props.appointment_createdTime),
+                appointmentDate:convertDateTimeToDate(this.props.appointment_meetingTime),
+                appointmentTime:convertDateTimeToTime(this.props.appointment_meetingTime),
+                appointmentDob:convertDateTimeToDate(this.props.appointment_DOB),
+            })
+            this.setStatusNameAndColor(this.props.appointment_status)
         }
+    }
+
+    setStatusNameAndColor(status){
+        switch (status) {
+            case 'pending':
+                this.setState(previousState => ({ 
+                    statusName:'Đợi xác nhận',
+                    statusColor:'#ffd66f'
+                }));
+                break;
+            case 'accepted':
+                this.setState(previousState => ({ 
+                    statusName:'Đã được xác nhận',
+                    statusColor:'#a4d57b'
+                }));
+                break;
+            case 'rejected':
+                this.setState(previousState => ({ 
+                    statusName:'Đơn bị từ chối',
+                    statusColor:'#f97867'
+                }));
+                break;
+            case 'canceled':
+                this.setState(previousState => ({ 
+                    statusName:'Đơn đã hủy',
+                    statusColor:'#ffd66f'
+                }));
+                break;
+            }
     }
 
     isVisible(){
@@ -72,6 +88,7 @@ export default class AppointmentListItem extends Component {
                         CommonActions.navigate({
                             name: 'AppointmentDetailScreen',
                             params: {
+                                appointment_id: this.props.appointment_id,
                                 appointment_userName: this.props.appointment_userName,
                                 appointment_phoneNumber: this.props.appointment_phoneNumber,
                                 appointment_DOB: this.state.appointmentDob,

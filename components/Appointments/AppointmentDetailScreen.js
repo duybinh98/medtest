@@ -19,9 +19,10 @@ class AppointmentDetailScreen extends Component {
             date: this.props.route.params.appointment_date? this.props.route.params.appointment_date: '',
             freeTime: this.props.route.params.appointment_time? this.props.route.params.appointment_time: '',
             status: this.props.route.params.appointment_status? this.props.route.params.appointment_status: '',
-            statusName: this.props.route.params.appointment_statusName? this.props.route.params.appointment_statusName: '',
+            statusName: this.props.route.params.appointment_status? this.props.route.params.appointment_status: '',
             backScreen: this.props.route.params.backScreen? this.props.route.params.backScreen: null,
         };
+        this.setStatusNameAndColor(this.props.route.params.appointment_status? this.props.route.params.appointment_status: '')
         this.onCancelAppointment = this.onCancelAppointment.bind(this)
     }
 
@@ -34,10 +35,37 @@ class AppointmentDetailScreen extends Component {
                 phone: this.props.route.params.appointment_phoneNumber? this.props.route.params.appointment_phoneNumber: '',
                 date: this.props.route.params.appointment_date? this.props.route.params.appointment_date: '',
                 freeTime: this.props.route.params.appointment_time? this.props.route.params.appointment_time: '',
-                status: this.props.route.params.appointment_status? this.props.route.params.appointment_status: 'Đang chờ xác nhận',
+                status: this.props.route.params.appointment_status? this.props.route.params.appointment_status: '',
+                statusName: this.props.route.params.appointment_status? this.props.route.params.appointment_status: '',
                 backScreen: this.props.route.params.backScreen? this.props.route.params.backScreen: null,
             })
+            this.setStatusNameAndColor(this.props.route.params.appointment_status? this.props.route.params.appointment_status: '',)
         }
+    }
+
+    setStatusNameAndColor(status){
+        switch (status) {
+            case 'pending':
+                this.setState(previousState => ({ 
+                    statusName:'Đợi xác nhận',
+                }));
+                break;
+            case 'accepted':
+                this.setState(previousState => ({ 
+                    statusName:'Đã được xác nhận',
+                }));
+                break;
+            case 'rejected':
+                this.setState(previousState => ({ 
+                    statusName:'Đơn bị từ chối',
+                }));
+                break;
+            case 'canceled':
+                this.setState(previousState => ({ 
+                    statusName:'Đơn đã hủy',
+                }));
+                break;
+            }
     }
 
 

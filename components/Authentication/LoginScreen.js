@@ -55,8 +55,16 @@ class LoginComponent extends Component {
     
     submit = value => {
         const { phoneNumber, password } = this.state;
-        this.props.login(phoneNumber, password)
-        setTimeout(() => {
+        this.props.login(phoneNumber, password)    
+        let count = 0;    
+        var waitForIt = setInterval(() => {
+            if (this.props.isLoginSuccess==true || count>50){
+                clearInterval(waitForIt);
+            }
+            else console.log('wait')
+            count+=1
+        }, 100);
+        setTimeout(() =>{
             if (this.props.customerInfoFromLogin != null ) {                
                 this.setState(previousState => ({
                     phoneNumber: '',
@@ -74,10 +82,9 @@ class LoginComponent extends Component {
             else {
                 // console.log('error at screen'+this.props.LoginError)
                 // Alert.alert(this.props.LoginError.message);
-                }
-        },2000)
-
-        
+            }
+            }
+        ,2000)
     }
     render() {
         const { handleSubmit } = this.props;

@@ -67,17 +67,18 @@ class CreateAppointmentScreen extends Component {
         .then(res => res.json())
         .then(
             (result) => {
+                console.log(result)
                 this.props.navigation.dispatch(
                     CommonActions.navigate({
                         name: 'AppointmentDetailScreen',
                         params: {
                             appointment_userName: this.state.name,
                             appointment_phoneNumber: this.state.phonenumber,
-                            dob: this.state.dob,
+                            appointment_DOB: this.state.dob,
                             appointment_date: this.state.apointmentDate,
                             appointment_time: this.state.apointmentTime,
-                            status: 'pending',
-                            statusName:'Đang chờ xác nhận',
+                            appointment_status: 'pending',
+                            appointment_statusName:'Đang chờ xác nhận',
                             backScreen:'HomeScreen',
                         },
                     })

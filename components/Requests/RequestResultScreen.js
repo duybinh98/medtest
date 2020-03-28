@@ -37,9 +37,10 @@ constructor(props) {
         .then(res => res.json())
         .then(
             (result) => {
-            this.setState(previousState => ({
-                resultList: result,
-            }));
+                result ? result.message? null :
+                this.setState(previousState => ({
+                    resultList: result,
+                })) :null
             },            
             (error) => {
                 console.log(error)

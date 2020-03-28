@@ -173,13 +173,7 @@ class RequestConfirmScreen extends Component {
                             <View style={styles.totalMoneyContainer}>
                                 <Text>Tổng tiền: {this.props.route.params.totalPrice}</Text>
                             </View>
-                            <TouchableOpacity style={styles.btnConfirm} 
-                                onPress={() => {
-                                    this.onConfirm()
-                                    
-                                    
-                                    }}                                                              
-                                >
+                            <TouchableOpacity style={styles.btnConfirm} onPress={() => { this.onConfirm()}} >
                                 <Text style={styles.textBtn}>Xác nhận</Text>
                             </TouchableOpacity>
                         </View>

@@ -66,7 +66,7 @@ class RequestPersonalInformation extends Component {
             selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [], 
             totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0', 
             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : [],
-
+            districtList : [],
         };
         this.selectItem = this.selectItem.bind(this)
         this.submit = this.submit.bind(this)
@@ -95,7 +95,7 @@ class RequestPersonalInformation extends Component {
                 district: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
                 town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
                 customerInfor: this.props.customerInfor,
-                districtList : [],
+                
             })
         }
     }
@@ -155,13 +155,17 @@ class RequestPersonalInformation extends Component {
         )
     }
     selectItem(id) {
-        districtList.forEach(district => {
-            if (district.districtCode === id) {
-                this.setState({
-                    selectTownList: district.listTown
-                })
-            }
-        });
+        // this.state.districtList.forEach(district => {            
+        //     if (district.districtCode == id) {
+        //         this.setState({
+        //             selectTownList: district.listTown
+        //         })
+        //     }
+        // });
+        this.setState({
+            selectTownList: this.state.districtList[id].listTown
+        })
+
     }
     render() {
         const { handleSubmit } = this.props;
@@ -199,7 +203,7 @@ class RequestPersonalInformation extends Component {
                 </View>
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
-                        options={districtList}
+                        options={this.state.districtList}
                         renderSeparator={() => <View />}
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
@@ -209,7 +213,7 @@ class RequestPersonalInformation extends Component {
                         style={styles.dropdownButton}
                         dropdownStyle={{ width: 200, borderWidth: 2 }}
                         dropdownTextStyle={{ fontSize: 16 }}
-                        onSelect={(value) => this.selectItem(value)}
+                        onSelect={(value) => {this.selectItem(value)}}
                     />
                 </View>
                 <View style={styles.inputContainer}>

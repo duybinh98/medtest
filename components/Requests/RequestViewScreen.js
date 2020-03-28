@@ -29,6 +29,7 @@ constructor(props) {
             nurseName: this.props.route.params.nurseName ? this.props.route.params.nurseName:  '',
             totalAmount: this.props.route.params.totalAmount? this.props.route.params.totalAmount:'free',
             testsList: this.props.route.params.testsList? this.props.route.params.testsList: testList,
+            backScreen: this.props.route.params.backScreen? this.props.route.params.backScreen: "RequestListScreen",
         };        
         this.isSelected = this.isSelected.bind(this);
         this.viewResult = this.viewResult.bind(this);
@@ -54,6 +55,7 @@ constructor(props) {
                 nurseName: this.props.route.params.nurseName ? this.props.route.params.nurseName:  '',
                 nurseId: this.props.route.params.nurseId ? this.props.route.params.nurseId:  '',
                 totalAmount: this.props.route.params.totalAmount? this.props.route.params.totalAmount:'free',
+                backScreen: this.props.route.params.backScreen? this.props.route.params.backScreen: "RequestListScreen",
             }));
         }
     }
@@ -147,7 +149,7 @@ constructor(props) {
     render(){
         return(
                 <View style={{flex:1}}>
-                    <ScreenTopMenuBack navigation={this.props.navigation} backScreen="RequestListScreen"></ScreenTopMenuBack>
+                    <ScreenTopMenuBack navigation={this.props.navigation} backScreen={this.state.backScreen}></ScreenTopMenuBack>
                     <ScrollView 
                         style ={styles.background}                                            
                         showsVerticalScrollIndicator={false}
@@ -157,9 +159,12 @@ constructor(props) {
                         }}
                         >            
                         <View style={styles.titleArea}>     
-                            <Text style={{fontSize:22,color:'#25345D'}}>Đặt xét nghiệm</Text>
+                            <Text style={{fontSize:22,color:'#25345D'}}>Đơn xét nghiệm</Text>
                         </View>
-                        <View style={styles.infoArea}>     
+                        <View style={styles.infoArea}>    
+                            <View style={styles.textContainer}>
+                                <Text style={styles.textInfor} >Mã đơn xét nghiệm:  {this.state.requestId}</Text>
+                            </View> 
                             <View style={styles.textContainer}>
                                 <Text style={styles.textInfor} >Tên hiển thị:  {this.state.name}</Text>
                             </View>
