@@ -250,6 +250,10 @@ constructor(props) {
                             <TouchableOpacity style={styles.btnConfirm} onPress={() => this.cancelRequest()}>
                                 <Text style={styles.textBtn}>{'Hủy đơn xét nghiệm'}</Text>
                             </TouchableOpacity>
+                            : this.state.status=='accepted' ? 
+                            <TouchableOpacity style={styles.btnConfirm} onPress={() => this.cancelRequest()}>
+                                <Text style={styles.textBtn}>{'Hủy đơn xét nghiệm'}</Text>
+                            </TouchableOpacity>
                             : this.state.status=='closed' ? 
                             <TouchableOpacity style={styles.btnConfirm} onPress={() => this.viewResult()}>
                                 <Text style={styles.textBtn}>{'Xem kết quả'}</Text>
