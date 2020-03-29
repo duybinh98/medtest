@@ -1,46 +1,19 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
-import { Icon } from 'react-native-elements';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-// import action from '../Store/Action/actions';
 import { login } from '../Store/Reducers/LoginReducer';
-// import { getApiUrl } from './../Common/CommonFunction';
 import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
+import renderField from '../../Validate/RenderField';
 
 //validate conditions
-const required = value => value ? undefined : 'Required';
-const isNumber = value => value && isNaN(Number(value)) ? 'Must be phone number' : undefined;
-const isPhonenumber = value => value && value.length == 10 ? undefined : 'Must be 10 digits';
+const required = value => value ? undefined : 'Bắt buộc';
+const isNumber = value => value && isNaN(Number(value)) ? 'Phải nhập số điện thoại' : undefined;
+const isPhonenumber = value => value && value.length == 10 ? undefined : 'Phải có 10 số';
 const isWeakPassword = value => value && value.length >= 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
-
-//Field input for redux-form
-const renderField = ({
-    iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
-    input: { onChange, ...restInput }, placeholder
-}) => {
-    return (
-        <View style={{ flex: 1 }}>
-            <View style={styles.inputContainer}>
-                <Icon
-                    name={iconName}
-                    type={iconType}
-                    color='black'
-                    size={32}
-                    iconStyle={styles.inputIcon}
-                ></Icon>
-                <TextInput style={styles.input} placeholder={placeholder} secureTextEntry={secureText}
-                    keyboardType={keyboardType} onChangeText={onChange} {...restInput} autoCapitalize='none'
-                ></TextInput>
-            </View>
-            {touched && ((error && <Text style={{ color: 'red', paddingLeft: 35 }}>{error}</Text>) ||
-                (warning && <Text style={{ color: 'orange' }}>{warning}</Text>))}
-        </View>
-    );
-}
 
 class LoginComponent extends Component {
     constructor(props) {
@@ -52,20 +25,20 @@ class LoginComponent extends Component {
         };
         this.submit = this.submit.bind(this)
     }
-    
+
     submit = value => {
         const { phoneNumber, password } = this.state;
-        this.props.login(phoneNumber, password)    
-        let count = 0;    
+        this.props.login(phoneNumber, password)
+        let count = 0;
         var waitForIt = setInterval(() => {
-            if (this.props.isLoginSuccess==true || count>50){
+            if (this.props.isLoginSuccess == true || count > 50) {
                 clearInterval(waitForIt);
             }
             else console.log('wait')
-            count+=1
+            count += 1
         }, 100);
-        setTimeout(() =>{
-            if (this.props.customerInfoFromLogin != null ) {                
+        setTimeout(() => {
+            if (this.props.customerInfoFromLogin != null) {
                 this.setState(previousState => ({
                     phoneNumber: '',
                     password: '',
@@ -77,14 +50,14 @@ class LoginComponent extends Component {
                         params: {
                         },
                     })
-                )                
-            }  
+                )
+            }
             else {
-                // console.log('error at screen'+this.props.LoginError)
+                console.log('error at screen'+this.props.LoginError)
                 // Alert.alert(this.props.LoginError.message);
             }
-            }
-        ,2000)
+        }
+            , 5000)
     }
     render() {
         const { handleSubmit } = this.props;
@@ -154,20 +127,6 @@ const { width: WIDTH } = Dimensions.get('window')
 //#0A6ADA
 //#27CDCB
 const styles = StyleSheet.create({
-    backIcon: {
-        position: "absolute",
-        top: 10,
-        left: 20,
-    },
-    nameHeader: {
-        alignItems: "center",
-        backgroundColor: '#25345D',
-    },
-    nameText: {
-        margin: 10,
-        fontSize: 25,
-        color: 'white',
-    },
     logo: {
         width: 120,
         height: 120,
@@ -181,28 +140,7 @@ const styles = StyleSheet.create({
     logoText: {
         fontSize: 40,
         color: '#25345D',
-    },
-    input: {
-        width: WIDTH - 55,
-        height: 45,
-        borderRadius: 15,
-        fontSize: 16,
-        paddingLeft: 65,
-        borderWidth: 2,
-        borderColor: '#0A6ADA',
-        backgroundColor: 'rgba(255,255,255,0.7)',
-        // color: 'rgba(255,255,255,0.7)',
-        color: 'black',
-        marginHorizontal: 25
-    },
-    inputIcon: {
-        position: 'absolute',
-        top: 7,
-        left: 35,
-    },
-    inputContainer: {
-        marginTop: 10
-    },
+    },  
     btnLogin: {
         width: WIDTH - 170,
         height: 45,

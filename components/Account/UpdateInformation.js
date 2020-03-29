@@ -7,7 +7,6 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
 import DatePicker from 'react-native-datepicker';
-import districtList from '../../Data/District';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {getApiUrl, convertDateTimeToDate, convertDateToDateTime} from './../Common/CommonFunction';
 import { connect } from 'react-redux';
@@ -61,6 +60,8 @@ class UpdateInformationScreen extends Component {
             townName1: '',
             districtName1: '',
             districtList : [],
+            townList: [],
+            disableDropdownTown: true,
         };
         this.submit = this.submit.bind(this)
     }
@@ -75,6 +76,33 @@ class UpdateInformationScreen extends Component {
 
     componentDidMount = value => {
         this.callApiGetDistrictCode();
+        this.callApiGetTownCode();
+
+        setTimeout(() => {
+            console.log("name" + this.state.districtList + "  2")
+            this.state.districtList.forEach(district => {
+                if (district.districtCode === this.props.customerInfor.districtCode) {
+                    // console.log("name" + district.districtName)
+                    this.setState({
+                        districtName1: district.districtName
+                    })
+                } else {
+                    console.log("Error")
+                }
+            });
+            this.state.townList.forEach(town => {
+                if (town.townCode === this.props.customerInfor.townCode) {
+                    // console.log("name" + district.districtName)
+                    this.setState({
+                        townName1: town.townName
+                    })
+                } else {
+                    console.log("Error")
+                }
+            });
+            console.log(this.state.townName1)
+            console.log(this.props.customerInfor.districtCode + "  2")
+        }, 4000);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -116,8 +144,23 @@ class UpdateInformationScreen extends Component {
             }
         )
     }
-
-
+    callApiGetTownCode() {
+        fetch(getApiUrl() + "/management/districts/towns/list")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result)
+                    this.setState(previousState => ({
+                        townList: result,
+                    }));
+                },
+                (error) => {
+                    this.setState({
+                        error
+                    });
+                }
+            )
+    }
     _renderDistrictButtonText = rowData => {
         const { districtName } = rowData;
         this.setState({ district: districtName })
@@ -144,14 +187,8 @@ class UpdateInformationScreen extends Component {
         )
     }
     selectItem(id) {
-        // districtList.forEach(district => {
-        //     if (district.districtCode === id) {
-        //         this.setState({
-        //             selectTownList: district.listTown
-        //         })
-        //     }
-        // });
         this.setState({
+            disableDropdownTown: false,
             selectTownList: this.state.districtList[id].listTown
         })
     }
@@ -264,32 +301,40 @@ class UpdateInformationScreen extends Component {
                 />
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
+                        disabled={this.state.disableDropdownTown}
                         options={this.state.selectTownList}
-                        renderSeparator={() => <View />}
+                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderTownRow.bind(this)}
                         renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
-                        defaultIndex='1'
-                        defaultValue='Phường:'
+                        defaultValue={this.state.townName1}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
-                        dropdownStyle={{ width: 200, borderWidth: 2 }}
+                        showsVerticalScrollIndicator={false} 
+                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
                         dropdownTextStyle={{ fontSize: 16 }}
+                        
                     />
+                    <View style={{ position: "absolute", right: 30, top: 15 }}>
+                        <Text style={{ fontSize: 20 }} >▼</Text>
+                    </View>
                 </View>
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
                         options={this.state.districtList}
-                        renderSeparator={() => <View />}
+                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
-                        defaultIndex='1'
-                        defaultValue='Quận:'
+                        defaultValue={this.state.districtName1}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
-                        dropdownStyle={{ width: 200, borderWidth: 2 }}
+                        showsVerticalScrollIndicator={false}                      
+                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
                         dropdownTextStyle={{ fontSize: 16 }}
-                        onSelect={(value) => this.selectItem(value)}
+                        onSelect={(value) => { this.selectItem(value) }}
                     />
+                    <View style={{ position: "absolute", right: 30, top: 15 }}>
+                        <Text style={{ fontSize: 20 }} >▼</Text>
+                    </View>
                 </View>
                 <Field name="email" keyboardType="email-address" component={renderField} iconName="email-outline"
                     defaultText={this.state.email}
@@ -315,7 +360,8 @@ let UpdateInformationForm = reduxForm({
 UpdateInformationForm = connect(
     state => ({
       initialValues: state.initialValue.data, // pull initial values from account reducer
-      token: state.login.token
+      token: state.login.token,
+      customerInfor: state.loadCustomer.customerInfor,
     }),
     { load: loadAccount,
         loadCustomer: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),

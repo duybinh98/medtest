@@ -10,9 +10,9 @@ import ModalDropdown from 'react-native-modal-dropdown';
 // import districtList from '../../Data/District';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import {load as loadAccount} from '../Store/Reducers/InitialValue'
+import { load as loadAccount } from '../Store/Reducers/InitialValue'
 import renderField from '../../Validate/RenderField'
-import {getApiUrl, convertDateTimeToTime, convertDateTimeToDate} from './../Common/CommonFunction'
+import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate } from './../Common/CommonFunction'
 
 
 //validate conditions
@@ -49,31 +49,32 @@ class RequestPersonalInformation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            
-
             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
             name: this.props.customerInfor ? this.props.customerInfor.name : '',
             dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
             apointmentDate: '01/01/2020',
-            apointmentTime: '07:30',
-            selectTownList: [],
+            apointmentTime: '07:30',            
             address: this.props.customerInfor ? this.props.customerInfor.address : '',
             district: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
             town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
-            customerInfor: this.props.customerInfor,
+            customerInfor: this.props.customerInfor,           
+            selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [],
+            totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0',
+            testsList: this.props.route.params.testsList ? this.props.route.params.testsList : [],
+            
+            districtList: [],
+            selectTownList: [],
+            townList: [],
             townName1: '',
             districtName1: '',
-            selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [], 
-            totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0', 
-            testsList: this.props.route.params.testsList ? this.props.route.params.testsList : [],
-            districtList : [],
+            disableDropdownTown: true,
         };
         this.selectItem = this.selectItem.bind(this)
         this.submit = this.submit.bind(this)
     }
     componentWillMount = value => {
-        const customerInfor =  {
-            username : this.state.name,
+        const customerInfor = {
+            username: this.state.name,
             email: this.state.email,
             address: this.state.address,
         }
@@ -81,6 +82,34 @@ class RequestPersonalInformation extends Component {
     }
     componentDidMount = value => {
         this.callApiGetDistrictCode();
+        this.callApiGetTownCode();
+
+        setTimeout(() => {
+            console.log("name" + this.state.districtList + "  2")
+            this.state.districtList.forEach(district => {
+                if (district.districtCode === this.props.customerInfor.districtCode) {
+                    // console.log("name" + district.districtName)
+                    this.setState({
+                        districtName1: district.districtName
+                    })
+                } else {
+                    console.log("Error")
+                }
+            });
+            this.state.townList.forEach(town => {
+                if (town.townCode === this.props.customerInfor.townCode) {
+                    // console.log("name" + district.districtName)
+                    this.setState({
+                        townName1: town.townName
+                    })
+                } else {
+                    console.log("Error")
+                }
+            });
+            console.log(this.state.townName1)
+            console.log(this.props.customerInfor.districtCode + "  2")
+        }, 4000);
+
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
@@ -95,43 +124,58 @@ class RequestPersonalInformation extends Component {
                 district: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
                 town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
                 customerInfor: this.props.customerInfor,
-                
             })
         }
     }
 
     _renderDistrictButtonText = rowData => {
-        const { districtCode,districtName } = rowData;
-        this.setState({ 
+        const { districtCode, districtName } = rowData;
+        this.setState({
             district: districtCode,
-            districtName1 : districtName
         })
-        return ` ${districtName}`;
+        return `${districtName}`;
     }
     _renderTownButtonText = listTown => {
         const { townCode, townName } = listTown;
-        this.setState({ 
+        this.setState({
             town: townCode,
-            townName1 : townName
+
         })
-        return ` ${townName}`;
+        return `${townName}`;
     }
-    callApiGetDistrictCode(){
-        fetch(getApiUrl()+"/management/districts/district-town-list")
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result)
-                this.setState(previousState => ({
-                    districtList: result,
-                }));
-            },            
-            (error) => {
-            this.setState({
-                error
-            });
-            }
-        )
+    callApiGetDistrictCode() {
+        fetch(getApiUrl() + "/management/districts/district-town-list")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result)
+                    this.setState(previousState => ({
+                        districtList: result,
+                    }));
+                },
+                (error) => {
+                    this.setState({
+                        error
+                    });
+                }
+            )
+    }
+    callApiGetTownCode() {
+        fetch(getApiUrl() + "/management/districts/towns/list")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result)
+                    this.setState(previousState => ({
+                        townList: result,
+                    }));
+                },
+                (error) => {
+                    this.setState({
+                        error
+                    });
+                }
+            )
     }
     submit = values => {
         this.props.navigation.dispatch(
@@ -139,14 +183,14 @@ class RequestPersonalInformation extends Component {
                 name: 'RequestConfirmScreen',
                 params: {
                     customerId: this.state.customerId,
-                    name: this.state.name,       
+                    name: this.state.name,
                     address: this.state.address,
                     dob: this.state.dob,
                     town: this.state.town,
-                    district : this.state.district,
-                    date:this.state.apointmentDate,
-                    time:this.state.apointmentTime,
-                    selectedTest: this.props.route.params.selectedTest,   
+                    district: this.state.district,
+                    date: this.state.apointmentDate,
+                    time: this.state.apointmentTime,
+                    selectedTest: this.props.route.params.selectedTest,
                     testsList: this.props.route.params.testsList,
                     totalPrice: this.props.route.params.totalPrice,
                     resetSelectedTestOnConfirm: this.props.route.params.resetSelectedTestOnConfirm,
@@ -155,17 +199,10 @@ class RequestPersonalInformation extends Component {
         )
     }
     selectItem(id) {
-        // this.state.districtList.forEach(district => {            
-        //     if (district.districtCode == id) {
-        //         this.setState({
-        //             selectTownList: district.listTown
-        //         })
-        //     }
-        // });
         this.setState({
-            selectTownList: this.state.districtList[id].listTown
+            disableDropdownTown: false,
+            selectTownList: this.state.districtList[id].listTown,         
         })
-
     }
     render() {
         const { handleSubmit } = this.props;
@@ -189,32 +226,40 @@ class RequestPersonalInformation extends Component {
                 />
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
+                        disabled={this.state.disableDropdownTown}
                         options={this.state.selectTownList}
-                        renderSeparator={() => <View />}
+                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderTownRow.bind(this)}
                         renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
-                        defaultIndex='3'
                         defaultValue={this.state.townName1}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
-                        dropdownStyle={{ width: 200, borderWidth: 2 }}
+                        showsVerticalScrollIndicator={false} 
+                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
                         dropdownTextStyle={{ fontSize: 16 }}
+                        
                     />
+                    <View style={{ position: "absolute", right: 30, top: 15 }}>
+                        <Text style={{ fontSize: 20 }} >▼</Text>
+                    </View>
                 </View>
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
                         options={this.state.districtList}
-                        renderSeparator={() => <View />}
+                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
-                        defaultIndex='3'
                         defaultValue={this.state.districtName1}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
-                        dropdownStyle={{ width: 200, borderWidth: 2 }}
+                        showsVerticalScrollIndicator={false}                      
+                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
                         dropdownTextStyle={{ fontSize: 16 }}
-                        onSelect={(value) => {this.selectItem(value)}}
+                        onSelect={(value) => { this.selectItem(value) }}
                     />
+                    <View style={{ position: "absolute", right: 30, top: 15 }}>
+                        <Text style={{ fontSize: 20 }} >▼</Text>
+                    </View>
                 </View>
                 <View style={styles.inputContainer}>
                     <DatePicker
@@ -289,11 +334,11 @@ let RequestPersonalInformationForm = reduxForm({
 })(RequestPersonalInformation);
 RequestPersonalInformationForm = connect(
     state => ({
-      initialValues: state.initialValue.data, // pull initial values from account reducer
-      customerInfor: state.loadCustomer.customerInfor,
+        initialValues: state.initialValue.data, // pull initial values from account reducer
+        customerInfor: state.loadCustomer.customerInfor,
     }),
     { load: loadAccount } // bind account loading action creator
-  )(RequestPersonalInformationForm);
+)(RequestPersonalInformationForm);
 export default RequestPersonalInformationForm;
 //#25345D
 //#0A6ADA

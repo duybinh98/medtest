@@ -7,6 +7,7 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { CommonActions } from '@react-navigation/native';
+import renderField from '../../Validate/RenderField'
 
 //validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
@@ -15,31 +16,6 @@ const isPhonenumber = values => values && values.length == 10 ? undefined : 'Ph�
 const isEmail = values =>
     values && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values) ? 'Email không hợp lệ' : undefined;
 const isWeakPassword = values => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
-
-//Field textInput for redux-form
-const renderField = ({
-    iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
-    input: { onChange, ...restInput }, placeholder
-}) => {
-    return (
-        <View style={{ flex: 1 }}>
-            <View style={styles.inputContainer}>
-                <Icon
-                    name={iconName}
-                    type={iconType}
-                    color='black'
-                    size={32}
-                    iconStyle={styles.inputIcon}
-                ></Icon>
-                <TextInput style={styles.input} placeholder={placeholder} secureTextEntry={secureText}
-                    keyboardType={keyboardType} onChangeText={onChange} {...restInput} autoCapitalize='none'
-                ></TextInput>
-            </View>
-            {touched && ((error && <Text style={{ color: 'red', paddingLeft: 35 }}>{error}</Text>) ||
-                (warning && <Text style={{ color: 'orange' }}>{warning}</Text>))}
-        </View>
-    );
-}
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -50,7 +26,7 @@ class RegisterScreen extends Component {
             name: 'a',
             phonenumber: '0123456789',
             email: 'binhpd@fpt.edu',
-            dob: '',
+            dob: '01-01-1970',
             password: '',
             gender: 'Nữ',
         };
