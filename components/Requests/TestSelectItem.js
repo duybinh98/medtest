@@ -12,6 +12,15 @@ export default class TestSelectItem extends Component {
             selected:false
         }
     }
+
+
+    componentDidUpdate  (prevProps, prevState) {        
+         if (prevProps.resetFlag !== this.props.resetFlag) {
+            this.setState(previousState => ({ 
+                selected: false,
+            }));
+        }
+    }
     
 
     render(){

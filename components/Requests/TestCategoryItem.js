@@ -9,9 +9,18 @@ export default class TestCategoryItem extends Component {
         super(props);
         this.state={
             viewTest: true,            
-            visible: false
+            visible: false,
+            resetFlag: this.props.resetFlag,
         }
         this.isVisible = this.isVisible.bind(this);
+    }
+
+    componentDidUpdate  (prevProps, prevState) {        
+         if (prevProps.resetFlag !== this.props.resetFlag) {
+            this.setState(previousState => ({ 
+                resetFlag: this.props.resetFlag,
+            }));
+        }
     }
 
     isVisible(){
@@ -99,6 +108,7 @@ export default class TestCategoryItem extends Component {
                                     testID={item.testID}
                                     backgroundColor={index % 2 == 0 ? '#EEE': '#FFF'}
                                     onPressItem = {this.props.selectItem}
+                                    resetFlag={this.state.resetFlag}
                                     /> 
                                      : null}    
                                 </View>                          
