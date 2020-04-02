@@ -10,7 +10,7 @@ import renderField from '../../Validate/RenderField'
 
 //validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
-const isWeakPassword = values => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
+const isWeakPassword = value => value && value.length >= 6 ? undefined : 'Mật khẩu phải có ít nhất 6 kí tự';
 
 const { width: WIDTH } = Dimensions.get('window')
 

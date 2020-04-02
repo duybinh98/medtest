@@ -13,7 +13,7 @@ import renderField from '../../Validate/RenderField';
 const required = value => value ? undefined : 'Bắt buộc';
 const isNumber = value => value && isNaN(Number(value)) ? 'Phải nhập số điện thoại' : undefined;
 const isPhonenumber = value => value && value.length == 10 ? undefined : 'Phải có 10 số';
-const isWeakPassword = value => value && value.length >= 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
+const isWeakPassword = value => value && value.length >= 6 ? undefined : 'Mật khẩu phải có ít nhất 6 kí tự';
 
 class LoginComponent extends Component {
     constructor(props) {

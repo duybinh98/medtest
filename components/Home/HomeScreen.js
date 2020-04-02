@@ -8,6 +8,8 @@ import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import ArticleListItem from './ArticleListItem';
 import {getApiUrl} from './../Common/CommonFunction';
 // import articlesList from './../../Data/Articles'
+import { login, logout } from '../Store/Reducers/LoginReducer';
+import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
 
 class HomeScreen extends Component {
     constructor(props) {
@@ -27,6 +29,9 @@ class HomeScreen extends Component {
         this.callApiArticlesList();
         this.callApiTestList();
         this.callApiCustomerInfo();
+        this.props.navigation.addListener("focus", () => {
+
+        })
     }
 
     callApiArticlesList= async () =>  {
@@ -172,6 +177,7 @@ class HomeScreen extends Component {
 }
 const mapStateToProps = (state) => {
     return {
+        isLoginSuccess : state.login.isLoginSuccess,
         token: state.login.token,
         customerInfor: state.loadCustomer.customerInfor,
         isLoadSuccess: state.loadCustomer.isLoadSuccess,
@@ -181,7 +187,8 @@ const mapStateToProps = (state) => {
 const mapStateToDispatch = (dispatch) => {
     return {
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
-        login: (phoneNumber, password) => dispatch(login(phoneNumber, password))
+        // login: (phoneNumber, password) => dispatch(login(phoneNumber, password)),
+        logout: () => dispatch(logout()),
     };
 }
 
