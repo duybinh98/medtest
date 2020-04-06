@@ -37,51 +37,51 @@ class RegisterScreen extends Component {
             alert("Xác nhận mật khẩu không đúng!")
         } else {
             this.callApi().then(
-            this.props.navigation.dispatch(
-                CommonActions.navigate({
-                    name: 'LoginScreen',
-                    params: {
-                        name: this.state.name,
-                        phonenumber: this.state.phonenumber,
-                        email: this.state.email,
-                        dob: this.state.dob,
-                        password: this.state.password,
-                        gender: this.state.gender,
-                    },
-                })
-            ))
+                this.props.navigation.dispatch(
+                    CommonActions.navigate({
+                        name: 'LoginScreen',
+                        params: {
+                            name: this.state.name,
+                            phonenumber: this.state.phonenumber,
+                            email: this.state.email,
+                            dob: this.state.dob,
+                            password: this.state.password,
+                            gender: this.state.gender,
+                        },
+                    })
+                ))
         }
     }
 
-    callApi  = async () => {
+    callApi = async () => {
         fetch('http://192.168.1.6:8080/users/customers/register', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name: this.state.name,
-            phoneNumber: this.state.phonenumber,
-            email: this.state.email,
-            dob : "1998-12-12T17:00:00.000+0000",
-            gender: '1',
-            password: this.state.password
-        }),
-        })
-        .then(res => res.json())
-        .then(
-            (result) => {
-                Alert.alert("hi"+result);
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             },
-            (error) => {
-            this.setState({                
-                error
-            });
-            Alert.alert("hi"+error);
-            }
-        )
-        ;
+            body: JSON.stringify({
+                name: this.state.name,
+                phoneNumber: this.state.phonenumber,
+                email: this.state.email,
+                dob: "1998-12-12T17:00:00.000+0000",
+                gender: '1',
+                password: this.state.password
+            }),
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    Alert.alert("hi" + result);
+                },
+                (error) => {
+                    this.setState({
+                        error
+                    });
+                    Alert.alert("hi" + error);
+                }
+            )
+            ;
     }
 
     render() {
@@ -89,7 +89,10 @@ class RegisterScreen extends Component {
         const { gender } = this.state;
         return (
             <View style={styles.background}>
-                <ScrollView>
+                <ScrollView
+                    style={{ flex: 1 }}
+                    showsVerticalScrollIndicator={false}
+                >
                     {/* <ScreenTopMenuBack navigation={this.props.navigation} backScreen={'LoginScreen'}></ScreenTopMenuBack> */}
                     <View>
                         <View style={styles.logoContainer}>

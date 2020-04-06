@@ -10,7 +10,8 @@ import ModalDropdown from 'react-native-modal-dropdown';
 // import districtList from '../../Data/District';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import { load as loadAccount } from '../Store/Reducers/InitialValue'
+import { load as loadAccount } from '../Store/Reducers/InitialValue';
+import {loadCustomer} from '../Store/Reducers/LoadInforReducer'
 import renderField from '../../Validate/RenderField'
 import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate } from './../Common/CommonFunction'
 
@@ -73,10 +74,10 @@ class RequestPersonalInformation extends Component {
         this.submit = this.submit.bind(this)
     }
     componentWillMount = value => {
-        const customerInfor = {
-            username: this.state.name,
+        const customerInfor = {  
             email: this.state.email,
             address: this.state.address,
+            username: this.state.name,
         }
         this.props.load(customerInfor)
     }
@@ -85,10 +86,8 @@ class RequestPersonalInformation extends Component {
         this.callApiGetTownCode();
 
         setTimeout(() => {
-            console.log("name" + this.state.districtList + "  2")
             this.state.districtList.forEach(district => {
                 if (district.districtCode === this.props.customerInfor.districtCode) {
-                    // console.log("name" + district.districtName)
                     this.setState({
                         districtName1: district.districtName
                     })
@@ -98,7 +97,6 @@ class RequestPersonalInformation extends Component {
             });
             this.state.townList.forEach(town => {
                 if (town.townCode === this.props.customerInfor.townCode) {
-                    // console.log("name" + district.districtName)
                     this.setState({
                         townName1: town.townName
                     })
@@ -106,8 +104,6 @@ class RequestPersonalInformation extends Component {
                     console.log("Error")
                 }
             });
-            console.log(this.state.townName1)
-            console.log(this.props.customerInfor.districtCode + "  2")
         }, 4000);
 
     }
@@ -125,6 +121,32 @@ class RequestPersonalInformation extends Component {
                 town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
                 customerInfor: this.props.customerInfor,
             })
+            setTimeout(() => {
+                this.state.districtList.forEach(district => {
+                    if (district.districtCode === this.props.customerInfor.districtCode) {
+                        this.setState({
+                            districtName1: district.districtName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+                this.state.townList.forEach(town => {
+                    if (town.townCode === this.props.customerInfor.townCode) {
+                        this.setState({
+                            townName1: town.townName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+            }, 4000);
+            const customerInfor = {   
+                email: this.state.email,
+                address: this.state.address,
+                username: this.state.name,
+            }
+            this.props.load(customerInfor)
         }
     }
 
@@ -148,7 +170,7 @@ class RequestPersonalInformation extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result)
+                    // console.log(result)
                     this.setState(previousState => ({
                         districtList: result,
                     }));
@@ -165,7 +187,7 @@ class RequestPersonalInformation extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result)
+                    // console.log(result)
                     this.setState(previousState => ({
                         townList: result,
                     }));
@@ -186,8 +208,8 @@ class RequestPersonalInformation extends Component {
                     name: this.state.name,
                     address: this.state.address,
                     dob: this.state.dob,
-                    town: this.state.town,
-                    district: this.state.district,
+                    town: this.state.townName1,
+                    district: this.state.districtName1,
                     date: this.state.apointmentDate,
                     time: this.state.apointmentTime,
                     selectedTest: this.props.route.params.selectedTest,
@@ -210,20 +232,34 @@ class RequestPersonalInformation extends Component {
             <ScrollView style={{ flex: 1 }}>
                 <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                 <View>
-                    <View style={styles.logoContainer}>
+                    <View style={styles.titleArea}>
                         <Text style={styles.logoText}>Thông tin lấy mẫu</Text>
                     </View>
                 </View>
                 <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                     iconType="material-community" placeholder="Tên hiển thị" secureText={false}
-                    onChange={(text) => { this.setState({ name: text }) }} editable={false}
+                    onChange={(text) => { this.setState({ name: text }) }} 
+                    // editable={false}
                     validate={[required]}
-                />
-                <Field name="address" keyboardType="default" component={renderField} iconName="map-marker"
-                    iconType="material-community" placeholder="Địa chỉ" secureText={false}
-                    onChange={(text) => { this.setState({ address: text }) }}
-                    validate={[required]}
-                />
+                />               
+                <View style={styles.dropdownContainer}>
+                    <ModalDropdown
+                        options={this.state.districtList}
+                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
+                        renderRow={_renderDistrictRow.bind(this)}
+                        renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
+                        defaultValue={this.state.districtName1}
+                        textStyle={styles.dropdownText}
+                        style={styles.dropdownButton}
+                        showsVerticalScrollIndicator={false}                      
+                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
+                        dropdownTextStyle={{ fontSize: 16 }}
+                        onSelect={(value) => { this.selectItem(value) }}
+                    />
+                    <View style={{ position: "absolute", right: 30, top: 15 }}>
+                        <Text style={{ fontSize: 20 }} >▼</Text>
+                    </View>
+                </View>
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
                         disabled={this.state.disableDropdownTown}
@@ -243,24 +279,11 @@ class RequestPersonalInformation extends Component {
                         <Text style={{ fontSize: 20 }} >▼</Text>
                     </View>
                 </View>
-                <View style={styles.dropdownContainer}>
-                    <ModalDropdown
-                        options={this.state.districtList}
-                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
-                        renderRow={_renderDistrictRow.bind(this)}
-                        renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
-                        defaultValue={this.state.districtName1}
-                        textStyle={styles.dropdownText}
-                        style={styles.dropdownButton}
-                        showsVerticalScrollIndicator={false}                      
-                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
-                        dropdownTextStyle={{ fontSize: 16 }}
-                        onSelect={(value) => { this.selectItem(value) }}
-                    />
-                    <View style={{ position: "absolute", right: 30, top: 15 }}>
-                        <Text style={{ fontSize: 20 }} >▼</Text>
-                    </View>
-                </View>
+                <Field name="address" keyboardType="default" component={renderField} iconName="map-marker"
+                    iconType="material-community" placeholder="Địa chỉ" secureText={false}
+                    onChange={(text) => { this.setState({ address: text }) }}
+                    validate={[required]}
+                />
                 <View style={styles.inputContainer}>
                     <DatePicker
                         style={styles.DatePicker}
@@ -316,13 +339,15 @@ class RequestPersonalInformation extends Component {
                         onDateChange={(time) => { this.setState({ apointmentTime: time }) }}
                     />
                 </View>
+                <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.btnNext}
                     onPress={handleSubmit(this.submit)}
                 >
                     <Text style={styles.textBtn}>Tiếp</Text>
                 </TouchableOpacity>
-                <View>
                 </View>
+                {/* <View>
+                </View> */}
                 {/* <ScreenBottomMenu></ScreenBottomMenu> */}
             </ScrollView>
         );
@@ -337,7 +362,10 @@ RequestPersonalInformationForm = connect(
         initialValues: state.initialValue.data, // pull initial values from account reducer
         customerInfor: state.loadCustomer.customerInfor,
     }),
-    { load: loadAccount } // bind account loading action creator
+    {   
+        
+        load: loadAccount 
+    } 
 )(RequestPersonalInformationForm);
 export default RequestPersonalInformationForm;
 //#25345D
@@ -353,22 +381,21 @@ const styles = StyleSheet.create({
         top: 10,
         left: 20,
     },
-    nameHeader: {
-        alignItems: "center",
-        backgroundColor: '#25345D',
-    },
-    nameText: {
-        margin: 10,
-        fontSize: 25,
-        color: 'white',
-    },
-    logoContainer: {
+    titleArea: {
+        height: 50,
+        width: Dimensions.get('window').width - 25,
+        backgroundColor: 'white',
         marginTop: 10,
+        marginBottom: 20,
+        flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10
+        justifyContent: 'center',
+        paddingBottom: 3,
+        borderRadius: 10,
+        marginHorizontal: 15,
     },
     logoText: {
-        fontSize: 40,
+        fontSize: 30,
         color: '#25345D',
     },
     input: {
@@ -393,7 +420,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 15,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        borderRadius: 15,
+        marginBottom: 1,
     },
     dropdownContainer: {
         width: WIDTH - 25,
@@ -403,7 +432,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 15,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        borderRadius: 15,
+        marginBottom: 1
     },
     dropdownButton: {
         width: WIDTH - 55,
@@ -422,13 +453,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     btnNext: {
-        width: WIDTH - 170,
+        width: WIDTH - 190,
         height: 45,
         borderRadius: 5,
         backgroundColor: '#0A6ADA',
         justifyContent: 'center',
         marginTop: 10,
-        marginHorizontal: 85
+        // marginHorizontal: 85
     },
     textBtn: {
         color: 'white',
@@ -450,5 +481,14 @@ const styles = StyleSheet.create({
         width: WIDTH - 55,
         height: 45,
         backgroundColor: 'rgba(255,255,255,0.7)',
+    },
+    buttonContainer: {
+        flexDirection: "column",
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
+        width: Dimensions.get('window').width - 30,
+        height: 84,
+        marginBottom: 10,
+        marginHorizontal: 6,
     }
 })

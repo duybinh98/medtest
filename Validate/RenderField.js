@@ -48,7 +48,8 @@ styles = StyleSheet.create({
         justifyContent: 'center',
         marginHorizontal: 15,
         backgroundColor: 'white',
-        marginBottom: 1
+        marginBottom: 1,
+        borderRadius: 15,
     },
     inputIcon: {
         position: 'absolute',

@@ -8,9 +8,10 @@ import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
 import DatePicker from 'react-native-datepicker';
 import ModalDropdown from 'react-native-modal-dropdown';
-import {getApiUrl, convertDateTimeToDate, convertDateToDateTime} from './../Common/CommonFunction';
+import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
-import {load as loadAccount} from '../Store/Reducers/InitialValue'
+import { load as loadAccount } from '../Store/Reducers/InitialValue';
+import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer'
 import renderField from '../../Validate/RenderField'
 
 
@@ -46,30 +47,30 @@ class UpdateInformationScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            customerId: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.id : '-1',
-            name: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.name : '',
-            dob: this.props.route.params.customerInfo? convertDateTimeToDate(this.props.route.params.customerInfo.dob): '01/01/1970',
-            gender: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.gender=='1' ? 'Nữ':  'Nam'  : 'Nam',
+            customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
+            name: this.props.customerInfor ? this.props.customerInfor.name : '',
+            dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '01-01-1970',
+            gender: this.props.customerInfor ? this.props.customerInfor.gender === 0 ? 'Nữ' : 'Nam' : 'Nam',
             selectTownList: [],
-            address: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.address : '',
-            district: '',
-            town: '',
-            email: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.email :'123@1234.com',
+            address: this.props.customerInfor ? this.props.customerInfor.address : '',
+            districtCode: this.props.customerInfor.districtCode? this.props.customerInfor.districtCode: '',
+            townCode: this.props.customerInfor.townCode? this.props.customerInfor.townCode : '',
+            email: this.props.customerInfor ? this.props.customerInfor.email : '123@1234.com',
 
             selectTownList: [],
             townName1: '',
             districtName1: '',
-            districtList : [],
+            districtList: [],
             townList: [],
             disableDropdownTown: true,
         };
         this.submit = this.submit.bind(this)
     }
     componentWillMount = value => {
-        const customerInfor =  {
-            username : this.state.name,
+        const customerInfor = {   
             email: this.state.email,
-            address: this.state.address
+            address: this.state.address,
+            username: this.state.name,
         }
         this.props.load(customerInfor)
     }
@@ -79,10 +80,8 @@ class UpdateInformationScreen extends Component {
         this.callApiGetTownCode();
 
         setTimeout(() => {
-            console.log("name" + this.state.districtList + "  2")
             this.state.districtList.forEach(district => {
                 if (district.districtCode === this.props.customerInfor.districtCode) {
-                    // console.log("name" + district.districtName)
                     this.setState({
                         districtName1: district.districtName
                     })
@@ -92,7 +91,6 @@ class UpdateInformationScreen extends Component {
             });
             this.state.townList.forEach(town => {
                 if (town.townCode === this.props.customerInfor.townCode) {
-                    // console.log("name" + district.districtName)
                     this.setState({
                         townName1: town.townName
                     })
@@ -100,56 +98,54 @@ class UpdateInformationScreen extends Component {
                     console.log("Error")
                 }
             });
-            console.log(this.state.townName1)
-            console.log(this.props.customerInfor.districtCode + "  2")
         }, 4000);
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps !== this.props) {
-            this.setState({
-                customerId: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.id : '-1',
-                name: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.name : '',
-                dob: this.props.route.params.customerInfo? convertDateTimeToDate(this.props.route.params.customerInfo.dob): '01/01/1970',
-                gender: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.gender=='1' ? 'Nữ':  'Nam'  : 'Nam',
-                selectTownList: [],
-                address: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.address : '',
-                district: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.districtCode : '',
-                town: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.townCode : '',
-                email: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.email :'123@1234.com',
-            })
-            const customerInfor =  {
-                username : this.props.route.params.customerInfo ? this.props.route.params.customerInfo.name : '',
-                email: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.email :'123@1234.com',
-                address: this.props.route.params.customerInfo ? this.props.route.params.customerInfo.address : '',
-            }
-            this.props.load(customerInfor)
-        }
-    }
+    // componentDidUpdate(prevProps, prevState) {
+    //     if (prevProps !== this.props) {
+    //         this.setState({
+    //             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
+    //             name: this.props.customerInfor ? this.props.customerInfor.name : '',
+    //             dob:this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '01/01/1970',
+    //             gender: this.props.customerInfor ? this.props.customerInfor.gender === 0 ? 'Nữ' : 'Nam' : 'Nam',
+    //             selectTownList: [],
+    //             address: this.props.customerInfor ? this.props.customerInfor.address : '',
+    //             districtCode: this.props.customerInfor? this.props.customerInfor.districtCode : '',
+    //             townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '',
+    //             email: this.props.customerInfor ? this.props.customerInfor.email : '123@1234.com',
+    //         })
+    //         // const customerInfor = {   
+    //         //     email: this.state.email,
+    //         //     address: this.state.address,
+    //         //     username: this.state.name,
+    //         // }
+    //         // this.props.load(customerInfor)
+    //     }
+    // }
 
-    callApiGetDistrictCode(){
-        fetch(getApiUrl()+"/management/districts/district-town-list")
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result)
-                this.setState(previousState => ({
-                    districtList: result,
-                }));
-            },            
-            (error) => {
-            this.setState({
-                error
-            });
-            }
-        )
+    callApiGetDistrictCode() {
+        fetch(getApiUrl() + "/management/districts/district-town-list")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    // console.log(result)
+                    this.setState(previousState => ({
+                        districtList: result,
+                    }));
+                },
+                (error) => {
+                    this.setState({
+                        error
+                    });
+                }
+            )
     }
     callApiGetTownCode() {
         fetch(getApiUrl() + "/management/districts/towns/list")
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result)
+                    // console.log(result)
                     this.setState(previousState => ({
                         townList: result,
                     }));
@@ -164,15 +160,26 @@ class UpdateInformationScreen extends Component {
     _renderDistrictButtonText = rowData => {
         const { districtName } = rowData;
         this.setState({ district: districtName })
-        return ` ${districtName}`;
+        return `${districtName}`;
     }
     _renderTownButtonText = listTown => {
         const { townCode, townName } = listTown;
         this.setState({ town: townName })
-        return ` ${townName}`;
+        return `${townName}`;
     }
     submit = values => {
+        const customerInforReducer ={
+            name: this.state.name,
+            email : this.state.email,
+            gender : this.state.gender,
+            districtCode: this.state.districtCode,
+            townCode : this.state.townCode,
+            address: this.state.address,
+            dob: this.state.dob
+        }
+        
         this.callApi().then(
+            this.props.loadCustomerInfor(customerInforReducer),
             this.props.navigation.dispatch(
                 CommonActions.navigate({
                     name: 'CustomerInformation',
@@ -192,52 +199,61 @@ class UpdateInformationScreen extends Component {
             selectTownList: this.state.districtList[id].listTown
         })
     }
-    callApi  = async () => {
-        fetch(getApiUrl()+'/users/customers/detail/update/'+this.state.customerId, {
-        method: 'PUT',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer '+this.props.token,
-        },
-        body: JSON.stringify({
-            name: this.state.name,
-            address: this.state.address,
-            email: this.state.email,
-            dob : convertDateToDateTime(this.state.dob),
-            gender: this.state.gender?'0':'1',
-            townCode: this.state.townCode,
-            districtCode: this.state.districtCode
-        }),
-        })
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result)
-                this.props.loadCustomer(result)
+    callApi = async () => {
+        fetch(getApiUrl() + '/users/customers/detail/update/' + this.state.customerId, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + this.props.token,
             },
-            (error) => {
-            console.log(error);
-            }
-        );
+            body: JSON.stringify({
+                name: this.state.name,
+                address: this.state.address,
+                email: this.state.email,
+                dob: convertDateToDateTime(this.state.dob),
+                gender: this.state.gender==="Nữ" ? '0' : '1',
+                townCode: this.state.townCode,
+                districtCode: this.state.districtCode
+            }),
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    if(result.message){
+                        alert(result.message)
+                    }else{
+                        // this.props.load(result)
+                    }              
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
     }
 
 
     render() {
         const { gender } = this.state;
         const { handleSubmit, load } = this.props;
+        console.log("format: a" + this.state.dob+ "aaa")
+        console.log("format: a" +  convertDateToDateTime(this.state.dob)+ "aaa")
+       
         return (
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView
+                style={{ flex: 1 }}
+                showsVerticalScrollIndicator={false}
+            >
                 <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                 <View>
-                    <View style={styles.logoContainer}>
+                    <View style={styles.titleArea}>
                         <Text style={styles.logoText}>Chỉnh sửa thông tin</Text>
                     </View>
                 </View>
                 <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                     iconType="material-community" placeholder="Tên hiển thị" secureText={false}
                     onChange={(text) => { this.setState({ name: text }) }}
-                    validate={[required]} 
+                    validate={[required]}
                 />
                 <View style={styles.inputContainer}>
                     <DatePicker
@@ -279,43 +295,18 @@ class UpdateInformationScreen extends Component {
                         ></Icon>
                         <View style={styles.RadioButton}>
                             <RadioButton
-                                value="Male"
-                                gender={true}
-                                status={gender === 'Nam' ? 'checked' : 'unchecked'}
+                                value="Nam"
+                                status={gender === 'Nam'  ? 'checked' : 'unchecked'}
                                 onPress={() => { this.setState({ gender: 'Nam' }); }}
                             />
                             <Text style={styles.radioName}>Nam</Text>
                             <RadioButton
-                                value="Female"
+                                value="Nữ"
                                 status={gender === 'Nữ' ? 'checked' : 'unchecked'}
                                 onPress={() => { this.setState({ gender: 'Nữ' }); }}
                             />
                             <Text style={styles.radioName}>Nữ</Text>
                         </View>
-                    </View>
-                </View>
-                <Field name="address" keyboardType="default" component={renderField} iconName="map-marker"
-                    iconType="material-community" placeholder="Địa chỉ" secureText={false}
-                    onChange={(text) => { this.setState({ address: text }) }}
-                    validate={[required]}
-                />
-                <View style={styles.dropdownContainer}>
-                    <ModalDropdown
-                        disabled={this.state.disableDropdownTown}
-                        options={this.state.selectTownList}
-                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
-                        renderRow={_renderTownRow.bind(this)}
-                        renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
-                        defaultValue={this.state.townName1}
-                        textStyle={styles.dropdownText}
-                        style={styles.dropdownButton}
-                        showsVerticalScrollIndicator={false} 
-                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
-                        dropdownTextStyle={{ fontSize: 16 }}
-                        
-                    />
-                    <View style={{ position: "absolute", right: 30, top: 15 }}>
-                        <Text style={{ fontSize: 20 }} >▼</Text>
                     </View>
                 </View>
                 <View style={styles.dropdownContainer}>
@@ -327,7 +318,7 @@ class UpdateInformationScreen extends Component {
                         defaultValue={this.state.districtName1}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
-                        showsVerticalScrollIndicator={false}                      
+                        showsVerticalScrollIndicator={false}
                         dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
                         dropdownTextStyle={{ fontSize: 16 }}
                         onSelect={(value) => { this.selectItem(value) }}
@@ -336,6 +327,29 @@ class UpdateInformationScreen extends Component {
                         <Text style={{ fontSize: 20 }} >▼</Text>
                     </View>
                 </View>
+                <View style={styles.dropdownContainer}>
+                    <ModalDropdown
+                        disabled={this.state.disableDropdownTown}
+                        options={this.state.selectTownList}
+                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
+                        renderRow={_renderTownRow.bind(this)}
+                        renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
+                        defaultValue={this.state.townName1}
+                        textStyle={styles.dropdownText}
+                        style={styles.dropdownButton}
+                        showsVerticalScrollIndicator={false}
+                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
+                        dropdownTextStyle={{ fontSize: 16 }}
+                    />
+                    <View style={{ position: "absolute", right: 30, top: 15 }}>
+                        <Text style={{ fontSize: 20 }} >▼</Text>
+                    </View>
+                </View>
+                <Field name="address" keyboardType="default" component={renderField} iconName="map-marker"
+                    iconType="material-community" placeholder="Địa chỉ" secureText={false}
+                    onChange={(text) => { this.setState({ address: text }) }}
+                    validate={[required]}
+                />
                 <Field name="email" keyboardType="email-address" component={renderField} iconName="email-outline"
                     defaultText={this.state.email}
                     onChange={(text) => { this.setState({ email: text }) }}
@@ -351,36 +365,52 @@ class UpdateInformationScreen extends Component {
         );
     }
 }
-
+const mapStateToProps = (state) => {
+    return {
+        initialValues: state.initialValue.data, // pull initial values from account reducer
+        token: state.login.token,
+        customerInfor: state.loadCustomer.customerInfor,      
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: loadAccount,
+        loadCustomerInfor: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+    };
+}
 let UpdateInformationForm = reduxForm({
-        form: 'UpdateInformation',
-        enableReinitialize: true,
-    })(UpdateInformationScreen);
-
+    form: 'UpdateInformation',
+    enableReinitialize: true,
+})(UpdateInformationScreen);
 UpdateInformationForm = connect(
     state => ({
-      initialValues: state.initialValue.data, // pull initial values from account reducer
-      token: state.login.token,
-      customerInfor: state.loadCustomer.customerInfor,
-    }),
-    { load: loadAccount,
-        loadCustomer: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
-     } // bind account loading action creator
-  )(UpdateInformationForm);
+        initialValues: state.initialValue.data, // pull initial values from account reducer
+        token: state.login.token,
+        customerInfor: state.loadCustomer.customerInfor,       
+    }), mapStateToDispatch
+)(UpdateInformationForm);
 export default UpdateInformationForm;
-
+// export default connect(mapStateToProps, mapStateToDispatch)(UpdateInformationForm);
 
 //#25345D
 //#0A6ADA
 //#27CDCB
 const styles = StyleSheet.create({
-    logoContainer: {
+    titleArea: {
+        height: 50,
+        width: Dimensions.get('window').width - 25,
+        backgroundColor: 'white',
         marginTop: 10,
+        marginBottom: 20,
+        flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10
+        justifyContent: 'center',
+        paddingBottom: 3,
+        borderRadius: 10,
+        marginHorizontal: 15,
     },
     logoText: {
-        fontSize: 40,
+        fontSize: 30,
         color: '#25345D',
     },
     input: {
@@ -405,17 +435,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 15,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        marginBottom: 1,
+        borderRadius: 15,
     },
     dropdownContainer: {
         width: WIDTH - 25,
         height: 60,
-        borderRadius: 5,
+        borderRadius: 15,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 15,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        marginBottom: 1,
     },
     dropdownButton: {
         width: WIDTH - 55,
@@ -460,7 +493,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 15,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        borderRadius: 15,
+        marginBottom: 1,
     },
     genderContainer: {
         width: WIDTH - 55,

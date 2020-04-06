@@ -5,7 +5,7 @@ import { Icon } from 'react-native-elements';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
-import {getApiUrl} from './../Common/CommonFunction';
+import { getApiUrl } from './../Common/CommonFunction';
 import renderField from '../../Validate/RenderField'
 
 //validate conditions
@@ -18,7 +18,7 @@ class changePassword extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            customerId:'4',
+            customerId: '4',
             password: '',
             newPassword: '',
         };
@@ -31,43 +31,43 @@ class changePassword extends Component {
             alert("Xác nhận mật khẩu mới không đúng!")
         } else {
 
-            fetch(getApiUrl()+'/users/customers/change-password/'+this.state.customerId, {
+            fetch(getApiUrl() + '/users/customers/change-password/' + this.state.customerId, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    Authorization: 'Bearer '+this.props.token,
+                    Authorization: 'Bearer ' + this.props.token,
                 },
                 body: JSON.stringify({
                     oldPassword: this.state.password,
                     newPassword: this.state.newPassword,
 
                 }),
-                })
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.props.navigation.dispatch(
-                        CommonActions.navigate({
-                            // name: 'LoginScreen',
-                            // params: {
-                            //     password: this.state.password,
-                            //     newPassword: this.state.newPassword,
-                            // },
-                            name: 'HomeScreen',
-                            params: {
+            })
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        this.props.navigation.dispatch(
+                            CommonActions.navigate({
+                                // name: 'LoginScreen',
+                                // params: {
+                                //     password: this.state.password,
+                                //     newPassword: this.state.newPassword,
+                                // },
+                                name: 'HomeScreen',
+                                params: {
 
-                            },
-                        })
-                    )
-                },
-                (error) => {
-                this.setState({                
-                    error
-                });
-                console.log(error)
-                }
-            );
+                                },
+                            })
+                        )
+                    },
+                    (error) => {
+                        this.setState({
+                            error
+                        });
+                        console.log(error)
+                    }
+                );
 
             // this.props.navigation.dispatch(
             //     CommonActions.navigate({
@@ -87,7 +87,10 @@ class changePassword extends Component {
         const { handleSubmit } = this.props;
         return (
             <View style={styles.background}>
-                <ScrollView>
+                <ScrollView
+                    style={{ flex: 1 }}
+                    showsVerticalScrollIndicator={false}
+                >
                     <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                     <View>
                         <View style={styles.logoContainer}>

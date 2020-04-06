@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
-import { getApiUrl, convertDateTimeToDate } from './../Common/CommonFunction';
+import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import { login } from '../Store/Reducers/LoginReducer';
 // import { getApiUrl } from './../Common/CommonFunction';
@@ -15,40 +15,82 @@ const { width: WIDTH } = Dimensions.get('window')
 class customerInformation extends Component {
     constructor(props) {
         super(props)
-        this.state = {            
+        this.state = {
+            // customerInfor: this.props.customerInfor ? this.props.customerInfor : null,
             customerInfor: null,
-            token: null,
+            customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
+            token: this.props.token ? this.props.token : null,
         };
     }
-    
+
     componentWillMount() {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        // console.log("test customer: " + this.props.customerInfor)
         if (prevProps !== this.props) {
             // console.log(this.props.token)
             this.setState({
                 token: this.props.token,
-                customerInfor: this.props.customerInfor
+                // customerInfor: this.props.customerInfor
             })
         }
     }
     componentDidMount() {
-        this.setState({
-            token: this.props.token,
-            customerInfor: this.props.customerInfor
+        // this.setState({
+        //     token: this.props.token,
+        //     customerInfor: this.props.customerInfor
+        // })
+        this.callApiCustomerInfor();
+        this.props.navigation.addListener("focus", () => {
+            this.callApiCustomerInfor();
         })
+    }
+    callApiCustomerInfor() {
+        fetch(getApiUrl() + '/users/customers/detail/' + this.state.customerId, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + this.props.token,
+            }
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    if (result.message) {
+                        alert(result.message);
+                    } else {
+                        console.log(result)
+                        this.setState(previousState => ({
+                            customerInfor: result,
+                        }));
+                    }
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
+
     }
 
     render() {
         const { gender } = this.state;
+        const { abc } = this.props;
+        // debugger;
+        console.log("customer: " + this.props.customerInfor.name)
+        // console.log("format: " + convertDateToDateTime("12-12-1998"))
+        // console.log("format: " + convertDateTimeToDate("1998-12-12T00:00:00.000+0000"))
         return (
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView
+                style={{ flex: 1 }}
+                showsVerticalScrollIndicator={false}
+            >
                 <ScreenTopMenuBack navigation={this.props.navigation} backScreen='HomeScreen'></ScreenTopMenuBack>
                 <View>
                     <View style={styles.logoContainer}>
                         <ImageBackground
-                            source={{ uri: this.state.customerInfor?this.props.customerInfor.image:'' }}
+                            source={{ uri: this.state.customerInfor ? this.props.customerInfor.image : '' }}
                             style={styles.logo} >
                             <TouchableOpacity><Icon
                                 name='camera'
@@ -62,26 +104,31 @@ class customerInformation extends Component {
                     </View>
                 </View>
                 <View style={styles.textContainer}>
-                    {/* <Text style={styles.textInfor} >Tên hiển thị:  {this.props.customerInfoFromLogin?this.props.customerInfoFromLogin.name:""}</Text> */}
-                    <Text style={styles.textInfor} >Tên hiển thị:  {this.state.customerInfor?this.props.customerInfor.name:""}</Text>
+                    {/* <Text style={styles.textInfor} >Tên hiển thị:  {this.props.customerInfor ? this.props.customerInfor.name : ""}</Text> */}
+                    <Text style={styles.textInfor} >Tên hiển thị:  {this.state.customerInfor ? this.state.customerInfor.name : ""}</Text>
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Số điện thoại: {this.state.customerInfor?this.props.customerInfor.phoneNumber:""}</Text>
+                    {/* <Text style={styles.textInfor} >Số điện thoại: {this.props.customerInfor ? this.props.customerInfor.phoneNumber : ""}</Text> */}
+                    <Text style={styles.textInfor} >Số điện thoại:  {this.state.customerInfor ? this.state.customerInfor.phoneNumber : ""}</Text>
                 </View>
                 <View style={styles.dobGenderContainer}>
                     <View style={styles.dobContainer}>
-                        <Text style={styles.textInfor} >Ngày sinh: {this.state.customerInfor?convertDateTimeToDate(this.props.customerInfor.dob):""}</Text>
+                        {/* <Text style={styles.textInfor} >Ngày sinh: {this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : ""}</Text> */}
+                        <Text style={styles.textInfor} >Ngày sinh:  {this.state.customerInfor ? convertDateTimeToDate(this.state.customerInfor.dob) : ""}</Text>
                     </View>
                     <View style={styles.genderContainer}>
-                        <Text style={styles.textInfor} >Giới tính: {this.state.customerInfor?this.state.customerInfor.gender? "Nữ" : "Nam":''}</Text>
+                        {/* <Text style={styles.textInfor} >Giới tính: {this.props.customerInfor ? this.props.customerInfor.gender === 0 ? "Nữ" : "Nam" : ''}</Text> */}
+                        <Text style={styles.textInfor} >Giới tính: {this.state.customerInfor ? this.state.customerInfor.gender === 0 ? "Nữ" : "Nam" : ""}</Text>
                     </View>
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Địa chỉ: {this.state.customerInfor?this.state.customerInfor.address:''}</Text>
+                    {/* <Text style={styles.textInfor} >Địa chỉ: {this.props.customerInfor ? this.props.customerInfor.address : ''}</Text> */}
+                    <Text style={styles.textInfor} >Địa chỉ: {this.state.customerInfor ? this.state.customerInfor.address : ""}</Text>
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Email: {this.state.customerInfor?this.state.customerInfor.email:''}</Text>
+                    {/* <Text style={styles.textInfor} >Email: {this.props.customerInfor ? this.props.customerInfor.email : ''}</Text> */}
+                    <Text style={styles.textInfor} >Email {this.state.customerInfor ? this.state.customerInfor.email : ""}</Text>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.btnConfirm}

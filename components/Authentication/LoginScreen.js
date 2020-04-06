@@ -44,7 +44,7 @@ class LoginComponent extends Component {
                     password: '',
                 }));
                 this.props.load(this.props.customerInfoFromLogin)
-                if(this.props.customerInfoFromLogin.address === null){
+                if (this.props.customerInfoFromLogin.address === null) {
                     this.props.navigation.dispatch(
                         CommonActions.navigate({
                             name: 'UpdateAddress',
@@ -52,19 +52,19 @@ class LoginComponent extends Component {
                             },
                         })
                     )
-                }else {
+                } else {
                     this.props.navigation.dispatch(
                         CommonActions.navigate({
                             name: 'HomeScreen',
                             params: {
-                                customerInfor : this.state.customerInfor
+                                customerInfor: this.state.customerInfor
                             },
                         })
                     )
-                }               
+                }
             }
             else {
-                console.log('error at screen '+this.props.LoginError)
+                console.log('error at screen ' + this.props.LoginError)
             }
         }
             , 5000)
@@ -72,7 +72,10 @@ class LoginComponent extends Component {
     render() {
         const { handleSubmit } = this.props;
         return (
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView
+                style={{ flex: 1 }}
+                showsVerticalScrollIndicator={false}
+            >
                 {/* <ScreenTopMenu {...this.props} ></ScreenTopMenu> */}
                 <View>
                     <View style={styles.logoContainer}>
@@ -150,7 +153,7 @@ const styles = StyleSheet.create({
     logoText: {
         fontSize: 40,
         color: '#25345D',
-    },  
+    },
     btnLogin: {
         width: WIDTH - 170,
         height: 45,

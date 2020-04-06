@@ -1,11 +1,9 @@
 import Promise from 'es6-promise';
-// import actions from "redux-form/lib/actions"
-// import action from '../Action/actions';
+
 
 const LOAD_PENDING = 'LOAD_PENDING';
 const LOAD_SUCCESS = 'LOAD_SUCCESS';
 const LOAD_ERROR = 'LOAD_ERROR';
-// const LOAD_INFOR = 'LOAD_INFOR';
 
 function setLoadPending(isLoadPending) {
     return {
@@ -37,15 +35,7 @@ function loadCustomerFromState(customerInfor) {
     }); 
 }
 
-// function loadCustomerFromState(customerInfor) {
-//     setTimeout(() => {
-//         try {
-//             return new Promise.resolve(true);
-//         } catch (error) {
-//             return new  Promise.reject(new Error('Load customer information failed'));
-//         }
-//     },3000)   
-// }
+
 export function loadCustomerInfor(customerInfor){
     return dispatch => {
         dispatch(setLoadPending(true));

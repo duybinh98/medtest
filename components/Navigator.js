@@ -195,15 +195,15 @@ function CustomDrawerContent(props, state, navigatorProps) {
           screenTitle='Mời bạn bè cài đặt'
           navigator={props.navigation}
         />
-        {/* <MenuButtonScreenContainer
-          screenName='LoginScreen'
+        <MenuButtonScreenContainer
+          screenName='UpdateAddress'
           iconName='logout'
           iconType='antdesign'
           iconColor='#0A6ADA'
           iconSize={20}
           screenTitle='Đăng xuất'
           navigator={props.navigation}
-        /> */}
+        />
         <TouchableOpacity
           style={styles.navigatorButton}
           onPress={() => {
