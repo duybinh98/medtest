@@ -47,7 +47,8 @@ styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 15,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        marginBottom: 1
     },
     inputIcon: {
         position: 'absolute',
@@ -63,6 +64,7 @@ styles = StyleSheet.create({
         borderColor: '#0A6ADA',
         backgroundColor: 'rgba(255,255,255,0.7)',
         color: 'black',
+        // marginB
     },
 })
 export default renderField;

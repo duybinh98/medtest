@@ -44,17 +44,27 @@ class LoginComponent extends Component {
                     password: '',
                 }));
                 this.props.load(this.props.customerInfoFromLogin)
-                this.props.navigation.dispatch(
-                    CommonActions.navigate({
-                        name: 'HomeScreen',
-                        params: {
-                        },
-                    })
-                )
+                if(this.props.customerInfoFromLogin.address === null){
+                    this.props.navigation.dispatch(
+                        CommonActions.navigate({
+                            name: 'UpdateAddress',
+                            params: {
+                            },
+                        })
+                    )
+                }else {
+                    this.props.navigation.dispatch(
+                        CommonActions.navigate({
+                            name: 'HomeScreen',
+                            params: {
+                                customerInfor : this.state.customerInfor
+                            },
+                        })
+                    )
+                }               
             }
             else {
-                console.log('error at screen'+this.props.LoginError)
-                // Alert.alert(this.props.LoginError.message);
+                console.log('error at screen '+this.props.LoginError)
             }
         }
             , 5000)

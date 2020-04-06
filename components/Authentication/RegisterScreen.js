@@ -54,7 +54,7 @@ class RegisterScreen extends Component {
     }
 
     callApi  = async () => {
-        fetch('http://192.168.1.11:8080/users/customers/register', {
+        fetch('http://192.168.1.6:8080/users/customers/register', {
         method: 'POST',
         headers: {
             Accept: 'application/json',

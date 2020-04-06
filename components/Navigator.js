@@ -10,6 +10,7 @@ import { loadCustomerInfor } from './Store/Reducers/LoadInforReducer';
 import ChangePassword from './Account/ChangePassword';
 import CustomerInformation from './Account/CustomerInformation';
 import UpdateInformation from './Account/UpdateInformation';
+import UpdateAddress from './Account/UpdateAddress';
 
 import AppointmentListScreen from './Appointments/AppointmentListScreen';
 import AppointmentDetailScreen from './Appointments/AppointmentDetailScreen';
@@ -30,6 +31,7 @@ import RequestResultScreen from './Requests/RequestResultScreen';
 import RequestTestListScreen from './Requests/RequestTestListScreen';
 import RequestViewScreen from './Requests/RequestViewScreen';
 import ViewNurseScreen from './Requests/ViewNurseScreen';
+import UpdateAddressForm from './Account/UpdateAddress';
 
 // const navigation = useNavigation();
 class Navigator extends Component {
@@ -78,6 +80,7 @@ class Navigator extends Component {
           <Drawer.Screen name="ChangePassword" component={ChangePassword} />
           <Drawer.Screen name="CustomerInformation" component={CustomerInformation} />
           <Drawer.Screen name="UpdateInformation" component={UpdateInformation} />
+          <Drawer.Screen name="UpdateAddress" component={UpdateAddress} />
 
           <Drawer.Screen name="AppointmentListScreen" component={AppointmentListScreen} />
           <Drawer.Screen name="AppointmentDetailScreen" component={AppointmentDetailScreen} />
