@@ -115,6 +115,7 @@ export default class HomeScreen extends Component {
                                                 test = {item.listTest}
                                                 viewOnly = {false}
                                                 selectItem = {this.selectItem}
+                                                resetFlag = {this.state.resetList}
                                             >
                                             </TestCategoryItem>                                    
                                         );
