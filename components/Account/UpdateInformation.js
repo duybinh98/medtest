@@ -10,7 +10,7 @@ import DatePicker from 'react-native-datepicker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
-import { load as loadAccount } from '../Store/Reducers/InitialValue';
+import {  load as loadAccount } from '../Store/Reducers/InitialValue';
 import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer'
 import renderField from '../../Validate/RenderField'
 
@@ -72,12 +72,18 @@ class UpdateInformationScreen extends Component {
         const customerInfor = {
             email: this.state.email,
             address: this.state.address,
-            username: this.state.name,
+            name: this.state.name,
         }
         this.props.load(customerInfor)
     }
 
     componentDidMount = value => {
+        const customerInfor = {
+            email: this.state.email,
+            address: this.state.address,
+            name: this.state.name,
+        }
+        this.props.load(customerInfor);
         this.callApiGetDistrictCode();
         this.callApiGetTownCode();
 
@@ -102,28 +108,6 @@ class UpdateInformationScreen extends Component {
             });
         }, 4000);
     }
-
-    // componentDidUpdate(prevProps, prevState) {
-    //     if (prevProps !== this.props) {
-    //         this.setState({
-    //             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
-    //             name: this.props.customerInfor ? this.props.customerInfor.name : '',
-    //             dob:this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '01/01/1970',
-    //             gender: this.props.customerInfor ? this.props.customerInfor.gender === 0 ? 'Nữ' : 'Nam' : 'Nam',
-    //             selectTownList: [],
-    //             address: this.props.customerInfor ? this.props.customerInfor.address : '',
-    //             districtCode: this.props.customerInfor? this.props.customerInfor.districtCode : '',
-    //             townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '',
-    //             email: this.props.customerInfor ? this.props.customerInfor.email : '123@1234.com',
-    //         })
-    //         // const customerInfor = {   
-    //         //     email: this.state.email,
-    //         //     address: this.state.address,
-    //         //     username: this.state.name,
-    //         // }
-    //         // this.props.load(customerInfor)
-    //     }
-    // }
 
     callApiGetDistrictCode() {
         fetch(getApiUrl() + "/management/districts/district-town-list")
@@ -160,40 +144,21 @@ class UpdateInformationScreen extends Component {
             )
     }
     _renderDistrictButtonText = rowData => {
-        const { districtName } = rowData;
-        this.setState({ district: districtName })
+        const { districtCode, districtName } = rowData;
+        this.setState({
+            district: districtName,
+            districtCode: districtCode
+        })
         return `${districtName}`;
     }
     _renderTownButtonText = listTown => {
         const { townCode, townName } = listTown;
-        this.setState({ town: townName })
+        this.setState({
+            town: townName,
+            townCode : townCode
+        })
         return `${townName}`;
     }
-    // async submit(values) {
-    //     const customerInforReducer = {
-    //         name: this.state.name,
-    //         email: this.state.email,
-    //         gender: this.state.gender,
-    //         districtCode: this.state.districtCode,
-    //         townCode: this.state.townCode,
-    //         address: this.state.address,
-    //         dob: this.state.dob,
-    //         phoneNumber: this.state.phoneNumber,
-    //         image: this.state.image,
-    //     }
-
-    //     let A = await this.callApi();
-    //     this.props.loadCustomerInfor(customerInforReducer);
-    //     this.props.navigation.dispatch(
-    //         CommonActions.navigate({
-    //             name: 'CustomerInformation',
-    //             params: {
-    //                 customerInfor: customerInforReducer
-    //             },
-    //         })
-    //     )
-    //     return A;
-    // }
     submit = values => {
         const customerInforReducer = {
             name: this.state.name,
@@ -202,7 +167,6 @@ class UpdateInformationScreen extends Component {
             districtCode: this.state.districtCode,
             townCode: this.state.townCode,
             address: this.state.address,
-            // dob: this.state.dob,
             dob: convertDateToDateTime(this.state.dob),
             phoneNumber: this.state.phoneNumber,
             image: this.state.image,
@@ -262,6 +226,8 @@ class UpdateInformationScreen extends Component {
     render() {
         const { gender } = this.state;
         const { handleSubmit, load } = this.props;
+        debugger;
+        const abc = this.props.customerInfor;
         return (
             <ScrollView
                 style={{ flex: 1 }}
@@ -273,7 +239,7 @@ class UpdateInformationScreen extends Component {
                         <Text style={styles.logoText}>Chỉnh sửa thông tin</Text>
                     </View>
                 </View>
-                <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
+                <Field name="name" keyboardType="default" component={renderField} iconName="rename-box"
                     iconType="material-community" placeholder="Tên hiển thị" secureText={false}
                     onChange={(text) => { this.setState({ name: text }) }}
                     validate={[required]}
@@ -397,7 +363,7 @@ const mapStateToProps = (state) => {
 }
 const mapStateToDispatch = (dispatch) => {
     return {
-        load: loadAccount,
+        load:(data) => dispatch(loadAccount(data)),
         loadCustomerInfor: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
     };
 }
@@ -413,7 +379,6 @@ UpdateInformationForm = connect(
     }), mapStateToDispatch
 )(UpdateInformationForm);
 export default UpdateInformationForm;
-// export default connect(mapStateToProps, mapStateToDispatch)(UpdateInformationForm);
 
 //#25345D
 //#0A6ADA
@@ -486,7 +451,6 @@ const styles = StyleSheet.create({
     },
     dropdownText: {
         marginTop: 10,
-        // marginHorizontal: 85,
         fontSize: 16,
     },
     btnConfirm: {

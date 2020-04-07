@@ -66,7 +66,6 @@ class customerInformation extends Component {
     render() {
         const { gender } = this.state;
         const { abc } = this.props;
-        debugger;
         return (
             <ScrollView
                 style={{ flex: 1 }}

@@ -175,7 +175,9 @@ class UpdateAddress extends Component {
 
 
     render() {
+        debugger;
         const { handleSubmit } = this.props;
+        
         return (
             <ScrollView
                 style={{ flex: 1 }}

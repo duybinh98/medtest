@@ -71,6 +71,7 @@ class LoginComponent extends Component {
     }
     render() {
         const { handleSubmit } = this.props;
+        // debugger;
         return (
             <ScrollView
                 style={{ flex: 1 }}

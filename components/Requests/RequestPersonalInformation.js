@@ -56,8 +56,8 @@ class RequestPersonalInformation extends Component {
             apointmentDate: '01/01/2020',
             apointmentTime: '07:30',            
             address: this.props.customerInfor ? this.props.customerInfor.address : '',
-            district: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
-            town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
+            districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
+            townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
             customerInfor: this.props.customerInfor,           
             selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [],
             totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0',
@@ -153,15 +153,16 @@ class RequestPersonalInformation extends Component {
     _renderDistrictButtonText = rowData => {
         const { districtCode, districtName } = rowData;
         this.setState({
-            district: districtCode,
+            district: districtName,
+            districtCode: districtCode
         })
         return `${districtName}`;
     }
     _renderTownButtonText = listTown => {
         const { townCode, townName } = listTown;
         this.setState({
-            town: townCode,
-
+            town: townName,
+            townCode : townCode
         })
         return `${townName}`;
     }
@@ -187,7 +188,6 @@ class RequestPersonalInformation extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    // console.log(result)
                     this.setState(previousState => ({
                         townList: result,
                     }));
@@ -208,8 +208,10 @@ class RequestPersonalInformation extends Component {
                     name: this.state.name,
                     address: this.state.address,
                     dob: this.state.dob,
-                    town: this.state.townName1,
-                    district: this.state.districtName1,
+                    town: this.state.townCode,
+                    district: this.state.districtCode,
+                    townName: this.state.townName1,
+                    districtName: this.state.districtName1,
                     date: this.state.apointmentDate,
                     time: this.state.apointmentTime,
                     selectedTest: this.props.route.params.selectedTest,
@@ -227,7 +229,9 @@ class RequestPersonalInformation extends Component {
         })
     }
     render() {
+        debugger;
         const { handleSubmit } = this.props;
+        const abc = this.props.customerInfor;
         return (
             <ScrollView style={{ flex: 1 }}>
                 <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
@@ -346,9 +350,6 @@ class RequestPersonalInformation extends Component {
                     <Text style={styles.textBtn}>Tiếp</Text>
                 </TouchableOpacity>
                 </View>
-                {/* <View>
-                </View> */}
-                {/* <ScreenBottomMenu></ScreenBottomMenu> */}
             </ScrollView>
         );
     }
