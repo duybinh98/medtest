@@ -53,9 +53,11 @@ class UpdateInformationScreen extends Component {
             gender: this.props.customerInfor ? this.props.customerInfor.gender === 0 ? 'Nữ' : 'Nam' : 'Nam',
             selectTownList: [],
             address: this.props.customerInfor ? this.props.customerInfor.address : '',
-            districtCode: this.props.customerInfor.districtCode? this.props.customerInfor.districtCode: '',
-            townCode: this.props.customerInfor.townCode? this.props.customerInfor.townCode : '',
+            districtCode: this.props.customerInfor.districtCode ? this.props.customerInfor.districtCode : '',
+            townCode: this.props.customerInfor.townCode ? this.props.customerInfor.townCode : '',
             email: this.props.customerInfor ? this.props.customerInfor.email : '123@1234.com',
+            phoneNumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
+            image: this.props.customerInfor ? this.props.customerInfor.image : '',
 
             selectTownList: [],
             townName1: '',
@@ -67,7 +69,7 @@ class UpdateInformationScreen extends Component {
         this.submit = this.submit.bind(this)
     }
     componentWillMount = value => {
-        const customerInfor = {   
+        const customerInfor = {
             email: this.state.email,
             address: this.state.address,
             username: this.state.name,
@@ -167,31 +169,55 @@ class UpdateInformationScreen extends Component {
         this.setState({ town: townName })
         return `${townName}`;
     }
+    // async submit(values) {
+    //     const customerInforReducer = {
+    //         name: this.state.name,
+    //         email: this.state.email,
+    //         gender: this.state.gender,
+    //         districtCode: this.state.districtCode,
+    //         townCode: this.state.townCode,
+    //         address: this.state.address,
+    //         dob: this.state.dob,
+    //         phoneNumber: this.state.phoneNumber,
+    //         image: this.state.image,
+    //     }
+
+    //     let A = await this.callApi();
+    //     this.props.loadCustomerInfor(customerInforReducer);
+    //     this.props.navigation.dispatch(
+    //         CommonActions.navigate({
+    //             name: 'CustomerInformation',
+    //             params: {
+    //                 customerInfor: customerInforReducer
+    //             },
+    //         })
+    //     )
+    //     return A;
+    // }
     submit = values => {
-        const customerInforReducer ={
+        const customerInforReducer = {
             name: this.state.name,
-            email : this.state.email,
-            gender : this.state.gender,
+            email: this.state.email,
+            gender: this.state.gender,
             districtCode: this.state.districtCode,
-            townCode : this.state.townCode,
+            townCode: this.state.townCode,
             address: this.state.address,
-            dob: this.state.dob
+            // dob: this.state.dob,
+            dob: convertDateToDateTime(this.state.dob),
+            phoneNumber: this.state.phoneNumber,
+            image: this.state.image,
         }
-        
-        this.callApi().then(
-            this.props.loadCustomerInfor(customerInforReducer),
+
+        this.callApi()
+        this.props.loadCustomerInfor(customerInforReducer),
             this.props.navigation.dispatch(
                 CommonActions.navigate({
                     name: 'CustomerInformation',
                     params: {
-                        name: this.state.name,
-                        address: this.state.address,
-                        town: this.state.town,
-                        district: this.state.district,
+                        customerInfor: customerInforReducer
                     },
                 })
             )
-        )
     }
     selectItem(id) {
         this.setState({
@@ -212,7 +238,7 @@ class UpdateInformationScreen extends Component {
                 address: this.state.address,
                 email: this.state.email,
                 dob: convertDateToDateTime(this.state.dob),
-                gender: this.state.gender==="Nữ" ? '0' : '1',
+                gender: this.state.gender === "Nữ" ? '0' : '1',
                 townCode: this.state.townCode,
                 districtCode: this.state.districtCode
             }),
@@ -220,11 +246,11 @@ class UpdateInformationScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    if(result.message){
+                    if (result.message) {
                         alert(result.message)
-                    }else{
+                    } else {
                         // this.props.load(result)
-                    }              
+                    }
                 },
                 (error) => {
                     console.log(error);
@@ -236,9 +262,6 @@ class UpdateInformationScreen extends Component {
     render() {
         const { gender } = this.state;
         const { handleSubmit, load } = this.props;
-        console.log("format: a" + this.state.dob+ "aaa")
-        console.log("format: a" +  convertDateToDateTime(this.state.dob)+ "aaa")
-       
         return (
             <ScrollView
                 style={{ flex: 1 }}
@@ -296,7 +319,7 @@ class UpdateInformationScreen extends Component {
                         <View style={styles.RadioButton}>
                             <RadioButton
                                 value="Nam"
-                                status={gender === 'Nam'  ? 'checked' : 'unchecked'}
+                                status={gender === 'Nam' ? 'checked' : 'unchecked'}
                                 onPress={() => { this.setState({ gender: 'Nam' }); }}
                             />
                             <Text style={styles.radioName}>Nam</Text>
@@ -369,7 +392,7 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.initialValue.data, // pull initial values from account reducer
         token: state.login.token,
-        customerInfor: state.loadCustomer.customerInfor,      
+        customerInfor: state.loadCustomer.customerInfor,
     };
 }
 const mapStateToDispatch = (dispatch) => {
@@ -386,7 +409,7 @@ UpdateInformationForm = connect(
     state => ({
         initialValues: state.initialValue.data, // pull initial values from account reducer
         token: state.login.token,
-        customerInfor: state.loadCustomer.customerInfor,       
+        customerInfor: state.loadCustomer.customerInfor,
     }), mapStateToDispatch
 )(UpdateInformationForm);
 export default UpdateInformationForm;
