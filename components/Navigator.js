@@ -6,6 +6,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { login, logout } from './Store/Reducers/LoginReducer';
 import { loadCustomerInfor } from './Store/Reducers/LoadInforReducer';
+import { CommonActions } from '@react-navigation/native';
 
 import ChangePassword from './Account/ChangePassword';
 import CustomerInformation from './Account/CustomerInformation';
@@ -46,7 +47,7 @@ class Navigator extends Component {
     };
     this.logout = this.logout.bind(this)
   }
-  
+
   logout() {
     this.props.logout();
     console.log("this is logout function")
@@ -69,14 +70,14 @@ class Navigator extends Component {
     // const abc = this.props;
     // debugger;
     // // const {navigation}  = this.props;
-  
+
     return (
 
       <NavigationContainer>
 
         <Drawer.Navigator initialRouteName="LoginScreen"
           drawerContent={props => CustomDrawerContent(props, this.state ? this.state : null, this.props)}
-        > 
+        >
           <Drawer.Screen name="ChangePassword" component={ChangePassword} />
           <Drawer.Screen name="CustomerInformation" component={CustomerInformation} />
           <Drawer.Screen name="UpdateInformation" component={UpdateInformation} />
@@ -111,7 +112,7 @@ class Navigator extends Component {
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props, state, navigatorProps) {
-  
+
   return (
     <View style={{ flex: 1 }}>
       <TouchableOpacity
@@ -215,8 +216,19 @@ function CustomDrawerContent(props, state, navigatorProps) {
                 {
                   text: 'Xác nhận', onPress: () => {
                     // logout,
-                    navigatorProps.logout();
-                    props.navigation.navigate('HomeScreen')
+
+                    setTimeout(() => {
+                      navigatorProps.logout();
+                    }, 5000);
+                    // props.navigation.navigate('LoginScreen')
+                    props.navigation.dispatch(
+                      CommonActions.navigate({
+                        name: 'LoginScreen',
+                        params: {
+                          logout: "true"
+                        },
+                      })
+                    )
                   }
                 },
               ]

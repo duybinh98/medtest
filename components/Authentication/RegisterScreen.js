@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { RadioButton } from 'react-native-paper';
@@ -7,7 +7,8 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { CommonActions } from '@react-navigation/native';
-import renderField from '../../Validate/RenderField'
+import renderField from '../../Validate/RenderField';
+import { getApiUrl, convertDateToDateTime, convertDateTimeToDate } from './../Common/CommonFunction';
 
 //validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
@@ -23,12 +24,12 @@ class RegisterScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: 'a',
-            phonenumber: '0123456789',
-            email: 'binhpd@fpt.edu',
+            name: '',
+            phonenumber: '',
+            email: '',
             dob: '01-01-1970',
             password: '',
-            gender: 'Nữ',
+            gender: 'Nam',
         };
         this.submit = this.submit.bind(this)
     }
@@ -50,11 +51,13 @@ class RegisterScreen extends Component {
                         },
                     })
                 ))
+            
         }
     }
 
     callApi = async () => {
-        fetch('http://192.168.1.6:8080/users/customers/register', {
+        // fetch('http://192.168.1.6:8080/users/customers/register', {
+        fetch(getApiUrl() + '/users/customers/register', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -64,8 +67,8 @@ class RegisterScreen extends Component {
                 name: this.state.name,
                 phoneNumber: this.state.phonenumber,
                 email: this.state.email,
-                dob: "1998-12-12T17:00:00.000+0000",
-                gender: '1',
+                dob: convertDateToDateTime(this.state.dob),
+                gender: this.state.gender === "Nữ" ? '0' : '1',
                 password: this.state.password
             }),
         })
@@ -154,14 +157,13 @@ class RegisterScreen extends Component {
                             ></Icon>
                             <View style={styles.RadioButton}>
                                 <RadioButton
-                                    value="Male"
-                                    checked={true}
+                                    value="Nam"
                                     status={gender === 'Nam' ? 'checked' : 'unchecked'}
                                     onPress={() => { this.setState({ gender: 'Nam' }); }}
                                 />
                                 <Text style={styles.radioName}>Nam</Text>
                                 <RadioButton
-                                    value="Female"
+                                    value="Nữ"
                                     status={gender === 'Nữ' ? 'checked' : 'unchecked'}
                                     onPress={() => { this.setState({ gender: 'Nữ' }); }}
                                 />
@@ -232,7 +234,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 15,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        marginBottom: 1,
+        borderRadius: 15,
     },
     btnRegister: {
         width: WIDTH - 170,
@@ -255,7 +259,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 15,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        marginBottom: 1,
+        borderRadius: 15,
     },
     genderContainer: {
         width: WIDTH - 55,

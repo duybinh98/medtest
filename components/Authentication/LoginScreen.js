@@ -7,6 +7,7 @@ import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { login } from '../Store/Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
+import { load as loadAccount } from '../Store/Reducers/InitialValue';
 import renderField from '../../Validate/RenderField';
 
 //validate conditions
@@ -21,15 +22,25 @@ class LoginComponent extends Component {
         this.state = {
             phoneNumber: '',
             password: '',
-            customerInfoFromLogin: null,
+            customerInfoFromLogin: this.props.customerInforReducer ? this.props.customerInforReducer : null,
+            isLoginSuccess: this.props.isLoginSuccess
         };
         this.submit = this.submit.bind(this)
     }
-
+    componentDidMount() {
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+            this.setState({
+                isLoginSuccess: this.props.isLoginSuccess
+            })
+        }
+    }
     submit = value => {
         const { phoneNumber, password } = this.state;
         this.props.login(phoneNumber, password)
         let count = 0;
+
         var waitForIt = setInterval(() => {
             if (this.props.isLoginSuccess == true || count > 50) {
                 clearInterval(waitForIt);
@@ -43,6 +54,12 @@ class LoginComponent extends Component {
                     phoneNumber: '',
                     password: '',
                 }));
+                const customerInfor = {
+                    password: this.state.password,
+                    phonenumber: this.state.phoneNumber,
+                }
+
+                this.props.loadInitValue(customerInfor)
                 this.props.load(this.props.customerInfoFromLogin)
                 if (this.props.customerInfoFromLogin.address === null) {
                     this.props.navigation.dispatch(
@@ -62,16 +79,21 @@ class LoginComponent extends Component {
                         })
                     )
                 }
+                this.props.reset();
             }
             else {
-                console.log('error at screen ' + this.props.LoginError)
+                console.log('error at screen ' + this.props.LoginError);
+                console.log('error at screen aa' )
             }
         }
-            , 5000)
+            , 8000)
+        // 
     }
     render() {
         const { handleSubmit } = this.props;
         // debugger;
+        const abc = this.props.customerInforReducer;
+        const a = this.state.customerInfoFromLogin;
         return (
             <ScrollView
                 style={{ flex: 1 }}
@@ -118,22 +140,26 @@ class LoginComponent extends Component {
 }
 const mapStateToProps = (state) => {
     return {
+        initialValues: state.initialValue.data,
         isLoginPending: state.login.isLoginPending,
         isLoginSuccess: state.login.isLoginSuccess,
         LoginError: state.login.LoginError,
         customerInfoFromLogin: state.login.customerInfo,
-        // token: state.login.token
+        customerInforReducer: state.loadCustomer.customerInfor,
     };
 }
 const mapStateToDispatch = (dispatch) => {
     return {
+        loadInitValue: (data) => dispatch(loadAccount(data)),
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
         login: (phoneNumber, password) => dispatch(login(phoneNumber, password))
     };
 }
 const LoginForm = reduxForm({
     form: 'login',
+    enableReinitialize: true,
 })(LoginComponent);
+
 export default connect(mapStateToProps, mapStateToDispatch)(LoginForm);
 
 const { width: WIDTH } = Dimensions.get('window')

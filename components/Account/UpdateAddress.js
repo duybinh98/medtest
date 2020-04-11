@@ -42,7 +42,7 @@ class UpdateAddress extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            customerId: this.props.customerInfor ? this.props.customerInfor.id : '1',
+            customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
             selectTownList: [],
             address: '',
             districtCode: '',

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
-import { Icon } from 'react-native-elements';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
@@ -48,6 +47,11 @@ class CreateAppointmentScreen extends Component {
                 dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
             })
         }
+        const customerInfor =  {
+            username : this.state.name,
+            phonenumber: this.state.phonenumber
+        }
+        this.props.load(customerInfor)
     }
 
 
@@ -95,6 +99,7 @@ class CreateAppointmentScreen extends Component {
     
     render() {
         const { handleSubmit } = this.props;
+        // debugger;
         return (
             <View style={styles.background}>
                 <ScrollView>

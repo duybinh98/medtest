@@ -114,7 +114,6 @@ class UpdateInformationScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    // console.log(result)
                     this.setState(previousState => ({
                         districtList: result,
                     }));
@@ -131,7 +130,6 @@ class UpdateInformationScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    // console.log(result)
                     this.setState(previousState => ({
                         townList: result,
                     }));
@@ -226,8 +224,6 @@ class UpdateInformationScreen extends Component {
     render() {
         const { gender } = this.state;
         const { handleSubmit, load } = this.props;
-        debugger;
-        const abc = this.props.customerInfor;
         return (
             <ScrollView
                 style={{ flex: 1 }}

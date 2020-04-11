@@ -14,6 +14,8 @@ class RequestConfirmScreen extends Component {
         super(props)
         this.state = {
             customerId: this.props.route.params.customerId,
+            phoneNumber: this.props.customerInfor.phoneNumber,
+            
             name: this.props.route.params.name,
             address: this.props.route.params.address,
             dob: this.props.route.params.dob,
@@ -84,6 +86,8 @@ class RequestConfirmScreen extends Component {
                         CommonActions.navigate({
                             name: 'RequestViewScreen',
                             params: {
+                                requestID : result.requestID,
+                                phoneNumber: this.state.phoneNumber,
                                 name: this.state.name,
                                 address: this.state.address,
                                 dob: convertDateTimeToDate(this.state.dob),
@@ -106,6 +110,8 @@ class RequestConfirmScreen extends Component {
     }
 
     render() {
+        debugger;
+        const abc = this.props.customerInfor;
         return (
             <View style={{ flex: 1 }}>
                 <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
