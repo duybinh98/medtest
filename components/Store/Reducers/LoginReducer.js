@@ -152,7 +152,7 @@ function sendLoginRequest(phoneNumber, password) {
                         return reject(new Error(result.message));
                     } else {
                         const token = result.token;
-                        const customerInfo = result.customerInfo;
+                        const customerInfo = result.userInfo;
                         return resolve({ token, customerInfo });
                     }
                 },
