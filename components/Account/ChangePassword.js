@@ -79,23 +79,22 @@ class changePassword extends Component {
                 .then(res => res.json())
                 .then(
                     (result) => {
-                        if (result.success == "true") {
-                            // alert(result.message)
+                        console.log('.'+result.changedSuccess +'.')
+                        if (result.changedSuccess == true) {
                             Alert.alert(
                                 'Đổi mật khẩu',
                                 result.message,
                             )
                             this.props.navigation.dispatch(
                                 CommonActions.navigate({
-                                    name: 'HomeScreen',
+                                    name: 'LoginScreen',
                                     params: {
-
                                     },
                                 })
                             )
                         } else {
                             Alert.alert(
-                                'Đổi mật khẩu',
+                                'Lỗi đổi mật khẩu',
                                 result.message,
                             )
                         }
@@ -113,9 +112,6 @@ class changePassword extends Component {
 
 
     render() {
-        debugger;
-        const abc = this.props.customerInfo;
-        const a = this.state.newPassword;
         const { handleSubmit } = this.props;
         return (
             <View style={styles.background}>

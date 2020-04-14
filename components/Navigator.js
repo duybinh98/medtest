@@ -43,15 +43,9 @@ class Navigator extends Component {
       customerInfor: null,
       isLoadSuccess: null,
       loadError: null,
-      logout: this.props.logout(),
     };
-    this.logout = this.logout.bind(this)
   }
 
-  logout() {
-    this.props.logout();
-    console.log("this is logout function")
-  }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps !== this.props) {
       this.setState(previousState => ({
@@ -59,7 +53,6 @@ class Navigator extends Component {
         customerInfor: this.props.customerInfor,
         isLoadSuccess: this.props.isLoadSuccess,
         loadError: this.props.loadError,
-        // logout:  this.logout(), 
       }));
     }
   }
@@ -67,12 +60,7 @@ class Navigator extends Component {
 
 
   render() {
-    // const abc = this.props;
-    // debugger;
-    // // const {navigation}  = this.props;
-
     return (
-
       <NavigationContainer>
 
         <Drawer.Navigator initialRouteName="LoginScreen"

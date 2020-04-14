@@ -50,16 +50,6 @@ class LoginComponent extends Component {
         }, 100);
         setTimeout(() => {
             if (this.props.customerInfoFromLogin != null) {
-                this.setState(previousState => ({
-                    phoneNumber: '',
-                    password: '',
-                }));
-                const customerInfor = {
-                    password: this.state.password,
-                    phonenumber: this.state.phoneNumber,
-                }
-
-                this.props.loadInitValue(customerInfor)
                 this.props.load(this.props.customerInfoFromLogin)
                 if (this.props.customerInfoFromLogin.address === null) {
                     this.props.navigation.dispatch(
@@ -74,7 +64,7 @@ class LoginComponent extends Component {
                         CommonActions.navigate({
                             name: 'HomeScreen',
                             params: {
-                                customerInfor: this.state.customerInfor
+                                customerInfor: this.state.customerInfoFromLogin
                             },
                         })
                     )
@@ -86,14 +76,14 @@ class LoginComponent extends Component {
                 console.log('error at screen aa' )
             }
         }
-            , 8000)
+            , 10000)
         // 
     }
     render() {
         const { handleSubmit } = this.props;
-        // debugger;
-        const abc = this.props.customerInforReducer;
-        const a = this.state.customerInfoFromLogin;
+        // // debugger;
+        // const abc = this.props.customerInforReducer;
+        // const a = this.state.customerInfoFromLogin;
         return (
             <ScrollView
                 style={{ flex: 1 }}
@@ -140,7 +130,7 @@ class LoginComponent extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        initialValues: state.initialValue.data,
+        // initialValues: state.initialValue.data,
         isLoginPending: state.login.isLoginPending,
         isLoginSuccess: state.login.isLoginSuccess,
         LoginError: state.login.LoginError,
@@ -150,7 +140,7 @@ const mapStateToProps = (state) => {
 }
 const mapStateToDispatch = (dispatch) => {
     return {
-        loadInitValue: (data) => dispatch(loadAccount(data)),
+        // loadInitValue: (data) => dispatch(loadAccount(data)),
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
         login: (phoneNumber, password) => dispatch(login(phoneNumber, password))
     };

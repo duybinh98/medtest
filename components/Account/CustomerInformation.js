@@ -18,7 +18,7 @@ class customerInformation extends Component {
             customerInfor: null,
             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
             token: this.props.token ? this.props.token : null,
-            name: this.props.customerInfor ? this.props.customerInfor.name : '',
+            // name: this.props.customerInfor ? this.props.customerInfor.name : '',
         };
     }
 
