@@ -237,6 +237,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginBottom: 1,
         borderRadius: 15,
+        paddingTop: 5,
     },
     btnRegister: {
         width: WIDTH - 170,

@@ -141,12 +141,12 @@ class RequestPersonalInformation extends Component {
                     }
                 });
             }, 4000);
-            const customerInfor = {   
-                email: this.state.email,
-                address: this.state.address,
-                username: this.state.name,
-            }
-            this.props.load(customerInfor)
+            // const customerInfor = {   
+            //     email: this.state.email,
+            //     address: this.state.address,
+            //     username: this.state.name,
+            // }
+            // this.props.load(customerInfor)
         }
     }
 
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
         height: 45,
         borderRadius: 15,
         fontSize: 16,
-        paddingLeft: 65,
+        paddingLeft: 60,
         borderWidth: 2,
         borderColor: '#0A6ADA',
         backgroundColor: 'rgba(255,255,255,0.7)',

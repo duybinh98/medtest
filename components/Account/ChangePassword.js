@@ -9,6 +9,7 @@ import renderField from '../../Validate/RenderField'
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Store/Reducers/InitialValue';
 import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
+import { login, logout } from '../Store/Reducers/LoginReducer';
 
 //validate conditions
 const required = values => values ? undefined : 'Bắt buộc';
@@ -62,7 +63,6 @@ class changePassword extends Component {
                 "Xác nhận mật khẩu mới không đúng!",
             )
         } else {
-
             fetch(getApiUrl() + '/users/customers/change-password/' + this.state.customerId, {
                 method: 'POST',
                 headers: {
@@ -79,12 +79,15 @@ class changePassword extends Component {
                 .then(res => res.json())
                 .then(
                     (result) => {
-                        console.log('.'+result.changedSuccess +'.')
+                        console.log('.' + result.changedSuccess + '.')
                         if (result.changedSuccess == true) {
                             Alert.alert(
                                 'Đổi mật khẩu',
                                 result.message,
                             )
+                            setTimeout(() => {
+                                this.props.logout();
+                            }, 5000);
                             this.props.navigation.dispatch(
                                 CommonActions.navigate({
                                     name: 'LoginScreen',
@@ -106,6 +109,7 @@ class changePassword extends Component {
                         console.log(error)
                     }
                 );
+                this.props.reset();
         }
     }
 
@@ -159,7 +163,13 @@ class changePassword extends Component {
         );
     }
 }
-
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (data) => dispatch(loadAccount(data)),
+        loadCustomerInfor: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+        logout: () => dispatch(logout()),
+    };
+}
 
 let ChangePasswordForm = reduxForm({
     form: 'changePassword',
@@ -173,10 +183,7 @@ ChangePasswordForm = connect(
         customerInforLoad: state.loadCustomer.customerInfor,
         customerInfor: state.login.customerInfo
     }),
-    {
-        load: loadAccount,
-        // loadCustomer: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
-    }
+    mapStateToDispatch
 )(ChangePasswordForm);
 export default ChangePasswordForm;
 //#25345D

@@ -15,7 +15,7 @@ class HomeScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            customerId:'2',
+            customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
             customerInfo: null,
             articlesList: [],
             testsList:[],
@@ -188,7 +188,7 @@ const mapStateToDispatch = (dispatch) => {
     return {
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
         // login: (phoneNumber, password) => dispatch(login(phoneNumber, password)),
-        logout: () => dispatch(logout()),
+        // logout: () => dispatch(logout()),
     };
 }
 

@@ -6,7 +6,6 @@ import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
-import { login } from '../Store/Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
 
 
@@ -26,9 +25,9 @@ class customerInformation extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
             this.setState(previousState => ({
-                name: this.props.route.params.customerInfor ? this.props.route.params.customerInfor.name : "",
                 token: this.props.token,
-                customerInfor: this.props.route.params.customerInfor ? this.props.route.params.customerInfor : this.state.customerInfor
+                // customerInfor: this.props.route.params.customerInfor ? this.props.route.params.customerInfor : this.state.customerInfor
+                customerInfor: this.props.customerInfor ? this.props.customerInfor : null
             }));
         }
     }
@@ -75,7 +74,7 @@ class customerInformation extends Component {
                 <View>
                     <View style={styles.logoContainer}>
                         <ImageBackground
-                            source={{ uri: this.state.customerInfor ? this.props.customerInfor.image : '' }}
+                            source={{ uri: this.state.customerInfor ? this.state.customerInfor.image : '' }}
                             style={styles.logo} >
                             <TouchableOpacity><Icon
                                 name='camera'

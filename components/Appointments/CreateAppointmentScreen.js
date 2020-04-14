@@ -4,10 +4,11 @@ import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
+import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
-import {getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate} from './../Common/CommonFunction';
+import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
-import {load as loadAccount} from '../Store/Reducers/InitialValue'
+import { load as loadAccount } from '../Store/Reducers/InitialValue'
 import renderField from '../../Validate/RenderField'
 
 //validate conditions
@@ -31,8 +32,8 @@ class CreateAppointmentScreen extends Component {
         this.submit = this.submit.bind(this)
     }
     componentWillMount = value => {
-        const customerInfor =  {
-            username : this.state.name,
+        const customerInfor = {
+            username: this.state.name,
             phonenumber: this.state.phonenumber
         }
         this.props.load(customerInfor)
@@ -47,8 +48,8 @@ class CreateAppointmentScreen extends Component {
                 dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
             })
         }
-        const customerInfor =  {
-            username : this.state.name,
+        const customerInfor = {
+            username: this.state.name,
             phonenumber: this.state.phonenumber
         }
         this.props.load(customerInfor)
@@ -56,47 +57,47 @@ class CreateAppointmentScreen extends Component {
 
 
     submit = values => {
-        fetch(getApiUrl()+'/appointments/create', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer '+this.props.token,
-        },
-        body: JSON.stringify({
-            customerID: this.state.customerInfor.id,
-            meetingTime: convertDateAndTimeToDateTime(this.state.apointmentDate, this.state.apointmentTime),
-        }),
-        })
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result)
-                this.props.navigation.dispatch(
-                    CommonActions.navigate({
-                        name: 'AppointmentDetailScreen',
-                        params: {
-                            appointment_userName: this.state.name,
-                            appointment_phoneNumber: this.state.phonenumber,
-                            appointment_DOB: this.state.dob,
-                            appointment_date: this.state.apointmentDate,
-                            appointment_time: this.state.apointmentTime,
-                            appointment_status: 'pending',
-                            appointment_statusName:'Đang chờ xác nhận',
-                            backScreen:'HomeScreen',
-                        },
-                    })
-                )
+        fetch(getApiUrl() + '/appointments/create', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + this.props.token,
             },
-            (error) => {
-                console.log(error)
-                this.setState({
-                    error
-                });
-            }
-        );
+            body: JSON.stringify({
+                customerID: this.state.customerInfor.id,
+                meetingTime: convertDateAndTimeToDateTime(this.state.apointmentDate, this.state.apointmentTime),
+            }),
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result)
+                    this.props.navigation.dispatch(
+                        CommonActions.navigate({
+                            name: 'AppointmentDetailScreen',
+                            params: {
+                                appointment_userName: this.state.name,
+                                appointment_phoneNumber: this.state.phonenumber,
+                                appointment_DOB: this.state.dob,
+                                appointment_date: this.state.apointmentDate,
+                                appointment_time: this.state.apointmentTime,
+                                appointment_status: 'pending',
+                                appointment_statusName: 'Đang chờ xác nhận',
+                                backScreen: 'HomeScreen',
+                            },
+                        })
+                    )
+                },
+                (error) => {
+                    console.log(error)
+                    this.setState({
+                        error
+                    });
+                }
+            );
     }
-    
+
     render() {
         const { handleSubmit } = this.props;
         // debugger;
@@ -105,49 +106,20 @@ class CreateAppointmentScreen extends Component {
                 <ScrollView>
                     <ScreenTopMenuBack navigation={this.props.navigation} backScreen='HomeScreen'></ScreenTopMenuBack>
                     <View>
-                        <View style={styles.logoContainer}>
+                        <View style={styles.titleArea}>
                             <Text style={styles.logoText}>Đặt lịch khám</Text>
                         </View>
                     </View>
                     <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                         iconType="material-community" placeholder="Tên hiển thị" secureText={false}
-                        onChange ={(text) => {this.setState({name : text})}} editable={false}
+                        onChange={(text) => { this.setState({ name: text }) }} editable={false}
                         validate={[required]}
                     />
                     <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
                         iconType="material-community" placeholder="Số điện thoại" secureText={false}
-                        onChange ={(text) => {this.setState({phonenumber : text})}} editable={false}
+                        onChange={(text) => { this.setState({ phonenumber: text }) }} editable={false}
                         validate={[required, isNumber, isPhonenumber]}
                     />
-                    <View style={styles.inputContainer}>
-                        <DatePicker
-                            style={styles.DatePicker}
-                            date={this.state.dob}
-                            mode="date"
-                            placeholder="Ngày sinh"
-                            format="DD-MM-YYYY"
-                            minDate="01-01-1900"
-                            maxDate={new Date()}
-                            customStyles={{
-                                dateIcon: {
-                                    position: 'absolute',
-                                    left: 7,
-                                    top: 4,
-                                    marginLeft: 0,
-                                },
-                                dateInput: {
-                                    borderRadius: 15,
-                                    height: 45,
-                                    borderRadius: 15,
-                                    borderWidth: 2,
-                                    borderColor: '#0A6ADA',
-                                    backgroundColor: 'rgba(255,255,255,0.7)',
-                                    width: 250,
-                                }
-                            }}
-                            onDateChange={(date) => { this.setState({ dob: date }) }}
-                        />
-                    </View>
                     <View style={styles.inputContainer}>
                         <DatePicker
                             style={styles.DatePicker}
@@ -155,7 +127,7 @@ class CreateAppointmentScreen extends Component {
                             mode="date"
                             placeholder="Ngày hẹn"
                             format="DD-MM-YYYY"
-                            minDate={new Date()}
+                            minDate={new Date().getDate()+1}
                             customStyles={{
                                 dateIcon: {
                                     position: 'absolute',
@@ -177,12 +149,20 @@ class CreateAppointmentScreen extends Component {
                         />
                     </View>
                     <View style={styles.inputContainer}>
+                        <Icon
+                            name="alarm"
+                            type="material-community"
+                            color='black'
+                            size={32}
+                            iconStyle={styles.inputIcon}
+                        ></Icon>
                         <DatePicker
                             style={styles.DatePicker}
                             date={this.state.apointmentTime}
                             mode="time"
                             placeholder="Giờ hẹn"
                             format="HH:mm"
+                            showIcon={false}
                             customStyles={{
                                 dateIcon: {
                                     position: 'absolute',
@@ -220,12 +200,12 @@ let AppointmentForm = reduxForm({
 })(CreateAppointmentScreen);
 AppointmentForm = connect(
     state => ({
-      initialValues: state.initialValue.data, // pull initial values from account reducer
-      customerInfor: state.loadCustomer.customerInfor,
-      token: state.login.token
+        initialValues: state.initialValue.data, // pull initial values from account reducer
+        customerInfor: state.loadCustomer.customerInfor,
+        token: state.login.token
     }),
     { load: loadAccount } // bind account loading action creator
-  )(AppointmentForm);
+)(AppointmentForm);
 export default AppointmentForm;
 //#25345D
 //#0A6ADA
@@ -240,22 +220,21 @@ const styles = StyleSheet.create({
         top: 10,
         left: 20,
     },
-    nameHeader: {
-        alignItems: "center",
-        backgroundColor: '#25345D',
-    },
-    nameText: {
-        margin: 10,
-        fontSize: 25,
-        color: 'white',
-    },
-    logoContainer: {
+    titleArea: {
+        height: 50,
+        width: Dimensions.get('window').width - 25,
+        backgroundColor: 'white',
         marginTop: 10,
+        marginBottom: 20,
+        flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10
+        justifyContent: 'center',
+        paddingBottom: 3,
+        borderRadius: 10,
+        marginHorizontal: 15,
     },
     logoText: {
-        fontSize: 40,
+        fontSize: 30,
         color: '#25345D',
     },
     input: {
@@ -270,8 +249,10 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     inputIcon: {
+        flexDirection: 'column',
         position: 'absolute',
         left: 7,
+        paddingBottom: 5,
     },
     inputContainer: {
         width: WIDTH - 25,
@@ -280,13 +261,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 15,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        borderRadius: 15,
+        marginBottom: 1,
+        paddingTop: 5,
     },
     btnRegister: {
         width: WIDTH - 170,
         height: 45,
         borderRadius: 5,
         backgroundColor: '#0A6ADA',
+        flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'center',
         marginTop: 10,
         marginHorizontal: 85

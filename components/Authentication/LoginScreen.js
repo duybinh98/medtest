@@ -22,7 +22,7 @@ class LoginComponent extends Component {
         this.state = {
             phoneNumber: '',
             password: '',
-            customerInfoFromLogin: this.props.customerInforReducer ? this.props.customerInforReducer : null,
+            customerInfoFromLogin: this.props.customerInfoFromLogin ? this.props.customerInfoFromLogin : null,
             isLoginSuccess: this.props.isLoginSuccess
         };
         this.submit = this.submit.bind(this)

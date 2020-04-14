@@ -19,6 +19,19 @@ export function convertDateToDateTime(inputDate){
     return inputDate.substring(6,10)+'-'+inputDate.substring(3,5)+'-'+inputDate.substring(0,2)+'T00:00:00.000+0000'
 }
 
+export function convertMoney(_price){
+    let price = _price.toString()
+    let index = price.length -1
+    let result = ''
+    while (index >= 3) {
+        // console.log(price+": "+price.substring(index-2,index+1)+', '+index)
+        result = '.'+price.substring(index-2,index+1)+result
+        index-=3
+    }
+    result = price.substring(0,index+1)+result
+    return result
+}
+
 export function getApiUrl(){
     // return "http://192.168.1.11:8080";
     return "http://192.168.1.6:8080"

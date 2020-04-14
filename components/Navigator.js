@@ -184,15 +184,6 @@ function CustomDrawerContent(props, state, navigatorProps) {
           screenTitle='Mời bạn bè cài đặt'
           navigator={props.navigation}
         />
-        {/* <MenuButtonScreenContainer
-          screenName='UpdateAddress'
-          iconName='logout'
-          iconType='antdesign'
-          iconColor='#0A6ADA'
-          iconSize={20}
-          screenTitle='Đăng xuất'
-          navigator={props.navigation}
-        /> */}
         <TouchableOpacity
           style={styles.navigatorButton}
           onPress={() => {
@@ -203,12 +194,10 @@ function CustomDrawerContent(props, state, navigatorProps) {
                 { text: 'Hủy', onPress: () => { return null } },
                 {
                   text: 'Xác nhận', onPress: () => {
-                    // logout,
-
+                    // logout
                     setTimeout(() => {
                       navigatorProps.logout();
                     }, 5000);
-                    // props.navigation.navigate('LoginScreen')
                     props.navigation.dispatch(
                       CommonActions.navigate({
                         name: 'LoginScreen',
