@@ -11,7 +11,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Store/Reducers/InitialValue';
-import {loadCustomer} from '../Store/Reducers/LoadInforReducer'
+import { loadCustomer } from '../Store/Reducers/LoadInforReducer'
 import renderField from '../../Validate/RenderField'
 import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate } from './../Common/CommonFunction'
 
@@ -54,15 +54,15 @@ class RequestPersonalInformation extends Component {
             name: this.props.customerInfor ? this.props.customerInfor.name : '',
             dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
             apointmentDate: '01/01/2020',
-            apointmentTime: '07:30',            
+            apointmentTime: '07:30',
             address: this.props.customerInfor ? this.props.customerInfor.address : '',
             districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
             townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
-            customerInfor: this.props.customerInfor,           
+            customerInfor: this.props.customerInfor,
             selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [],
             totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0',
             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : [],
-            
+
             districtList: [],
             selectTownList: [],
             townList: [],
@@ -74,7 +74,7 @@ class RequestPersonalInformation extends Component {
         this.submit = this.submit.bind(this)
     }
     componentWillMount = value => {
-        const customerInfor = {  
+        const customerInfor = {
             email: this.state.email,
             address: this.state.address,
             username: this.state.name,
@@ -129,25 +129,45 @@ class RequestPersonalInformation extends Component {
                     }
                 });
             }, 9000);
-            this.setState({
-                customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
-                name: this.props.customerInfor ? this.props.customerInfor.name : '',
-                dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
-                apointmentDate: '01/01/2020',
-                apointmentTime: '07:30',
-                selectTownList: [],
-                address: this.props.customerInfor ? this.props.customerInfor.address : '',
-                district: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
-                town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
-                customerInfor: this.props.customerInfor,
-            })
         }
     }
-
+    resetRequestPersonalInfor = value => {
+        this.setState({
+            customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
+            name: this.props.customerInfor ? this.props.customerInfor.name : '',
+            dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
+            apointmentDate: '01/01/2020',
+            apointmentTime: '07:30',
+            address: this.props.customerInfor ? this.props.customerInfor.address : '',
+            districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
+            townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
+        })
+        setTimeout(() => {
+            this.state.districtList.forEach(district => {
+                if (district.districtCode == this.state.districtCode) {
+                    this.setState({
+                        districtName: district.districtName
+                    })
+                } else {
+                    console.log("Error district")
+                }
+            });
+            this.state.townList.forEach(town => {
+                if (town.townCode == this.state.townCode) {
+                    this.setState({
+                        townName: town.townName
+                    })
+                } else {
+                    console.log("Error town")
+                }
+            });
+        }, 9000);
+        this.props.reset();
+    }
     _renderDistrictButtonText = rowData => {
         const { districtCode, districtName } = rowData;
         this.setState({
-            district: districtName,
+            districtName: districtName,
             districtCode: districtCode
         })
         return `${districtName}`;
@@ -155,8 +175,8 @@ class RequestPersonalInformation extends Component {
     _renderTownButtonText = listTown => {
         const { townCode, townName } = listTown;
         this.setState({
-            town: townName,
-            townCode : townCode
+            townName: townName,
+            townCode: townCode
         })
         return `${townName}`;
     }
@@ -212,6 +232,7 @@ class RequestPersonalInformation extends Component {
                     testsList: this.props.route.params.testsList,
                     totalPrice: this.props.route.params.totalPrice,
                     resetSelectedTestOnConfirm: this.props.route.params.resetSelectedTestOnConfirm,
+                    resetRequestPersonalInformation: this.resetRequestPersonalInfor,
                 },
             })
         )
@@ -219,13 +240,13 @@ class RequestPersonalInformation extends Component {
     selectItem(id) {
         this.setState({
             disableDropdownTown: false,
-            selectTownList: this.state.districtList[id].listTown,         
+            selectTownList: this.state.districtList[id].listTown,
         })
     }
     render() {
-        debugger;
+        // debugger;
+        // const abc = this.props.customerInfor;
         const { handleSubmit } = this.props;
-        const abc = this.props.customerInfor;
         return (
             <ScrollView style={{ flex: 1 }}>
                 <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
@@ -236,10 +257,10 @@ class RequestPersonalInformation extends Component {
                 </View>
                 <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                     iconType="material-community" placeholder="Tên hiển thị" secureText={false}
-                    onChange={(text) => { this.setState({ name: text }) }} 
+                    onChange={(text) => { this.setState({ name: text }) }}
                     // editable={false}
                     validate={[required]}
-                />               
+                />
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
                         options={this.state.districtList}
@@ -249,7 +270,7 @@ class RequestPersonalInformation extends Component {
                         defaultValue={this.state.districtName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
-                        showsVerticalScrollIndicator={false}                      
+                        showsVerticalScrollIndicator={false}
                         dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
                         dropdownTextStyle={{ fontSize: 16 }}
                         onSelect={(value) => { this.selectItem(value) }}
@@ -268,10 +289,10 @@ class RequestPersonalInformation extends Component {
                         defaultValue={this.state.townName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
-                        showsVerticalScrollIndicator={false} 
+                        showsVerticalScrollIndicator={false}
                         dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
                         dropdownTextStyle={{ fontSize: 16 }}
-                        
+
                     />
                     <View style={{ position: "absolute", right: 30, top: 15 }}>
                         <Text style={{ fontSize: 20 }} >▼</Text>
@@ -289,7 +310,7 @@ class RequestPersonalInformation extends Component {
                         mode="date"
                         placeholder="Ngày hẹn"
                         format="DD-MM-YYYY"
-                        minDate={new Date()}
+                        minDate={new Date().getDate() + 1}
                         customStyles={{
                             dateIcon: {
                                 position: 'absolute',
@@ -311,12 +332,20 @@ class RequestPersonalInformation extends Component {
                     />
                 </View>
                 <View style={styles.inputContainer}>
+                    <Icon
+                        name="alarm"
+                        type="material-community"
+                        color='black'
+                        size={32}
+                        iconStyle={styles.inputIcon}
+                    ></Icon>
                     <DatePicker
                         style={styles.DatePicker}
                         date={this.state.apointmentTime}
                         mode="time"
                         placeholder="Giờ hẹn"
                         format="HH:mm"
+                        showIcon={false}
                         customStyles={{
                             dateIcon: {
                                 position: 'absolute',
@@ -338,11 +367,11 @@ class RequestPersonalInformation extends Component {
                     />
                 </View>
                 <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.btnNext}
-                    onPress={handleSubmit(this.submit)}
-                >
-                    <Text style={styles.textBtn}>Tiếp</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.btnNext}
+                        onPress={handleSubmit(this.submit)}
+                    >
+                        <Text style={styles.textBtn}>Tiếp</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         );
@@ -357,10 +386,10 @@ RequestPersonalInformationForm = connect(
         initialValues: state.initialValue.data, // pull initial values from account reducer
         customerInfor: state.loadCustomer.customerInfor,
     }),
-    {   
-        
-        load: loadAccount 
-    } 
+    {
+
+        load: loadAccount
+    }
 )(RequestPersonalInformationForm);
 export default RequestPersonalInformationForm;
 //#25345D
@@ -405,8 +434,10 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     inputIcon: {
+        flexDirection: 'column',
         position: 'absolute',
         left: 7,
+        paddingBottom: 5,
     },
     inputContainer: {
         width: WIDTH - 25,

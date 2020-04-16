@@ -76,7 +76,7 @@ class LoginComponent extends Component {
                 console.log('error at screen aa' )
             }
         }
-            , 10000)
+            , 8000)
         // 
     }
     render() {

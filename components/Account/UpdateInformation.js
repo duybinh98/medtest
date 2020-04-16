@@ -60,8 +60,8 @@ class UpdateInformationScreen extends Component {
             image: this.props.customerInfor ? this.props.customerInfor.image : '',
 
             selectTownList: [],
-            townName1: '',
-            districtName1: '',
+            townName: '',
+            districtName: '',
             districtList: [],
             townList: [],
             disableDropdownTown: true,
@@ -76,27 +76,29 @@ class UpdateInformationScreen extends Component {
         }
         this.props.load(customerInfor)
     }
-    componentDidUpdate = value => {
-        setTimeout(() => {
-            this.state.districtList.forEach(district => {
-                if (district.districtCode === this.props.customerInfor.districtCode) {
-                    this.setState({
-                        districtName1: district.districtName
-                    })
-                } else {
-                    console.log("Error")
-                }
-            });
-            this.state.townList.forEach(town => {
-                if (town.townCode === this.props.customerInfor.townCode) {
-                    this.setState({
-                        townName1: town.townName
-                    })
-                } else {
-                    console.log("Error")
-                }
-            });
-        }, 4000);
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+            setTimeout(() => {
+                this.state.districtList.forEach(district => {
+                    if (district.districtCode === this.props.customerInfor.districtCode) {
+                        this.setState({
+                            districtName: district.districtName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+                this.state.townList.forEach(town => {
+                    if (town.townCode === this.props.customerInfor.townCode) {
+                        this.setState({
+                            townName: town.townName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+            }, 9000);
+        }
     }
     componentDidMount = value => {
         const customerInfor = {
@@ -112,7 +114,7 @@ class UpdateInformationScreen extends Component {
             this.state.districtList.forEach(district => {
                 if (district.districtCode === this.props.customerInfor.districtCode) {
                     this.setState({
-                        districtName1: district.districtName
+                        districtName: district.districtName
                     })
                 } else {
                     console.log("Error")
@@ -121,13 +123,13 @@ class UpdateInformationScreen extends Component {
             this.state.townList.forEach(town => {
                 if (town.townCode === this.props.customerInfor.townCode) {
                     this.setState({
-                        townName1: town.townName
+                        townName: town.townName
                     })
                 } else {
                     console.log("Error")
                 }
             });
-        }, 4000);
+        }, 5000);
     }
 
     callApiGetDistrictCode() {
@@ -165,7 +167,7 @@ class UpdateInformationScreen extends Component {
     _renderDistrictButtonText = rowData => {
         const { districtCode, districtName } = rowData;
         this.setState({
-            district: districtName,
+            districtName: districtName,
             districtCode: districtCode
         })
         return `${districtName}`;
@@ -173,7 +175,7 @@ class UpdateInformationScreen extends Component {
     _renderTownButtonText = listTown => {
         const { townCode, townName } = listTown;
         this.setState({
-            town: townName,
+            townName: townName,
             townCode : townCode
         })
         return `${townName}`;
@@ -245,6 +247,9 @@ class UpdateInformationScreen extends Component {
     render() {
         const { gender } = this.state;
         const { handleSubmit, load } = this.props;
+        debugger;
+        const a = this.props.customerInfor;
+
         return (
             <ScrollView
                 style={{ flex: 1 }}
@@ -321,7 +326,7 @@ class UpdateInformationScreen extends Component {
                         renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
-                        defaultValue={this.state.districtName1}
+                        defaultValue={this.state.districtName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
                         showsVerticalScrollIndicator={false}
@@ -340,7 +345,7 @@ class UpdateInformationScreen extends Component {
                         renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderTownRow.bind(this)}
                         renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
-                        defaultValue={this.state.townName1}
+                        defaultValue={this.state.townName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
                         showsVerticalScrollIndicator={false}

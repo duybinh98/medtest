@@ -29,6 +29,44 @@ class ConfirmOPTScreen extends Component {
         };
     }
 
+    resendOTP = value => {
+        fetch(getApiUrl() + '/users/resend-otp', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                phoneNumber: this.state.phonenumber,
+            }),
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    if (result.messageSent == true) {
+                        Alert.alert(
+                            'Gửi lại OTP',
+                            result.message,
+                        )
+                    } else {
+                        Alert.alert(
+                            'Lỗi gửi lại OTP',
+                            result.message,
+                        )
+                    }
+                },
+                (error) => {
+                    this.setState({
+                        error
+                    });
+                    Alert.alert(
+                        'Lỗi gửi lại OTP',
+                        result.message,
+                    )
+                }
+            )
+            ;
+    }
 
     submit = values => {
 
@@ -39,7 +77,7 @@ class ConfirmOPTScreen extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                token: this.state.otp,
+                otp: this.state.otp,
                 name: this.state.name,
                 phoneNumber: this.state.phonenumber,
                 email: this.state.email,
@@ -51,7 +89,6 @@ class ConfirmOPTScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log('.' + result.valid + '.')
                     if (result.valid == true) {
                         Alert.alert(
                             'Xác nhận OTP',
@@ -112,9 +149,7 @@ class ConfirmOPTScreen extends Component {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.buttonView}
-                            onPress={() => {
-                                this.state.backScreen ? this.props.navigation.navigate(this.state.backScreen) : this.props.navigation.goBack();
-                            }}
+                           onPress={this.resendOTP}
                         >
                             <Text style={styles.textBtn}>Gửi lại OTP</Text>
                         </TouchableOpacity>

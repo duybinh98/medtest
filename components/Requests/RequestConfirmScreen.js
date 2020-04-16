@@ -81,13 +81,14 @@ class RequestConfirmScreen extends Component {
             .then(
                 (result) => {
                     this.props.route.params.resetSelectedTestOnConfirm()
+                    this.props.route.params.resetRequestPersonalInformation()
                     console.log(result)
                     this.props.navigation.dispatch(
                         CommonActions.navigate({
                             name: 'RequestViewScreen',
                             params: {
-                                requestID : result.requestID,
-                                phoneNumber: this.state.phoneNumber,
+                                id : result.requestID,
+                                phone: this.state.phoneNumber,
                                 name: this.state.name,
                                 address: this.state.address,
                                 dob: convertDateTimeToDate(this.state.dob),
