@@ -38,44 +38,39 @@ class RegisterScreen extends Component {
             alert("Xác nhận mật khẩu không đúng!")
         } else {
             this.callApi().then(
-                this.props.navigation.dispatch(
-                    CommonActions.navigate({
-                        name: 'LoginScreen',
-                        params: {
-                            name: this.state.name,
-                            phonenumber: this.state.phonenumber,
-                            email: this.state.email,
-                            dob: this.state.dob,
-                            password: this.state.password,
-                            gender: this.state.gender,
-                        },
-                    })
-                ))
-            
+            this.props.navigation.dispatch(
+                CommonActions.navigate({
+                    name: 'ConfirmOTPScreen',
+                    params: {
+                        name: this.state.name,
+                        phonenumber: this.state.phonenumber,
+                        email: this.state.email,
+                        dob: this.state.dob,
+                        password: this.state.password,
+                        gender: this.state.gender,
+                        backScreen: 'LoginScreen',
+                    },
+                })
+            ))
         }
     }
 
     callApi = async () => {
         // fetch('http://192.168.1.6:8080/users/customers/register', {
-        fetch(getApiUrl() + '/users/customers/register', {
+        fetch(getApiUrl() + '/users/check-phone-otp', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: this.state.name,
                 phoneNumber: this.state.phonenumber,
-                email: this.state.email,
-                dob: convertDateToDateTime(this.state.dob),
-                gender: this.state.gender === "Nữ" ? '0' : '1',
-                password: this.state.password
             }),
         })
             .then(res => res.json())
             .then(
                 (result) => {
-                    Alert.alert("hi" + result);
+                    Alert.alert(result.message);
                 },
                 (error) => {
                     this.setState({

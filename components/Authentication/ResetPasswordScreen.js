@@ -25,11 +25,6 @@ class ResetPasswordScreen extends Component {
 
 
     submit = values => {
-    // alert(`Validation success. Values = ~${JSON.stringify(values)}`);
-    console.log(values.phonenumber)
-    console.log(values.phonenumber)
-    console.log(values)
-    
     fetch(getApiUrl()+'/users/forgot-password', {
         method: 'POST',
         headers: {
@@ -37,7 +32,7 @@ class ResetPasswordScreen extends Component {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            phoneNumber: values.phonenumber.toString(),
+            phoneNumber: this.state.phonenumber,
         }),
         })
         .then(res => res.json())
@@ -66,12 +61,13 @@ class ResetPasswordScreen extends Component {
                 <ScrollView>
                     {/* <ScreenTopMenuBack navigation={this.props.navigation} backScreen={'LoginScreen'}></ScreenTopMenuBack> */}
                     <View>
-                        <View style={styles.logoContainer}>
+                        <View style={styles.titleArea}>
                             <Text style={styles.logoText}>Quên mật khẩu</Text>
                         </View>
                     </View>
                     <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
                         iconType="material-community" placeholder="Số điện thoại" secureText={false}
+                        onChange={(text) => { this.setState({ phonenumber: text }) }}
                         validate={[required, isNumber, isPhonenumber]}
                     />
                     <TouchableOpacity style={styles.btnResetPassword} onPress={handleSubmit(this.submit)}>
@@ -97,13 +93,21 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f1f0f0',
     },
-    logoContainer: {
+    titleArea: {
+        height: 50,
+        width: Dimensions.get('window').width - 25,
+        backgroundColor: 'white',
         marginTop: 10,
+        marginBottom: 20,
+        flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10
+        justifyContent: 'center',
+        paddingBottom: 3,
+        borderRadius: 10,
+        marginHorizontal: 15,
     },
     logoText: {
-        fontSize: 40,
+        fontSize: 30,
         color: '#25345D',
     },
     input: {

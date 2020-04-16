@@ -76,7 +76,28 @@ class UpdateInformationScreen extends Component {
         }
         this.props.load(customerInfor)
     }
-
+    componentDidUpdate = value => {
+        setTimeout(() => {
+            this.state.districtList.forEach(district => {
+                if (district.districtCode === this.props.customerInfor.districtCode) {
+                    this.setState({
+                        districtName1: district.districtName
+                    })
+                } else {
+                    console.log("Error")
+                }
+            });
+            this.state.townList.forEach(town => {
+                if (town.townCode === this.props.customerInfor.townCode) {
+                    this.setState({
+                        townName1: town.townName
+                    })
+                } else {
+                    console.log("Error")
+                }
+            });
+        }, 4000);
+    }
     componentDidMount = value => {
         const customerInfor = {
             email: this.state.email,

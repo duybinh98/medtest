@@ -17,6 +17,7 @@ import AppointmentListScreen from './Appointments/AppointmentListScreen';
 import AppointmentDetailScreen from './Appointments/AppointmentDetailScreen';
 import CreateAppointmentScreen from './Appointments/CreateAppointmentScreen';
 
+import ConfirmOTPScreen from './Authentication/ConfirmOTPScreen';
 import LoginScreen from './Authentication/LoginScreen';
 import RegisterScreen from './Authentication/RegisterScreen';
 import ResetPasswordScreen from './Authentication/ResetPasswordScreen';
@@ -32,7 +33,7 @@ import RequestResultScreen from './Requests/RequestResultScreen';
 import RequestTestListScreen from './Requests/RequestTestListScreen';
 import RequestViewScreen from './Requests/RequestViewScreen';
 import ViewNurseScreen from './Requests/ViewNurseScreen';
-import UpdateAddressForm from './Account/UpdateAddress';
+// import UpdateAddressForm from './Account/UpdateAddress';
 
 // const navigation = useNavigation();
 class Navigator extends Component {
@@ -66,6 +67,9 @@ class Navigator extends Component {
         <Drawer.Navigator initialRouteName="LoginScreen"
           drawerContent={props => CustomDrawerContent(props, this.state ? this.state : null, this.props)}
         >
+        {/* <Drawer.Navigator initialRouteName="ConfirmOTPScreen"
+          drawerContent={props => CustomDrawerContent(props, this.state ? this.state : null, this.props)}
+        > */}
           <Drawer.Screen name="ChangePassword" component={ChangePassword} />
           <Drawer.Screen name="CustomerInformation" component={CustomerInformation} />
           <Drawer.Screen name="UpdateInformation" component={UpdateInformation} />
@@ -75,6 +79,7 @@ class Navigator extends Component {
           <Drawer.Screen name="AppointmentDetailScreen" component={AppointmentDetailScreen} />
           <Drawer.Screen name="CreateAppointmentScreen" component={CreateAppointmentScreen} />
 
+          <Drawer.Screen name="ConfirmOTPScreen" component={ConfirmOTPScreen} />
           <Drawer.Screen name="LoginScreen" component={LoginScreen} />
           <Drawer.Screen name="RegisterScreen" component={RegisterScreen} />
           <Drawer.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />

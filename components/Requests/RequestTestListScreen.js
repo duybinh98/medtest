@@ -94,7 +94,7 @@ export default class HomeScreen extends Component {
                 <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
                 <View style={styles.background}>
                     <View style={styles.titleArea}>
-                        <Text style={{ fontSize: 22, color: '#25345D' }}>Đặt xét nghiệm</Text>
+                        <Text style={{ fontSize: 30, color: '#25345D' }}>Đặt xét nghiệm</Text>
                     </View>
                     <TextInput
                         style={styles.searchArea}

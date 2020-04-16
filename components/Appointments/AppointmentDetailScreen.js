@@ -130,8 +130,6 @@ class AppointmentDetailScreen extends Component {
                         </View>
                     </View>
                 </View>
-
-
                 <View style={styles.buttonContainer}>
                     {this.state.status == 'pending' ?
                         <TouchableOpacity style={styles.buttonView}

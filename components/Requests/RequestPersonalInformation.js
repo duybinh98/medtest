@@ -66,8 +66,8 @@ class RequestPersonalInformation extends Component {
             districtList: [],
             selectTownList: [],
             townList: [],
-            townName1: '',
-            districtName1: '',
+            townName: '',
+            districtName: '',
             disableDropdownTown: true,
         };
         this.selectItem = this.selectItem.bind(this)
@@ -89,7 +89,7 @@ class RequestPersonalInformation extends Component {
             this.state.districtList.forEach(district => {
                 if (district.districtCode === this.props.customerInfor.districtCode) {
                     this.setState({
-                        districtName1: district.districtName
+                        districtName: district.districtName
                     })
                 } else {
                     console.log("Error")
@@ -98,7 +98,7 @@ class RequestPersonalInformation extends Component {
             this.state.townList.forEach(town => {
                 if (town.townCode === this.props.customerInfor.townCode) {
                     this.setState({
-                        townName1: town.townName
+                        townName: town.townName
                     })
                 } else {
                     console.log("Error")
@@ -109,6 +109,26 @@ class RequestPersonalInformation extends Component {
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
+            setTimeout(() => {
+                this.state.districtList.forEach(district => {
+                    if (district.districtCode === this.props.customerInfor.districtCode) {
+                        this.setState({
+                            districtName: district.districtName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+                this.state.townList.forEach(town => {
+                    if (town.townCode === this.props.customerInfor.townCode) {
+                        this.setState({
+                            townName: town.townName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+            }, 9000);
             this.setState({
                 customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
                 name: this.props.customerInfor ? this.props.customerInfor.name : '',
@@ -121,32 +141,6 @@ class RequestPersonalInformation extends Component {
                 town: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
                 customerInfor: this.props.customerInfor,
             })
-            setTimeout(() => {
-                this.state.districtList.forEach(district => {
-                    if (district.districtCode === this.props.customerInfor.districtCode) {
-                        this.setState({
-                            districtName1: district.districtName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-                this.state.townList.forEach(town => {
-                    if (town.townCode === this.props.customerInfor.townCode) {
-                        this.setState({
-                            townName1: town.townName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-            }, 4000);
-            // const customerInfor = {   
-            //     email: this.state.email,
-            //     address: this.state.address,
-            //     username: this.state.name,
-            // }
-            // this.props.load(customerInfor)
         }
     }
 
@@ -210,8 +204,8 @@ class RequestPersonalInformation extends Component {
                     dob: this.state.dob,
                     town: this.state.townCode,
                     district: this.state.districtCode,
-                    townName: this.state.townName1,
-                    districtName: this.state.districtName1,
+                    townName: this.state.townName,
+                    districtName: this.state.districtName,
                     date: this.state.apointmentDate,
                     time: this.state.apointmentTime,
                     selectedTest: this.props.route.params.selectedTest,
@@ -252,7 +246,7 @@ class RequestPersonalInformation extends Component {
                         renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
-                        defaultValue={this.state.districtName1}
+                        defaultValue={this.state.districtName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
                         showsVerticalScrollIndicator={false}                      
@@ -271,7 +265,7 @@ class RequestPersonalInformation extends Component {
                         renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderTownRow.bind(this)}
                         renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
-                        defaultValue={this.state.townName1}
+                        defaultValue={this.state.townName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
                         showsVerticalScrollIndicator={false} 
