@@ -198,8 +198,7 @@ class CreateAppointmentScreen extends Component {
 
 let AppointmentForm = reduxForm({
     form: 'createAppointment',
-    enableReinitialize: false,
-    // validate: validate,
+    enableReinitialize: true,
     destroyOnUnmount: false,
     // keepDirtyOnReinitialize: true,
     // forceUnregisterOnUnmount: true

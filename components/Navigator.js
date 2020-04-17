@@ -180,7 +180,7 @@ function CustomDrawerContent(props, state, navigatorProps) {
           // link='fb://profile/?canh.cam.31'
           link='fb://page/1739029202909840'
         />
-        <MenuButtonScreenContainer
+        {/* <MenuButtonScreenContainer
           screenName='HomeScreen'
           iconName='tool'
           iconType='antdesign'
@@ -188,7 +188,7 @@ function CustomDrawerContent(props, state, navigatorProps) {
           iconSize={20}
           screenTitle='Mời bạn bè cài đặt'
           navigator={props.navigation}
-        />
+        /> */}
         <TouchableOpacity
           style={styles.navigatorButton}
           onPress={() => {

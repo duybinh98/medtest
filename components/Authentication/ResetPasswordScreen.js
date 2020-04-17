@@ -20,11 +20,15 @@ class ResetPasswordScreen extends Component {
         super(props)
         this.state = {
             phonenumber: '',
+            disabledButton: false,
         };
     }
 
 
     submit = values => {
+        this.setState({
+            disabledButton : true,
+        })
         fetch(getApiUrl() + '/users/forgot-password', {
             method: 'POST',
             headers: {
@@ -39,6 +43,9 @@ class ResetPasswordScreen extends Component {
             .then(
                 (result) => {
                     console.log('.' + result.changedSuccess + '.')
+                    this.setState({
+                        disabledButton : false
+                    })
                     if (result.changedSuccess == true) {
                         Alert.alert(
                             'Lấy lại mật khẩu',
@@ -83,7 +90,9 @@ class ResetPasswordScreen extends Component {
                         onChange={(text) => { this.setState({ phonenumber: text }) }}
                         validate={[required, isNumber, isPhonenumber]}
                     />
-                    <TouchableOpacity style={styles.btnResetPassword} onPress={handleSubmit(this.submit)}>
+                    <TouchableOpacity disabled={this.state.disabledButton}
+                    style={styles.btnResetPassword} onPress={handleSubmit(this.submit)}
+                    >
                         <Text style={styles.textBtn}>Thay đổi mật khẩu</Text>
                     </TouchableOpacity>
                     <View>

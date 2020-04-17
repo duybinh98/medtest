@@ -37,7 +37,11 @@ export default class ViewNurseScreen extends Component {
 
     render(){
         return(
-            <View style={{ flex: 1 }}>
+            <ScrollView
+                style={{ flex: 1 }}
+                showsVerticalScrollIndicator={false}
+            >
+               {/* <View> */}
                 <ScreenTopMenuBack navigation={this.props.navigation}></ScreenTopMenuBack>
                 <View>
                     <View style={styles.logoContainer}>
@@ -62,23 +66,23 @@ export default class ViewNurseScreen extends Component {
                         <Text style={styles.textInfor} >Giới tính: {this.state.gender? "Nữ" : "Nam"}</Text>
                     </View>
                 </View>
-
                 <View style={styles.textContainer}>
                     <Text style={styles.textInfor} >Địa chỉ: {this.state.address}</Text>
                 </View>
                 <View style={styles.textContainer}>
                     <Text style={styles.textInfor} >Email: {this.state.email}</Text>
                 </View>
-                <View style={styles.buttonContainer}>  
+                {/* <View style={styles.buttonContainer}>  
                     <View/>                  
                     <TouchableOpacity style={styles.btnConfirm}
                         onPress={() => this.props.navigation.navigate('ChangePassword')}
                     >
                         <Text style={styles.textBtn}>Quay lại</Text>
                     </TouchableOpacity>
-                </View>
-                <ScreenBottomMenu {...this.props}></ScreenBottomMenu>
-            </View>
+                </View> */}
+                
+                {/* <ScreenBottomMenu {...this.props}></ScreenBottomMenu> */}
+                </ScrollView>
         );
     }
 }

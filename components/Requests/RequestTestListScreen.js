@@ -6,7 +6,7 @@ import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestSelectItem from './TestSelectItem'
 import testList from './../../Data/Test'
-import {convertMoney} from './../Common/CommonFunction';
+import { convertMoney } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 
 class RequestTestListScreen extends Component {
@@ -136,7 +136,7 @@ class RequestTestListScreen extends Component {
                         </View>
                         <TouchableOpacity
                             style={styles.btnConfirm}
-                            onPress={() => this.state.customerId != '-1' ? this.props.navigation.dispatch(
+                            onPress={() => this.state.customerId != '-1' ? this.state.selectedTest.length > 0 ? this.props.navigation.dispatch(
                                 CommonActions.navigate({
                                     name: 'RequestPersonalInformation',
                                     params: {
@@ -147,8 +147,16 @@ class RequestTestListScreen extends Component {
                                         resetSelectedTestOnConfirm: this.resetSelectedTestOnConfirm
                                     },
                                 })
-                            ) :
-                                Alert.alert('Bạn cần đăng nhập để có thể sử dụng chức năng đặt xét nghiệm')
+                            )
+                                : Alert.alert(
+                                    'Lỗi đặt xét nghiệm',
+                                    'Bạn cần chọn ít nhất 1 loại xét nghiệm để có thể đặt xét nghiệm',
+                                )
+                                : Alert.alert(
+                                    'Lỗi đặt xét nghiệm',
+                                    'Bạn cần đăng nhập để có thể sử dụng chức năng đặt xét nghiệm',
+                                )
+
                             }
                         >
                             <Text style={styles.textBtn}>Đặt xét nghiệm</Text>

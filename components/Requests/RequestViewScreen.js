@@ -78,7 +78,8 @@ class RequestViewScreen extends Component {
             },
             body: JSON.stringify({
                 status: 'canceled',
-                userID: '1',
+                // userID: '1',
+                userID : this.props.customerInfor.id,
                 note: 'I want to cancel this request',
             }),
         })
