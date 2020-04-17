@@ -84,7 +84,6 @@ class RequestPersonalInformation extends Component {
     componentDidMount = value => {
         this.callApiGetDistrictCode();
         this.callApiGetTownCode();
-
         setTimeout(() => {
             this.state.districtList.forEach(district => {
                 if (district.districtCode === this.props.customerInfor.districtCode) {
@@ -104,31 +103,12 @@ class RequestPersonalInformation extends Component {
                     console.log("Error")
                 }
             });
-        }, 4000);
+        }, 2000);
 
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
-            setTimeout(() => {
-                this.state.districtList.forEach(district => {
-                    if (district.districtCode === this.props.customerInfor.districtCode) {
-                        this.setState({
-                            districtName: district.districtName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-                this.state.townList.forEach(town => {
-                    if (town.townCode === this.props.customerInfor.townCode) {
-                        this.setState({
-                            townName: town.townName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-            }, 9000);
+            
         }
     }
     resetRequestPersonalInfor = value => {
@@ -144,24 +124,26 @@ class RequestPersonalInformation extends Component {
         })
         setTimeout(() => {
             this.state.districtList.forEach(district => {
-                if (district.districtCode == this.state.districtCode) {
+                if (district.districtCode === this.props.customerInfor.districtCode) {
                     this.setState({
                         districtName: district.districtName
                     })
                 } else {
-                    console.log("Error district")
+                    console.log("Error")
                 }
             });
             this.state.townList.forEach(town => {
-                if (town.townCode == this.state.townCode) {
+                if (town.townCode === this.props.customerInfor.townCode) {
                     this.setState({
                         townName: town.townName
                     })
                 } else {
-                    console.log("Error town")
+                    console.log("Error")
                 }
             });
-        }, 9000);
+        }, 2000);
+        this.districtDropdown.select(-1);
+        this.townDropdown.select(-1);
         this.props.reset();
     }
     _renderDistrictButtonText = rowData => {
@@ -263,6 +245,7 @@ class RequestPersonalInformation extends Component {
                 />
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
+                        ref={(ref) => this.districtDropdown = ref}
                         options={this.state.districtList}
                         renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderDistrictRow.bind(this)}
@@ -281,6 +264,7 @@ class RequestPersonalInformation extends Component {
                 </View>
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
+                        ref={(ref) => this.townDropdown = ref}
                         disabled={this.state.disableDropdownTown}
                         options={this.state.selectTownList}
                         renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
