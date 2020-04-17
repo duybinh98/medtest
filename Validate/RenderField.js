@@ -41,7 +41,7 @@ const renderField = ({
 const { width: WIDTH } = Dimensions.get('window')
 styles = StyleSheet.create({
     inputContainer: {
-        width: WIDTH - 25,
+        width: WIDTH - 30,
         height: 60,
         flexDirection: 'row',
         alignItems: 'center',

@@ -73,7 +73,7 @@ class LoginComponent extends Component {
             }
             else {
                 console.log('error at screen ' + this.props.LoginError);
-                console.log('error at screen aa' )
+                console.log('error at screen aa')
             }
         }
             , 8000)
@@ -93,10 +93,13 @@ class LoginComponent extends Component {
                 <View>
                     <View style={styles.logoContainer}>
                         <Image
-                            source={{ uri: 'https://getdrawings.com/free-icon/react-icon-69.png' }}
+                            // source={{ uri: 'https://getdrawings.com/free-icon/react-icon-69.png' }}
+                            source={require('./../../Image/LogoMedtest.png')}
                             style={styles.logo}
                         ></Image>
-                        <Text style={styles.logoText}>Đăng nhập</Text>
+                        <View style={styles.titleArea}>
+                            <Text style={styles.logoText}>Đăng nhập</Text>
+                        </View>
                     </View>
                 </View>
                 <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
@@ -157,10 +160,22 @@ const { width: WIDTH } = Dimensions.get('window')
 //#0A6ADA
 //#27CDCB
 const styles = StyleSheet.create({
+    titleArea: {
+        height: 50,
+        width: Dimensions.get('window').width - 30,
+        backgroundColor: 'white',
+        marginTop: 20,
+        marginBottom: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: 3,
+        borderRadius: 10,
+        marginHorizontal: 15,
+    },
     logo: {
         width: 120,
         height: 120,
-
     },
     logoContainer: {
         marginTop: 20,
@@ -168,7 +183,7 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     logoText: {
-        fontSize: 40,
+        fontSize: 30,
         color: '#25345D',
     },
     btnLogin: {
