@@ -53,7 +53,7 @@ class CreateAppointmentScreen extends Component {
             }
             this.props.load(customerInfor)
         }
-        
+
     }
 
 
@@ -89,6 +89,7 @@ class CreateAppointmentScreen extends Component {
                             },
                         })
                     )
+
                 },
                 (error) => {
                     console.log(error)
@@ -114,7 +115,7 @@ class CreateAppointmentScreen extends Component {
                     <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                         iconType="material-community" placeholder="Tên hiển thị" secureText={false}
                         onChange={(text) => { this.setState({ name: text }) }} editable={false}
-                        validate={[required]}
+                        validate={[required]} initialValue="123"
                     />
                     <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
                         iconType="material-community" placeholder="Số điện thoại" secureText={false}
@@ -128,7 +129,7 @@ class CreateAppointmentScreen extends Component {
                             mode="date"
                             placeholder="Ngày hẹn"
                             format="DD-MM-YYYY"
-                            minDate={new Date().getDate()+1}
+                            minDate={new Date().getDate() + 1}
                             customStyles={{
                                 dateIcon: {
                                     position: 'absolute',
@@ -197,7 +198,11 @@ class CreateAppointmentScreen extends Component {
 
 let AppointmentForm = reduxForm({
     form: 'createAppointment',
-    enableReinitialize: true,
+    enableReinitialize: false,
+    // validate: validate,
+    destroyOnUnmount: false,
+    // keepDirtyOnReinitialize: true,
+    // forceUnregisterOnUnmount: true
 })(CreateAppointmentScreen);
 AppointmentForm = connect(
     state => ({

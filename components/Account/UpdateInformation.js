@@ -70,12 +70,12 @@ class UpdateInformationScreen extends Component {
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
-            const customerInforReducer = {
-                email: this.props.customerInfor.email,
-                address: this.props.customerInfor.address,
-                name: this.props.customerInfor.name,
-            }
-            this.props.load(customerInforReducer)
+            // const customerInforReducer = {
+            //     email: this.props.customerInfor.email,
+            //     address: this.props.customerInfor.address,
+            //     name: this.props.customerInfor.name,
+            // }
+            // this.props.load(customerInforReducer)
         }
 
     }
@@ -109,6 +109,7 @@ class UpdateInformationScreen extends Component {
                 }
             });
         }, 9000);
+        this.props.reset();
     }
 
     callApiGetDistrictCode() {
@@ -377,6 +378,9 @@ const mapStateToDispatch = (dispatch) => {
 let UpdateInformationForm = reduxForm({
     form: 'UpdateInformation',
     enableReinitialize: true,
+    destroyOnUnmount: false,
+    keepDirtyOnReinitialize: true,
+    forceUnregisterOnUnmount: true
 })(UpdateInformationScreen);
 UpdateInformationForm = connect(
     state => ({
