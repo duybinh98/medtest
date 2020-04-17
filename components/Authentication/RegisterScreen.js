@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'rea
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { RadioButton } from 'react-native-paper';
-import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
+import TopMenuOutside from './../Common/TopMenuOutside';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { CommonActions } from '@react-navigation/native';
@@ -91,9 +91,9 @@ class RegisterScreen extends Component {
                     style={{ flex: 1 }}
                     showsVerticalScrollIndicator={false}
                 >
-                    {/* <ScreenTopMenuBack navigation={this.props.navigation} backScreen={'LoginScreen'}></ScreenTopMenuBack> */}
+                    <TopMenuOutside navigation={this.props.navigation} backScreen={'LoginScreen'}></TopMenuOutside>
                     <View>
-                        <View style={styles.logoContainer}>
+                        <View style={styles.titleArea}>
                             <Text style={styles.logoText}>Đăng ký</Text>
                         </View>
                     </View>
@@ -198,13 +198,21 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f1f0f0',
     },
-    logoContainer: {
+    titleArea: {
+        height: 50,
+        width: Dimensions.get('window').width - 25,
+        backgroundColor: 'white',
         marginTop: 10,
+        marginBottom: 20,
+        flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10
+        justifyContent: 'center',
+        paddingBottom: 3,
+        borderRadius: 10,
+        marginHorizontal: 15,
     },
     logoText: {
-        fontSize: 40,
+        fontSize: 30,
         color: '#25345D',
     },
     input: {

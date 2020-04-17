@@ -6,14 +6,16 @@ import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestSelectItem from './TestSelectItem'
 import testList from './../../Data/Test'
-import {convertMoney} from './../Common/CommonFunction'
+import {convertMoney} from './../Common/CommonFunction';
+import { connect } from 'react-redux';
 
-export default class HomeScreen extends Component {
+class RequestTestListScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            customerId: this.props.route.params.customerId ? this.props.route.params.customerId : '-1',
+            customerId: this.props.customerInforLoad.id ? this.props.customerInforLoad.id : '-1',
+            // customerId: this.props.route.params.customerId ? this.props.route.params.customerId : '-1',
             showFooter: true,
             selectedTest: [],
             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : testList,
@@ -84,6 +86,9 @@ export default class HomeScreen extends Component {
     };
 
     render() {
+        debugger;
+        const a = this.state.customerId;
+        const ab = this.props.customerInforLoad;
         return (
             <View style={{
                 flex: 1,
@@ -155,6 +160,21 @@ export default class HomeScreen extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        isLoginSuccess: state.login.isLoginSuccess,
+        token: state.login.token,
+        customerInforLoad: state.loadCustomer.customerInfor,
+    };
+}
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+    };
+}
+
+export default connect(mapStateToProps, mapStateToDispatch)(RequestTestListScreen);
 
 const styles = StyleSheet.create({
     background: {

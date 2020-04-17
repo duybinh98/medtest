@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { CommonActions } from '@react-navigation/native';
-import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
+import TopMenuOutside from './../Common/TopMenuOutside';
 import { Field, reduxForm } from 'redux-form';
-import {getApiUrl} from './../Common/CommonFunction'
+import { getApiUrl } from './../Common/CommonFunction'
 import renderField from '../../Validate/RenderField';
+import ScreenTopMenuBack from '../Common/ScreenTopMenuBack';
 
 
 const required = values => values ? undefined : 'Bắt buộc';
@@ -14,43 +15,55 @@ const isPhonenumber = values => values && values.length == 10 ? undefined : 'Ph�
 
 const { width: WIDTH } = Dimensions.get('window')
 
-class ResetPasswordScreen extends Component {    
+class ResetPasswordScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: '',
             phonenumber: '',
         };
     }
 
 
     submit = values => {
-    fetch(getApiUrl()+'/users/forgot-password', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            phoneNumber: this.state.phonenumber,
-        }),
-        })
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result)
-                this.props.navigation.dispatch(
-                    CommonActions.navigate({
-                        name: 'LoginScreen',
-                        params: {
-                        },
-                    })
-                )
+        fetch(getApiUrl() + '/users/forgot-password', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             },
-            (error) => {
-                console.log(error)
-            }
-        );
+            body: JSON.stringify({
+                phoneNumber: this.state.phonenumber,
+            }),
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log('.' + result.changedSuccess + '.')
+                    if (result.changedSuccess == true) {
+                        Alert.alert(
+                            'Lấy lại mật khẩu',
+                            result.message,
+                        )
+                        this.props.navigation.dispatch(
+                            CommonActions.navigate({
+                                name: 'LoginScreen',
+                                params: {
+                                },
+                            })
+                        )
+                        this.props.reset();
+                    } else {
+                        Alert.alert(
+                            'Lỗi lấy lại mật khẩu',
+                            result.message,
+                        )
+                    }
+                    
+                },
+                (error) => {
+                    console.log(error)
+                }
+            );
     }
 
 
@@ -59,7 +72,7 @@ class ResetPasswordScreen extends Component {
         return (
             <View style={styles.background}>
                 <ScrollView>
-                    {/* <ScreenTopMenuBack navigation={this.props.navigation} backScreen={'LoginScreen'}></ScreenTopMenuBack> */}
+                    <TopMenuOutside navigation={this.props.navigation} backScreen={'LoginScreen'}></TopMenuOutside>
                     <View>
                         <View style={styles.titleArea}>
                             <Text style={styles.logoText}>Quên mật khẩu</Text>
@@ -95,7 +108,7 @@ const styles = StyleSheet.create({
     },
     titleArea: {
         height: 50,
-        width: Dimensions.get('window').width - 25,
+        width: Dimensions.get('window').width - 30,
         backgroundColor: 'white',
         marginTop: 10,
         marginBottom: 20,
@@ -147,5 +160,5 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: "center",
         fontSize: 16,
-    },   
+    },
 })

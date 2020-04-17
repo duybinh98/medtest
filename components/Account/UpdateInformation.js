@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { RadioButton } from 'react-native-paper';
@@ -10,7 +10,7 @@ import DatePicker from 'react-native-datepicker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
-import {  load as loadAccount } from '../Store/Reducers/InitialValue';
+import { load as loadAccount } from '../Store/Reducers/InitialValue';
 import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer'
 import renderField from '../../Validate/RenderField'
 
@@ -68,43 +68,22 @@ class UpdateInformationScreen extends Component {
         };
         this.submit = this.submit.bind(this)
     }
-    componentWillMount = value => {
-        const customerInfor = {
-            email: this.state.email,
-            address: this.state.address,
-            name: this.state.name,
-        }
-        this.props.load(customerInfor)
-    }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
-            setTimeout(() => {
-                this.state.districtList.forEach(district => {
-                    if (district.districtCode === this.props.customerInfor.districtCode) {
-                        this.setState({
-                            districtName: district.districtName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-                this.state.townList.forEach(town => {
-                    if (town.townCode === this.props.customerInfor.townCode) {
-                        this.setState({
-                            townName: town.townName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-            }, 9000);
+            const customerInforReducer = {
+                email: this.props.customerInfor.email,
+                address: this.props.customerInfor.address,
+                name: this.props.customerInfor.name,
+            }
+            this.props.load(customerInforReducer)
         }
+
     }
     componentDidMount = value => {
         const customerInfor = {
-            email: this.state.email,
-            address: this.state.address,
-            name: this.state.name,
+            name: this.props.customerInfor.name,
+            address: this.props.customerInfor.address,
+            email: this.props.customerInfor.email,
         }
         this.props.load(customerInfor);
         this.callApiGetDistrictCode();
@@ -129,7 +108,7 @@ class UpdateInformationScreen extends Component {
                     console.log("Error")
                 }
             });
-        }, 5000);
+        }, 9000);
     }
 
     callApiGetDistrictCode() {
@@ -176,12 +155,14 @@ class UpdateInformationScreen extends Component {
         const { townCode, townName } = listTown;
         this.setState({
             townName: townName,
-            townCode : townCode
+            townCode: townCode
         })
         return `${townName}`;
     }
     submit = values => {
         const customerInforReducer = {
+            id: this.state.customerId,
+            phoneNumber: this.state.phoneNumber,
             name: this.state.name,
             email: this.state.email,
             gender: this.state.gender,
@@ -232,7 +213,11 @@ class UpdateInformationScreen extends Component {
             .then(
                 (result) => {
                     if (result.message) {
-                        alert(result.message)
+                        Alert.alert(
+                            'Lỗi cập nhật thông tin',
+                            result.message,
+                        )
+                        this.props.reset();
                     } else {
                         // this.props.load(result)
                     }
@@ -385,7 +370,7 @@ const mapStateToProps = (state) => {
 }
 const mapStateToDispatch = (dispatch) => {
     return {
-        load:(data) => dispatch(loadAccount(data)),
+        load: (data) => dispatch(loadAccount(data)),
         loadCustomerInfor: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
     };
 }
@@ -465,7 +450,7 @@ const styles = StyleSheet.create({
         height: 45,
         borderRadius: 15,
         fontSize: 16,
-        paddingLeft: 65,
+        paddingLeft: 60,
         borderWidth: 2,
         borderColor: '#0A6ADA',
         backgroundColor: 'rgba(255,255,255,0.7)',

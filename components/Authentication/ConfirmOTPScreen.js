@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { CommonActions } from '@react-navigation/native';
-import ScreenTopMenuBack from '../Common/ScreenTopMenuBack';
+import TopMenuOutside from '../Common/TopMenuOutside';
 import { Field, reduxForm } from 'redux-form';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import renderField from '../../Validate/RenderField';
@@ -123,7 +123,7 @@ class ConfirmOPTScreen extends Component {
         return (
             <View style={styles.background}>
                 <ScrollView>
-                    <ScreenTopMenuBack navigation={this.props.navigation} backScreen={this.state.backScreen}></ScreenTopMenuBack>
+                    <TopMenuOutside navigation={this.props.navigation} backScreen={'LoginScreen'}></TopMenuOutside>
                     <View>
                         <View style={styles.titleArea}>
                             <Text style={styles.logoText}>Xác nhận OTP</Text>
@@ -149,7 +149,7 @@ class ConfirmOPTScreen extends Component {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.buttonView}
-                           onPress={this.resendOTP}
+                            onPress={this.resendOTP}
                         >
                             <Text style={styles.textBtn}>Gửi lại OTP</Text>
                         </TouchableOpacity>

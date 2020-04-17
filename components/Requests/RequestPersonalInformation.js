@@ -11,7 +11,6 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Store/Reducers/InitialValue';
-import { loadCustomer } from '../Store/Reducers/LoadInforReducer'
 import renderField from '../../Validate/RenderField'
 import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate } from './../Common/CommonFunction'
 
@@ -51,11 +50,11 @@ class RequestPersonalInformation extends Component {
         super(props)
         this.state = {
             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
-            name: this.props.customerInfor ? this.props.customerInfor.name : '',
+            name: this.props.customerInfor.name ,
             dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
             apointmentDate: '01/01/2020',
             apointmentTime: '07:30',
-            address: this.props.customerInfor ? this.props.customerInfor.address : '',
+            address:  this.props.customerInfor.address ,
             districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
             townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
             customerInfor: this.props.customerInfor,
@@ -73,17 +72,15 @@ class RequestPersonalInformation extends Component {
         this.selectItem = this.selectItem.bind(this)
         this.submit = this.submit.bind(this)
     }
-    componentWillMount = value => {
-        const customerInfor = {
+    componentDidMount = value => {
+        this.callApiGetDistrictCode();
+        this.callApiGetTownCode();
+        const customerInforReducer = {
             email: this.state.email,
             address: this.state.address,
             username: this.state.name,
         }
-        this.props.load(customerInfor)
-    }
-    componentDidMount = value => {
-        this.callApiGetDistrictCode();
-        this.callApiGetTownCode();
+        this.props.load(customerInforReducer)
         setTimeout(() => {
             this.state.districtList.forEach(district => {
                 if (district.districtCode === this.props.customerInfor.districtCode) {
@@ -103,12 +100,17 @@ class RequestPersonalInformation extends Component {
                     console.log("Error")
                 }
             });
-        }, 2000);
+        }, 9000);
 
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
-            
+            const customerInforReducer = {
+                email: this.props.customerInfor.email,
+                address: this.props.customerInfor.address,
+                username: this.props.customerInfor.name,
+            }
+            this.props.load(customerInforReducer)
         }
     }
     resetRequestPersonalInfor = value => {
@@ -226,8 +228,8 @@ class RequestPersonalInformation extends Component {
         })
     }
     render() {
-        // debugger;
-        // const abc = this.props.customerInfor;
+        debugger;
+        const abc = this.props.customerInfor;
         const { handleSubmit } = this.props;
         return (
             <ScrollView style={{ flex: 1 }}>

@@ -31,7 +31,7 @@ class CreateAppointmentScreen extends Component {
         };
         this.submit = this.submit.bind(this)
     }
-    componentWillMount = value => {
+    componentDidMount = value => {
         const customerInfor = {
             username: this.state.name,
             phonenumber: this.state.phonenumber
@@ -47,12 +47,13 @@ class CreateAppointmentScreen extends Component {
                 phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '',
                 dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
             })
+            const customerInfor = {
+                username: this.state.name,
+                phonenumber: this.state.phonenumber
+            }
+            this.props.load(customerInfor)
         }
-        const customerInfor = {
-            username: this.state.name,
-            phonenumber: this.state.phonenumber
-        }
-        this.props.load(customerInfor)
+        
     }
 
 

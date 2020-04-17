@@ -19,14 +19,7 @@ export default class ScreenTopMenuBack extends Component {
                     }}
                 ></Icon>
                 <Text style={styles.title}> MedTest</Text>
-                <Icon
-                    name='bell'
-                    type='feather'
-                    color='yellow'
-                    size= {30}
-                    iconStyle={[styles.button,{marginRight:20,height:30,width:40}]}
-                    onPress={() => this.props.navigation.navigate('NotificationListScreen')}
-                ></Icon> 
+                
             </View>            
         );
     }
@@ -52,6 +45,7 @@ const styles = StyleSheet.create({
         color: 'white',
         flex: 1,
         textAlign: 'center',
-        fontWeight:'bold'
+        fontWeight:'bold',
+        marginRight: 60
     }
 });
