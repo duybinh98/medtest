@@ -152,7 +152,7 @@ class RequestPersonalInformation extends Component {
         const { districtCode, districtName } = rowData;
         this.setState({
             districtName: districtName,
-            districtCode: districtCode
+            districtCode: districtCode,
         })
         return `${districtName}`;
     }
@@ -225,6 +225,8 @@ class RequestPersonalInformation extends Component {
         this.setState({
             disableDropdownTown: false,
             selectTownList: this.state.districtList[id].listTown,
+            // townCode: this.state.districtList[id].listTown[0].townCode?  this.state.districtList[id].listTown[0].townCode : '',
+            // townName: this.state.districtList[id].listTown[0].townName? this.state.districtList[id].listTown[0].townName : '',
         })
     }
     render() {

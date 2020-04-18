@@ -70,7 +70,10 @@ class RegisterScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    Alert.alert(result.message);
+                    Alert.alert(
+                        'Đăng ký',
+                        result.message,
+                    )
                 },
                 (error) => {
                     this.setState({
@@ -200,10 +203,10 @@ const styles = StyleSheet.create({
     },
     titleArea: {
         height: 50,
-        width: Dimensions.get('window').width - 25,
+        width: Dimensions.get('window').width - 30,
         backgroundColor: 'white',
         marginTop: 10,
-        marginBottom: 20,
+        marginBottom: 10,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',

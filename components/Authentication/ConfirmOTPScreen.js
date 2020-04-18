@@ -26,10 +26,42 @@ class ConfirmOPTScreen extends Component {
             gender: this.props.route.params.gender,
             backScreen: this.props.route.params.backScreen,
             otp: '',
+            disabledButton: true,
+            timer: 20,
         };
     }
+    componentDidMount() {
+        this.startTimer()
+    }
+    startTimer = () => {
+        this.clockCall = setInterval(() => {
+            this.decrementClock();
+            console.log("abc " + this.state.timer)
+        }, 1000);
+    }
+
+    decrementClock = () => {
+        if (this.state.timer === 1) {
+            clearInterval(this.clockCall);
+            Alert.alert(
+                'Xác nhận OTP',
+                "Nếu không nhận được OTP, bạn có thể nhấn nút gửi lại OTP",
+            )
+            this.setState({
+                disabledButton: false
+            })
+        }
+        this.setState((prevstate) => ({
+            timer: prevstate.timer - 1
+        }));
+    };
 
     resendOTP = value => {
+        this.setState({
+            disabledButton : true,
+            timer : 20,
+        })
+        this.startTimer();
         fetch(getApiUrl() + '/users/resend-otp', {
             method: 'POST',
             headers: {
@@ -148,7 +180,7 @@ class ConfirmOPTScreen extends Component {
                             <Text style={styles.textBtn}>Hủy đăng ký</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.buttonView}
+                        <TouchableOpacity style={styles.buttonView} disabled={this.state.disabledButton}
                             onPress={this.resendOTP}
                         >
                             <Text style={styles.textBtn}>Gửi lại OTP</Text>
@@ -176,7 +208,7 @@ const styles = StyleSheet.create({
     },
     titleArea: {
         height: 50,
-        width: Dimensions.get('window').width - 25,
+        width: Dimensions.get('window').width - 30,
         backgroundColor: 'white',
         marginTop: 10,
         marginBottom: 20,
