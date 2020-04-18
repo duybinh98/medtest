@@ -108,7 +108,7 @@ class UpdateInformationScreen extends Component {
                     console.log("Error")
                 }
             });
-        }, 9000);
+        }, 12000);
         this.props.reset();
     }
 

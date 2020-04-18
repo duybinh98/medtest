@@ -33,8 +33,8 @@ export function convertMoney(_price){
 }
 
 export function getApiUrl(){
-    // return "http://192.168.1.11:8080";
-    return "http://192.168.1.6:8080"
+    return "https://medtest-backend.herokuapp.com";
+    // return "http://192.168.1.6:8080"
 }
 export function getStateName(status){
     switch (status) {

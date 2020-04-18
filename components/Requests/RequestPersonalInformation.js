@@ -100,7 +100,7 @@ class RequestPersonalInformation extends Component {
                     console.log("Error")
                 }
             });
-        }, 9000);
+        }, 14000);
 
     }
     componentDidUpdate(prevProps, prevState) {
