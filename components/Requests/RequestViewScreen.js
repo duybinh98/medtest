@@ -7,7 +7,7 @@ import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
 import testList from './../../Data/Test'
-import { getApiUrl, getStateName, getStateColor } from './../Common/CommonFunction'
+import { getApiUrl, getStateName, getStateColor, convertMoney } from './../Common/CommonFunction'
 
 
 class RequestViewScreen extends Component {
@@ -190,6 +190,9 @@ class RequestViewScreen extends Component {
                             }}>
                                 <Text style={styles.textInfor} >Giờ hẹn: {this.state.time}</Text>
                             </View>
+                        </View>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.textInfor} >Tổng tiền: {convertMoney(this.state.totalAmount) +'đ'}</Text>
                         </View>
                         <View style={styles.doubleContainer}>
                             <View style={{

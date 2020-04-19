@@ -62,7 +62,7 @@ export default class AppointmentListItem extends Component {
             case 'canceled':
                 this.setState(previousState => ({ 
                     statusName:'Đơn đã hủy',
-                    statusColor:'#ffd66f'
+                    statusColor:'#0a87da'
                 }));
                 break;
             }

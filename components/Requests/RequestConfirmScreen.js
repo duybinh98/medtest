@@ -5,7 +5,7 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
-import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate } from './../Common/CommonFunction'
+import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate, convertMoney } from './../Common/CommonFunction'
 import { connect } from 'react-redux';
 
 
@@ -181,7 +181,7 @@ class RequestConfirmScreen extends Component {
                     </View>
                     <View style={styles.buttonContainer}>
                         <View style={styles.totalMoneyContainer}>
-                            <Text>Tổng tiền: {this.props.route.params.totalPrice}</Text>
+                            <Text>Tổng tiền: {convertMoney(this.props.route.params.totalPrice)} đ</Text>
                         </View>
                         <TouchableOpacity style={styles.btnConfirm} onPress={() => { this.onConfirm() }} >
                             <Text style={styles.textBtn}>Xác nhận</Text>

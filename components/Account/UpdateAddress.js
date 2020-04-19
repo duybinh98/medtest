@@ -231,7 +231,7 @@ class UpdateAddress extends Component {
                     validate={[required]}
                 />
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.btnConfirm} onPress={handleSubmit(this.skip)}>
+                    <TouchableOpacity style={styles.btnConfirm} onPress={this.skip}>
                         <Text style={styles.textBtn}>Bỏ qua</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.btnConfirm} onPress={handleSubmit(this.submit)}>

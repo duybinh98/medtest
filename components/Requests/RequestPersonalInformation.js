@@ -12,7 +12,7 @@ import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Store/Reducers/InitialValue';
 import renderField from '../../Validate/RenderField'
-import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate } from './../Common/CommonFunction'
+import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate, formatMonth } from './../Common/CommonFunction'
 
 
 //validate conditions
@@ -50,11 +50,11 @@ class RequestPersonalInformation extends Component {
         super(props)
         this.state = {
             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
-            name: this.props.customerInfor.name ,
+            name: this.props.customerInfor.name,
             dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
-            apointmentDate: '01/01/2020',
+            apointmentDate: (new Date().getDate() + 1) + '-' + formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear(),
             apointmentTime: '07:30',
-            address:  this.props.customerInfor.address ,
+            address: this.props.customerInfor.address,
             districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
             townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
             customerInfor: this.props.customerInfor,
@@ -118,7 +118,7 @@ class RequestPersonalInformation extends Component {
             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
             name: this.props.customerInfor ? this.props.customerInfor.name : '',
             dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
-            apointmentDate: '01/01/2020',
+            apointmentDate: new Date().getDate() + 1,
             apointmentTime: '07:30',
             address: this.props.customerInfor ? this.props.customerInfor.address : '',
             districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',

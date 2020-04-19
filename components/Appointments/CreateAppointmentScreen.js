@@ -6,7 +6,7 @@ import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
-import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate } from './../Common/CommonFunction';
+import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate, formatMonth } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Store/Reducers/InitialValue'
 import renderField from '../../Validate/RenderField'
@@ -26,8 +26,8 @@ class CreateAppointmentScreen extends Component {
             name: this.props.customerInfor ? this.props.customerInfor.name : '',
             phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '',
             dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
-            apointmentDate: '01/01/2020',
-            apointmentTime: '07:30',
+            apointmentDate:(new Date().getDate() + 1) + '-' +formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear(),
+            apointmentTime: '07:30',          
         };
         this.submit = this.submit.bind(this)
     }
@@ -164,6 +164,7 @@ class CreateAppointmentScreen extends Component {
                             mode="time"
                             placeholder="Giờ hẹn"
                             format="HH:mm"
+                            customStyles='dateInput'
                             showIcon={false}
                             customStyles={{
                                 dateIcon: {

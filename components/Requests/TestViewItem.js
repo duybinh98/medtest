@@ -43,7 +43,7 @@ export default class TestViewItem extends Component {
                             fontSize:12,
                             color:'#25345d'
                         }}    
-                        >{this.props.testPrice}</Text>
+                        >{convertMoney(this.props.testPrice)+'đ'}</Text>
                 </View>
             </View>
         );

@@ -5,6 +5,17 @@ export function convertDateTimeToDate(inputString){
     
 }
 
+export function formatMonth(currentMonth){
+    //new Date().getMonth() return the month (from 0 to 11) with January is 0, February is 1
+    if(currentMonth < 9) {
+        return '0' + currentMonth;
+    }else {
+        return currentMonth;
+    };
+    
+}
+
+
 export function convertDateTimeToTime(inputString){
     
     return inputString.substring(11,13)+':'+inputString.substring(14,16);

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, FlatList, Alert} from 'react-native';
 import TestSelectItem from './TestSelectItem'
 import TestViewItem from './TestViewItem'
-import { convertMoney } from './../Common/CommonFunction';
+
 
 
 export default class TestCategoryItem extends Component {
@@ -99,13 +99,13 @@ export default class TestCategoryItem extends Component {
                                 { this.state.viewTest ? this.props.viewOnly ? this.props.isSelected(item.testID) ?
                                     <TestViewItem 
                                     testName={item.testName}
-                                    testPrice={convertMoney(item.price)}
+                                    testPrice={(item.price)}
                                     testID={item.testID}
                                     backgroundColor={(index-countHide) % 2 == 0 ? '#EEE': '#FFF'}
                                     /> : null :
                                     <TestSelectItem 
                                     testName={item.testName}
-                                    testPrice={convertMoney(item.price)}
+                                    testPrice={(item.price)}
                                     testID={item.testID}
                                     backgroundColor={index % 2 == 0 ? '#EEE': '#FFF'}
                                     onPressItem = {this.props.selectItem}
