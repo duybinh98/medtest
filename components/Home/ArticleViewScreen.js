@@ -79,9 +79,11 @@ const styles = StyleSheet.create({
     },
     articleTitleText:{
         fontSize:23,
-        //fontWeight: 'bold',
+        fontWeight: 'bold',
+        
     },
     articleContentText:{
-        fontSize:16
+        fontSize:16,
+        textAlign: 'justify'
     }
 });

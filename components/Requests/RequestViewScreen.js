@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
@@ -79,7 +79,7 @@ class RequestViewScreen extends Component {
             body: JSON.stringify({
                 status: 'canceled',
                 // userID: '1',
-                userID : this.props.customerInfor.id,
+                userID: this.props.customerInfor.id,
                 note: 'I want to cancel this request',
             }),
         })
@@ -249,11 +249,41 @@ class RequestViewScreen extends Component {
                     </View>
                     <View style={styles.buttonContainer}>
                         {this.state.status == 'pending' ?
-                            <TouchableOpacity style={styles.btnConfirm} onPress={() => this.cancelRequest()}>
+                            <TouchableOpacity style={styles.btnConfirm}
+                                onPress={() => {
+                                    Alert.alert(
+                                        'Hủy xét nghiệm',
+                                        'Bạn có chắc chắn muốn hủy đơn xét nghiệm mã ' + this.state.requestId + ' không?',
+                                        [
+                                            { text: 'Hủy', onPress: () => { return null } },
+                                            {
+                                                text: 'Xác nhận', onPress: () => {
+                                                    this.cancelRequest()
+                                                }
+                                            },
+                                        ]
+                                    )
+                                }}
+                            >
                                 <Text style={styles.textBtn}>{'Hủy đơn xét nghiệm'}</Text>
                             </TouchableOpacity>
                             : this.state.status == 'accepted' ?
-                                <TouchableOpacity style={styles.btnConfirm} onPress={() => this.cancelRequest()}>
+                                <TouchableOpacity style={styles.btnConfirm}
+                                    onPress={() => {
+                                        Alert.alert(
+                                            'Hủy xét nghiệm',
+                                            'Bạn có chắc chắn muốn hủy đơn xét nghiệm mã ' + this.state.requestId + ' không?',
+                                            [
+                                                { text: 'Hủy', onPress: () => { return null } },
+                                                {
+                                                    text: 'Xác nhận', onPress: () => {
+                                                        this.cancelRequest()
+                                                    }
+                                                },
+                                            ]
+                                        )
+                                    }}
+                                >
                                     <Text style={styles.textBtn}>{'Hủy đơn xét nghiệm'}</Text>
                                 </TouchableOpacity>
                                 : this.state.status == 'closed' ?
@@ -262,8 +292,8 @@ class RequestViewScreen extends Component {
                                     </TouchableOpacity>
                                     : <View />}
                         <TouchableOpacity style={styles.btnConfirm}
-                         onPress={() =>  this.state.backScreen ? this.props.navigation.navigate(this.state.backScreen) : this.props.navigation.goBack()}>
-                            <Text style={styles.textBtn} >Ok</Text>
+                            onPress={() => this.state.backScreen ? this.props.navigation.navigate(this.state.backScreen) : this.props.navigation.goBack()}>
+                            <Text style={styles.textBtn} >OK</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>

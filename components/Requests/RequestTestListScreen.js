@@ -217,8 +217,9 @@ const styles = StyleSheet.create({
         color: '#25345D'
     },
     TestListAreaBackground: {
-        height: 270,
-        marginTop: 5,
+        // height: 270,
+        flex :  50,
+        marginTop: 10,
     },
     TestListArea: {
         width: Dimensions.get('window').width - 20,
@@ -240,6 +241,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: Dimensions.get('window').width - 20,
         height: 54,
+        marginBottom: 10,
+        flex: 10,
     },
     btnConfirm: {
         width: 130,

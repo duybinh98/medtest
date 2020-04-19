@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity,Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
@@ -101,7 +101,7 @@ class AppointmentDetailScreen extends Component {
     render() {
         const { gender } = this.state;
         return (
-            <ScrollView style={{ flex: 1 }}>
+            <View style={{ flex: 1 }}>
                 <ScreenTopMenuBack navigation={this.props.navigation} backScreen={this.state.backScreen}></ScreenTopMenuBack>
                 <View style={styles.background}>
                     <View style={styles.titleArea}>
@@ -133,7 +133,20 @@ class AppointmentDetailScreen extends Component {
                 <View style={styles.buttonContainer}>
                     {this.state.status == 'pending' ?
                         <TouchableOpacity style={styles.buttonView}
-                            onPress={() => this.onCancelAppointment()}
+                            onPress={() => {
+                                Alert.alert(
+                                    'Hủy cuộc hẹn',
+                                    'Bạn có chắc chắn muốn hủy cuộc hẹn này không?',
+                                    [
+                                        { text: 'Hủy', onPress: () => { return null } },
+                                        {
+                                            text: 'Xác nhận', onPress: () => {
+                                                this.onCancelAppointment()
+                                            }
+                                        },
+                                    ]
+                                )
+                            }}
                         >
                             <Text style={styles.textBtn}>Hủy đơn</Text>
                         </TouchableOpacity>
@@ -148,7 +161,7 @@ class AppointmentDetailScreen extends Component {
                     </TouchableOpacity>
                 </View>
 
-            </ScrollView>
+            </View>
         );
     }
 }
@@ -192,7 +205,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
     },
     infoArea: {
-        height: 280,
+        height: 285,
         width: Dimensions.get('window').width - 25,
         backgroundColor: 'white',
         marginTop: 5,
@@ -201,7 +214,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         borderRadius: 10,
-        paddingTop: 3
+        paddingTop: 3,
     },
     logoText: {
         fontSize: 30,
@@ -250,6 +263,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
+        marginBottom: 40,
     },
     buttonView: {
         marginTop: 30,

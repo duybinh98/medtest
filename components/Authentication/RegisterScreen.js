@@ -37,26 +37,11 @@ class RegisterScreen extends Component {
         if (values.cfPassword !== values.password) {
             alert("Xác nhận mật khẩu không đúng!")
         } else {
-            this.callApi().then(
-            this.props.navigation.dispatch(
-                CommonActions.navigate({
-                    name: 'ConfirmOTPScreen',
-                    params: {
-                        name: this.state.name,
-                        phonenumber: this.state.phonenumber,
-                        email: this.state.email,
-                        dob: this.state.dob,
-                        password: this.state.password,
-                        gender: this.state.gender,
-                        backScreen: 'LoginScreen',
-                    },
-                })
-            ))
+            this.callApi()
         }
     }
 
     callApi = async () => {
-        // fetch('http://192.168.1.6:8080/users/customers/register', {
         fetch(getApiUrl() + '/users/send-otp', {
             method: 'POST',
             headers: {
@@ -70,10 +55,32 @@ class RegisterScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    Alert.alert(
-                        'Đăng ký',
-                        result.message,
-                    )
+                    if (result.messageSent == true) {
+                        Alert.alert(
+                            'Đăng ký',
+                            result.message,
+                        )
+                        this.props.navigation.dispatch(
+                            CommonActions.navigate({
+                                name: 'ConfirmOTPScreen',
+                                params: {
+                                    name: this.state.name,
+                                    phonenumber: this.state.phonenumber,
+                                    email: this.state.email,
+                                    dob: this.state.dob,
+                                    password: this.state.password,
+                                    gender: this.state.gender,
+                                    backScreen: 'LoginScreen',
+                                },
+                            })
+                        )
+                        this.props.reset();
+                    } else {
+                        Alert.alert(
+                            'Lỗi đăng ký',
+                            result.message,
+                        )
+                    }
                 },
                 (error) => {
                     this.setState({

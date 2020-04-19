@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Dimensions, Text, TextInput, ScrollView, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
+import { convertMoney } from './../Common/CommonFunction';
 
 
 
@@ -59,8 +60,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        //borderWidth:1,
-        //borderColor:'#25345d',
+        // borderWidth:1,
+        // borderColor:'#25345d',
     },
 
 });
