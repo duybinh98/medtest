@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image, Alert } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image, Alert, BackHandler } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
@@ -9,6 +9,7 @@ import { login } from '../Store/Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
 import { load as loadAccount } from '../Store/Reducers/InitialValue';
 import renderField from '../../Validate/RenderField';
+
 
 //validate conditions
 const required = value => value ? undefined : 'Bắt buộc';
@@ -26,9 +27,41 @@ class LoginComponent extends Component {
             isLoginSuccess: this.props.isLoginSuccess
         };
         this.submit = this.submit.bind(this)
+        this._unsubscribeSiFocus = this.props.navigation.addListener('focus', e => {
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        });
+        this._unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
+            BackHandler.removeEventListener(
+                'hardwareBackPress',
+                this.handleBackButton,
+            );
+        });
     }
-    componentDidMount() {
+    handleBackButton = () => {
+        Alert.alert(
+            'Cảnh báo!',
+            'Bạn có muốn tắt ứng dụng?',
+            [{
+                text: 'Hủy',
+                onPress: () => { return null },
+                style: 'cancel',
+            },
+            {
+                text: 'Xác nhận',
+                onPress: () => BackHandler.exitApp(),
+            },
+            ], {
+            cancelable: false,
+        },
+        );
+        return true;
+    };
+    componentWillUnmount() {
+        this._unsubscribeSiFocus();
+        this._unsubscribeSiBlur();
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
+
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
             this.setState({

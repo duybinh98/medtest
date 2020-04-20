@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Image, Text, Dimensions, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, Image, Text, Dimensions, FlatList, Alert, BackHandler } from 'react-native';
 import { Button } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
@@ -23,13 +23,26 @@ class HomeScreen extends Component {
         };
         this.onPressCreateRequest = this.onPressCreateRequest.bind(this);
         this.onPressCreateAppointment = this.onPressCreateAppointment.bind(this);
+
+        this._unsubscribeSiFocus = this.props.navigation.addListener('focus', e => {
+            console.warn('focus signIn');
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        });
+        this._unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
+            console.warn('blur signIn');
+            BackHandler.removeEventListener(
+                'hardwareBackPress',
+                this.handleBackButton,
+            );
+        });
     }
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps !== this.props) {
-            this.setState({
-                customerId: this.props.customerInforLoad ? this.props.customerInforLoad.id : '-1',
-            })
-        }
+    handleBackButton = () => {
+        return true;
+    };
+    componentWillUnmount() {
+        this._unsubscribeSiFocus();
+        this._unsubscribeSiBlur();
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
     componentDidMount() {
         this.callApiArticlesList();

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert, BackHandler } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -46,6 +46,16 @@ class Navigator extends Component {
       loadError: null,
     };
   }
+  // handleBackButton = () => {
+  //   return true;
+  // };
+  
+  // componentWillMount() {
+  //   BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
+  // }
+  // componentWillUnmount() {
+  //   BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton);
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps !== this.props) {
@@ -57,9 +67,6 @@ class Navigator extends Component {
       }));
     }
   }
-
-
-
   render() {
     return (
       <NavigationContainer>
@@ -67,7 +74,7 @@ class Navigator extends Component {
         <Drawer.Navigator initialRouteName="LoginScreen"
           drawerContent={props => CustomDrawerContent(props, this.state ? this.state : null, this.props)}
         >
-        {/* <Drawer.Navigator initialRouteName="ConfirmOTPScreen"
+          {/* <Drawer.Navigator initialRouteName="ConfirmOTPScreen"
           drawerContent={props => CustomDrawerContent(props, this.state ? this.state : null, this.props)}
         > */}
           <Drawer.Screen name="ChangePassword" component={ChangePassword} />
