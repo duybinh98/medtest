@@ -15,7 +15,7 @@ class RequestConfirmScreen extends Component {
         this.state = {
             customerId: this.props.route.params.customerId,
             phoneNumber: this.props.customerInfor.phoneNumber,
-            
+
             name: this.props.route.params.name,
             address: this.props.route.params.address,
             dob: this.props.route.params.dob,
@@ -87,7 +87,7 @@ class RequestConfirmScreen extends Component {
                         CommonActions.navigate({
                             name: 'RequestViewScreen',
                             params: {
-                                id : result.requestID,
+                                id: result.requestID,
                                 phone: this.state.phoneNumber,
                                 name: this.state.name,
                                 address: this.state.address,
@@ -97,6 +97,8 @@ class RequestConfirmScreen extends Component {
                                 status: 'pending',
                                 selectedTest: this.state.selectedTest,
                                 testsList: this.state.testsList,
+                                totalAmount : this.state.totalPrice,
+                                createdTime:  convertDateTimeToDate(result.requestCreatedTime),
                             },
                         })
                     )
@@ -125,6 +127,9 @@ class RequestConfirmScreen extends Component {
                     <View style={styles.infoArea}>
                         <View style={styles.textContainer}>
                             <Text style={styles.textInfor} >Tên hiển thị:  {this.state.name}</Text>
+                        </View>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.textInfor} >Số điện thoại: {this.state.phoneNumber}</Text>
                         </View>
                         <View style={styles.textContainer}>
                             <Text style={styles.textInfor} >Địa chỉ: {this.state.address + ', ' + this.state.townName + ', ' + this.state.districtName}</Text>
@@ -233,7 +238,7 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     infoArea: {
-        height: 105,
+        height: 150,
         width: Dimensions.get('window').width - 20,
         backgroundColor: 'white',
         marginTop: 5,
@@ -242,10 +247,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         borderRadius: 10,
-        paddingTop: 3
+        // paddingTop: 
     },
     textContainer: {
-        marginTop: 5,
+        marginTop: 10,
         width: Dimensions.get('window').width - 55,
         height: 25,
         marginHorizontal: 15,
@@ -256,7 +261,7 @@ const styles = StyleSheet.create({
     },
     TestListAreaBackground: {
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height - 370,
+        height: Dimensions.get('window').height - 415,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',

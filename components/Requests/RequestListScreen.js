@@ -16,6 +16,7 @@ class RequestListScreen extends Component {
             isDone: false,
             requestsList: [],
             testsList: testList,
+            testListVersion: 1,
         };
         this.viewDone = this.viewDone.bind(this);
     }
@@ -32,7 +33,21 @@ class RequestListScreen extends Component {
         })
     }
 
-    
+    // callApiTestList = async () => {
+    //     fetch(getApiUrl()+"/tests/versions/lastest-version-test")
+    //     .then(res => res.json())
+    //     .then(
+    //         (result) => {
+    //         this.setState(previousState => ({
+    //             testsList: result.lsTests,
+    //             testListVersion : result.versionID,
+    //         }));
+    //         },            
+    //         (error) => {
+    //             console.log(error)
+    //         }
+    //     )  
+    // }
     callApiTestList = async () => {
         fetch(getApiUrl()+"/test-types/type-test")
         .then(res => res.json())
@@ -75,6 +90,9 @@ class RequestListScreen extends Component {
 
 
     render(){
+        debugger;
+        const a = this.state.testListVersion;
+        const b = this.props.customerInfor;
         return(
                 <View style={{flex:1}}>
                     <ScreenTopMenuBack navigation={this.props.navigation} backScreen="HomeScreen"></ScreenTopMenuBack>

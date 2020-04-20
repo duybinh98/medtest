@@ -15,6 +15,7 @@ class NotificationListScreen extends Component {
     this.state = {
         customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
         notiList: [],
+        // notiList: this.props.route.params.notiList ? this.props.route.params.notiList : [],
         dataChanged: true,
         testsList: [],
     };

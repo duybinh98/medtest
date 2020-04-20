@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity,Alert } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
@@ -19,7 +19,9 @@ class AppointmentDetailScreen extends Component {
             date: this.props.route.params.appointment_date ? this.props.route.params.appointment_date : '',
             freeTime: this.props.route.params.appointment_time ? this.props.route.params.appointment_time : '',
             status: this.props.route.params.appointment_status ? this.props.route.params.appointment_status : '',
-            statusName: this.props.route.params.appointment_status ? this.props.route.params.appointment_status : '',
+            statusName: this.props.route.params.appointment_statusName ? this.props.route.params.appointment_statusName : '',
+            createdTime: this.props.route.params.appointment_createdTime ? this.props.route.params.appointment_createdTime : '',
+            createdDate: this.props.route.params.appointment_createdDate ? this.props.route.params.appointment_createdDate : '',
             backScreen: this.props.route.params.backScreen ? this.props.route.params.backScreen : null,
         };
         this.setStatusNameAndColor(this.props.route.params.appointment_status ? this.props.route.params.appointment_status : '')
@@ -36,7 +38,9 @@ class AppointmentDetailScreen extends Component {
                 date: this.props.route.params.appointment_date ? this.props.route.params.appointment_date : '',
                 freeTime: this.props.route.params.appointment_time ? this.props.route.params.appointment_time : '',
                 status: this.props.route.params.appointment_status ? this.props.route.params.appointment_status : '',
-                statusName: this.props.route.params.appointment_status ? this.props.route.params.appointment_status : '',
+                createdTime: this.props.route.params.appointment_createdTime ? this.props.route.params.appointment_createdTime : '',
+                createdDate: this.props.route.params.appointment_createdDate ? this.props.route.params.appointment_createdDate : '',
+                statusName: this.props.route.params.appointment_statusName ? this.props.route.params.appointment_statusName : '',
                 backScreen: this.props.route.params.backScreen ? this.props.route.params.backScreen : null,
             })
             this.setStatusNameAndColor(this.props.route.params.appointment_status ? this.props.route.params.appointment_status : '')
@@ -109,17 +113,23 @@ class AppointmentDetailScreen extends Component {
                     </View>
                     <View style={styles.infoArea}>
                         <View style={styles.textContainer}>
+                            <Text style={styles.textInfor} >Mã lịch hẹn:   {this.state.appointmentId}</Text>
+                        </View>
+                        <View style={styles.textContainer}>
                             <Text style={styles.textInfor} >Họ và tên:  {this.state.name}</Text>
                         </View>
                         <View style={styles.textContainer}>
                             <Text style={styles.textInfor} >Số điện thoại: {this.state.phone}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.textInfor} >Ngày sinh: {this.state.dob}</Text>
+                            <Text style={styles.textInfor} >Ngày tạo đơn: {this.state.createdDate}</Text>
+                        </View>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.textInfor} >Giờ tạo đơn: {this.state.createdTime}</Text>
                         </View>
                         <View style={styles.dateTimeContainer}>
                             <View style={styles.dateContainer}>
-                                <Text style={styles.textInfor} >Ngày : {this.state.date}</Text>
+                                <Text style={styles.textInfor} >Ngày hẹn: {this.state.date}</Text>
                             </View>
                             <View style={styles.timeContainer}>
                                 <Text style={styles.textInfor} >Giờ: {this.state.freeTime}</Text>
@@ -136,7 +146,7 @@ class AppointmentDetailScreen extends Component {
                             onPress={() => {
                                 Alert.alert(
                                     'Hủy cuộc hẹn',
-                                    'Bạn có chắc chắn muốn hủy cuộc hẹn này không?',
+                                    'Bạn có chắc chắn muốn hủy cuộc hẹn '+ this.state.appointmentId + ' không?',
                                     [
                                         { text: 'Hủy', onPress: () => { return null } },
                                         {
@@ -205,7 +215,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
     },
     infoArea: {
-        height: 285,
+        height: 355,
         width: Dimensions.get('window').width - 25,
         backgroundColor: 'white',
         marginTop: 5,
@@ -221,7 +231,7 @@ const styles = StyleSheet.create({
         color: '#25345D',
     },
     textContainer: {
-        marginTop: 10,
+        marginTop: 5,
         // borderWidth: 1,
         width: WIDTH - 55,
         height: 45,
@@ -233,7 +243,6 @@ const styles = StyleSheet.create({
     dateTimeContainer: {
         flexDirection: 'row',
         flex: 1,
-        marginTop: 10,
     },
     dateContainer: {
         flex: 70,
@@ -245,7 +254,7 @@ const styles = StyleSheet.create({
         marginLeft: 25,
     },
     timeContainer: {
-        flex: 40,
+        flex: 42,
         width: WIDTH - 55,
         height: 45,
         justifyContent: 'center',

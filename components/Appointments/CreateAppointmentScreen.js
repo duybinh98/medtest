@@ -78,13 +78,16 @@ class CreateAppointmentScreen extends Component {
                         CommonActions.navigate({
                             name: 'AppointmentDetailScreen',
                             params: {
+                                appointment_id : result.appointment_id,
                                 appointment_userName: this.state.name,
                                 appointment_phoneNumber: this.state.phonenumber,
                                 appointment_DOB: this.state.dob,
                                 appointment_date: this.state.apointmentDate,
                                 appointment_time: this.state.apointmentTime,
                                 appointment_status: 'pending',
-                                appointment_statusName: 'Đang chờ xác nhận',
+                                appointment_statusName: 'Đợi xác nhận',
+                                appointment_createdTime: convertDateTimeToTime(this.props.appointment_createdTime),
+                                appointment_createdDate: convertDateTimeToDate(this.props.appointment_createdTime),
                                 backScreen: 'HomeScreen',
                             },
                         })

@@ -13,7 +13,6 @@ class AppointmentListScreen extends Component {
         this.state = {
             isDone: false,
             customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
-            // customerId: '1',
             appointmentsList : null,
         };
         this.viewDone = this.viewDone.bind(this);

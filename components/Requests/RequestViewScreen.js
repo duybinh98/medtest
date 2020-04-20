@@ -27,7 +27,8 @@ class RequestViewScreen extends Component {
             statusColor: this.props.route.params.status ? getStateColor(this.props.route.params.status) : '#000',
             nurseId: this.props.route.params.nurseId ? this.props.route.params.nurseId : '',
             nurseName: this.props.route.params.nurseName ? this.props.route.params.nurseName : '',
-            totalAmount: this.props.route.params.totalAmount ? this.props.route.params.totalAmount : 'free',
+            totalAmount: this.props.route.params.totalAmount ? this.props.route.params.totalAmount : '0',
+            createdTime : this.props.route.params.createdTime ? this.props.route.params.createdTime : '',
             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : testList,
             backScreen: this.props.route.params.backScreen ? this.props.route.params.backScreen : "RequestListScreen",
         };
@@ -54,7 +55,8 @@ class RequestViewScreen extends Component {
                 statusColor: this.props.route.params.status ? getStateColor(this.props.route.params.status) : '#000',
                 nurseName: this.props.route.params.nurseName ? this.props.route.params.nurseName : '',
                 nurseId: this.props.route.params.nurseId ? this.props.route.params.nurseId : '',
-                totalAmount: this.props.route.params.totalAmount ? this.props.route.params.totalAmount : 'free',
+                totalAmount: this.props.route.params.totalAmount ? this.props.route.params.totalAmount : '0',
+                createdTime : this.props.route.params.createdTime ? this.props.route.params.createdTime : '',
                 backScreen: this.props.route.params.backScreen ? this.props.route.params.backScreen : "RequestListScreen",
             }));
         }
@@ -166,7 +168,7 @@ class RequestViewScreen extends Component {
                     <View style={styles.infoArea}>
                         <View style={styles.textContainer}>
                             <Text style={styles.textInfor} >Mã đơn xét nghiệm:  {this.state.requestId}</Text>
-                        </View>
+                        </View>                     
                         <View style={styles.textContainer}>
                             <Text style={styles.textInfor} >Tên hiển thị:  {this.state.name}</Text>
                         </View>
@@ -178,6 +180,9 @@ class RequestViewScreen extends Component {
                         </View>
                         <View style={styles.textContainer}>
                             <Text style={styles.textInfor} >Địa chỉ: {this.state.address}</Text>
+                        </View>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.textInfor} >Ngày tạo đơn:  {this.state.createdTime}</Text>
                         </View>
                         <View style={styles.doubleContainer}>
                             <View style={{

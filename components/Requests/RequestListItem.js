@@ -93,6 +93,7 @@ export default class RequestListItem extends Component {
                                 nurseName: this.props.nurse_name,
                                 totalAmount: this.props.req_amount,
                                 testsList: this.props.testList,
+                                createdTime:  convertDateTimeToDate(this.props.request_createTime),
                                 backScreen:'RequestListScreen'
                             },
                         })

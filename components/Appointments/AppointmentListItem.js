@@ -11,6 +11,7 @@ export default class AppointmentListItem extends Component {
             statusName:'',
             statusColor:'',
             createDate:'',
+            createTime: '',
             appointmentDate:'',
             appointmentTime:'',
             appointmentDob:'',
@@ -19,10 +20,12 @@ export default class AppointmentListItem extends Component {
     }
     componentDidMount(){
         this.setState(previousState => ({ 
+            createTime: convertDateTimeToTime(this.props.appointment_createdTime),
             createDate:convertDateTimeToDate(this.props.appointment_createdTime),
             appointmentDate:convertDateTimeToDate(this.props.appointment_meetingTime),
             appointmentTime:convertDateTimeToTime(this.props.appointment_meetingTime),
             appointmentDob:convertDateTimeToDate(this.props.appointment_DOB),
+
         }));
         this.setStatusNameAndColor(this.props.appointment_status)
     }
@@ -30,7 +33,8 @@ export default class AppointmentListItem extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
             this.setState({
-                createDate:convertDateTimeToDate(this.props.appointment_createdTime),
+                createTime: convertDateTimeToTime(this.props.appointment_createdTime),
+                createDate: convertDateTimeToDate(this.props.appointment_createdTime),
                 appointmentDate:convertDateTimeToDate(this.props.appointment_meetingTime),
                 appointmentTime:convertDateTimeToTime(this.props.appointment_meetingTime),
                 appointmentDob:convertDateTimeToDate(this.props.appointment_DOB),
@@ -91,12 +95,15 @@ export default class AppointmentListItem extends Component {
                                 appointment_id: this.props.appointment_id,
                                 appointment_userName: this.props.appointment_userName,
                                 appointment_phoneNumber: this.props.appointment_phoneNumber,
-                                appointment_DOB: this.state.appointmentDob,
+                                appointment_DOB: this.state.appointmentDob, 
                                 appointment_date: this.state.appointmentDate,
                                 appointment_time: this.state.appointmentTime,
                                 appointment_statusName: this.state.statusName,   
                                 appointment_status: this.props.appointment_status,   
                                 appointment_note: this.props.appointment_note,
+                                appointment_createdDate : this.state.createDate,
+                                appointment_createdTime : this.state.createTime
+
                                 // customerInfo  = this.state.customerInfo,
                             },
                         })
