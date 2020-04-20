@@ -51,8 +51,8 @@ class UpdateAddress extends Component {
             customerInfor: this.props.customerInforLoad ? this.props.customerInforLoad : null,
 
             selectTownList: [],
-            townName1: '',
-            districtName1: '',
+            townName: 'Chọn phường...',
+            districtName: 'Chọn quận...',
             districtList: [],
             townList: [],
             disableDropdownTown: true,
@@ -102,7 +102,7 @@ class UpdateAddress extends Component {
     _renderDistrictButtonText = rowData => {
         const { districtName, districtCode } = rowData;
         this.setState({
-            district: districtName,
+            districtName: districtName,
             districtCode: districtCode
         })
         return `${districtName}`;
@@ -110,27 +110,34 @@ class UpdateAddress extends Component {
     _renderTownButtonText = listTown => {
         const { townCode, townName } = listTown;
         this.setState({
-            town: townName,
+            townName: townName,
             townCode: townCode
         })
         return `${townName}`;
     }
     submit = values => {
-        this.props.customerInforLoad.address = this.state.address;
-        this.props.customerInforLoad.townCode = this.state.townCode;
-        this.props.customerInforLoad.districtCode = this.state.districtCode;
-        this.setState({
-            customerInfor: this.props.customerInforLoad
-        })
-        this.callApi().then(
-            this.props.load(this.state.customerInfor),
-            this.props.navigation.dispatch(
-                CommonActions.navigate({
-                    name: 'HomeScreen',
-                    params: {
-                    },
-                })
-            ))
+        if (this.state.districtName == 'Chọn quận...' || this.state.townName == 'Chọn phường...') {
+            alert('Bạn phải chọn quận và phường!')
+        } else {
+            this.props.customerInforLoad.address = this.state.address;
+            this.props.customerInforLoad.townCode = this.state.townCode;
+            this.props.customerInforLoad.districtCode = this.state.districtCode;
+            this.setState({
+                customerInfor: this.props.customerInforLoad
+            })
+            this.callApi().then(
+                this.props.load(this.state.customerInfor),
+                this.props.navigation.dispatch(
+                    CommonActions.navigate({
+                        name: 'HomeScreen',
+                        params: {
+                        },
+                    })
+                ))
+            this.districtDropdown.select(-1);
+            this.townDropdown.select(-1);
+            this.props.reset();
+        }
     }
     skip = values => {
         this.props.navigation.dispatch(
@@ -177,7 +184,7 @@ class UpdateAddress extends Component {
     render() {
         debugger;
         const { handleSubmit } = this.props;
-        
+
         return (
             <ScrollView
                 style={{ flex: 1 }}
@@ -191,11 +198,12 @@ class UpdateAddress extends Component {
                 </View>
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
+                        ref={(ref) => this.districtDropdown = ref}
                         options={this.state.districtList}
                         renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
-                        defaultValue={this.state.districtName1}
+                        defaultValue={this.state.districtName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
                         showsVerticalScrollIndicator={false}
@@ -209,17 +217,19 @@ class UpdateAddress extends Component {
                 </View>
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
+                        ref={(ref) => this.townDropdown = ref}
                         disabled={this.state.disableDropdownTown}
                         options={this.state.selectTownList}
                         renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderTownRow.bind(this)}
                         renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
-                        defaultValue={this.state.townName1}
+                        defaultValue={this.state.townName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
                         showsVerticalScrollIndicator={false}
                         dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
                         dropdownTextStyle={{ fontSize: 16 }}
+
                     />
                     <View style={{ position: "absolute", right: 30, top: 15 }}>
                         <Text style={{ fontSize: 20 }} >▼</Text>

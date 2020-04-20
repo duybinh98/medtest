@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert} from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { Field, reduxForm } from 'redux-form';
@@ -65,8 +65,8 @@ class RequestPersonalInformation extends Component {
             districtList: [],
             selectTownList: [],
             townList: [],
-            townName: '',
-            districtName: '',
+            townName: 'Loading...',
+            districtName: 'Loading...',
             disableDropdownTown: true,
         };
         this.selectItem = this.selectItem.bind(this)
@@ -118,7 +118,7 @@ class RequestPersonalInformation extends Component {
             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
             name: this.props.customerInfor ? this.props.customerInfor.name : '',
             dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
-            apointmentDate:  ((new Date().getDate() + 1) + '-' + formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear()),
+            apointmentDate: ((new Date().getDate() + 1) + '-' + formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear()),
             apointmentTime: '07:30',
             address: this.props.customerInfor ? this.props.customerInfor.address : '',
             districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
@@ -198,28 +198,35 @@ class RequestPersonalInformation extends Component {
             )
     }
     submit = values => {
-        this.props.navigation.dispatch(
-            CommonActions.navigate({
-                name: 'RequestConfirmScreen',
-                params: {
-                    customerId: this.state.customerId,
-                    name: this.state.name,
-                    address: this.state.address,
-                    dob: this.state.dob,
-                    town: this.state.townCode,
-                    district: this.state.districtCode,
-                    townName: this.state.townName,
-                    districtName: this.state.districtName,
-                    date: this.state.apointmentDate,
-                    time: this.state.apointmentTime,
-                    selectedTest: this.props.route.params.selectedTest,
-                    testsList: this.props.route.params.testsList,
-                    totalPrice: this.props.route.params.totalPrice,
-                    resetSelectedTestOnConfirm: this.props.route.params.resetSelectedTestOnConfirm,
-                    resetRequestPersonalInformation: this.resetRequestPersonalInfor,
-                },
-            })
-        )
+        if (this.state.districtName == 'Loading...' || this.state.townName == 'Loading...') {
+            Alert.alert(
+                'Thay đổi thông tin',
+                'Bạn phải chọn quận và phường!',
+            )
+        } else {
+            this.props.navigation.dispatch(
+                CommonActions.navigate({
+                    name: 'RequestConfirmScreen',
+                    params: {
+                        customerId: this.state.customerId,
+                        name: this.state.name,
+                        address: this.state.address,
+                        dob: this.state.dob,
+                        town: this.state.townCode,
+                        district: this.state.districtCode,
+                        townName: this.state.townName,
+                        districtName: this.state.districtName,
+                        date: this.state.apointmentDate,
+                        time: this.state.apointmentTime,
+                        selectedTest: this.props.route.params.selectedTest,
+                        testsList: this.props.route.params.testsList,
+                        totalPrice: this.props.route.params.totalPrice,
+                        resetSelectedTestOnConfirm: this.props.route.params.resetSelectedTestOnConfirm,
+                        resetRequestPersonalInformation: this.resetRequestPersonalInfor,
+                    },
+                })
+            )
+        }
     }
     selectItem(id) {
         this.setState({

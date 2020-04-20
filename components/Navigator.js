@@ -46,16 +46,6 @@ class Navigator extends Component {
       loadError: null,
     };
   }
-  // handleBackButton = () => {
-  //   return true;
-  // };
-  
-  // componentWillMount() {
-  //   BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
-  // }
-  // componentWillUnmount() {
-  //   BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton);
-  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps !== this.props) {

@@ -60,8 +60,8 @@ class UpdateInformationScreen extends Component {
             image: this.props.customerInfor ? this.props.customerInfor.image : '',
 
             selectTownList: [],
-            townName: '',
-            districtName: '',
+            townName: 'Loading...',
+            districtName: 'Loading...',
             districtList: [],
             townList: [],
             disableDropdownTown: true,
@@ -161,42 +161,48 @@ class UpdateInformationScreen extends Component {
         return `${townName}`;
     }
     submit = values => {
-        Alert.alert(
-            'Thay đổi thông tin',
-            'Bạn có muốn cập nhật các thông tin trên?',
-            [
-                { text: 'Hủy', onPress: () => { return null } },
-                {
-                    text: 'Xác nhận', onPress: () => {
-                        const customerInforReducer = {
-                            id: this.state.customerId,
-                            phoneNumber: this.state.phoneNumber,
-                            name: this.state.name,
-                            email: this.state.email,
-                            gender: this.state.gender,
-                            districtCode: this.state.districtCode,
-                            townCode: this.state.townCode,
-                            address: this.state.address,
-                            dob: convertDateToDateTime(this.state.dob),
-                            phoneNumber: this.state.phoneNumber,
-                            image: this.state.image,
+        if (this.state.districtName == 'Loading...' || this.state.townName == 'Loading...') {
+            Alert.alert(
+                'Thay đổi thông tin',
+                'Bạn phải chọn quận và phường!',
+            )
+        } else {
+            Alert.alert(
+                'Thay đổi thông tin',
+                'Bạn có muốn cập nhật các thông tin trên?',
+                [
+                    { text: 'Hủy', onPress: () => { return null } },
+                    {
+                        text: 'Xác nhận', onPress: () => {
+                            const customerInforReducer = {
+                                id: this.state.customerId,
+                                phoneNumber: this.state.phoneNumber,
+                                name: this.state.name,
+                                email: this.state.email,
+                                gender: this.state.gender,
+                                districtCode: this.state.districtCode,
+                                townCode: this.state.townCode,
+                                address: this.state.address,
+                                dob: convertDateToDateTime(this.state.dob),
+                                phoneNumber: this.state.phoneNumber,
+                                image: this.state.image,
+                            }
+
+                            this.callApi()
+                            this.props.loadCustomerInfor(customerInforReducer),
+                                this.props.navigation.dispatch(
+                                    CommonActions.navigate({
+                                        name: 'CustomerInformation',
+                                        params: {
+                                            customerInfor: customerInforReducer
+                                        },
+                                    })
+                                )
                         }
-
-                        this.callApi()
-                        this.props.loadCustomerInfor(customerInforReducer),
-                            this.props.navigation.dispatch(
-                                CommonActions.navigate({
-                                    name: 'CustomerInformation',
-                                    params: {
-                                        customerInfor: customerInforReducer
-                                    },
-                                })
-                            )
-                    }
-                },
-            ]
-        )
-
+                    },
+                ]
+            )
+        }
     }
     selectItem(id) {
         this.setState({
