@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'rea
 import { ScrollView } from 'react-native-gesture-handler';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
-import { getApiUrl } from './../Common/CommonFunction';
+import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate, formatMonth } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 
 const { width: WIDTH } = Dimensions.get('window')
@@ -122,10 +122,10 @@ class AppointmentDetailScreen extends Component {
                             <Text style={styles.textInfor} >Số điện thoại: {this.state.phone}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.textInfor} >Ngày tạo đơn: {this.state.createdDate}</Text>
+                            <Text style={styles.textInfor} >Ngày tạo đơn: {convertDateTimeToDate(this.state.createdDate)}</Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.textInfor} >Giờ tạo đơn: {this.state.createdTime}</Text>
+                            <Text style={styles.textInfor} >Giờ tạo đơn: {convertDateTimeToTime(this.state.createdTime)}</Text>
                         </View>
                         <View style={styles.dateTimeContainer}>
                             <View style={styles.dateContainer}>

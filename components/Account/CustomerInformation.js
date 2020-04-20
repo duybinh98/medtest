@@ -87,26 +87,27 @@ class customerInformation extends Component {
                         </ImageBackground>
                     </View>
                 </View>
-                <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Tên hiển thị:  {this.state.customerInfor ? this.state.customerInfor.name : ""}</Text>
-                </View>
-                <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Số điện thoại:  {this.state.customerInfor ? this.state.customerInfor.phoneNumber : ""}</Text>
-                </View>
-                <View style={styles.dobGenderContainer}>
-                    <View style={styles.dobContainer}>
-                        <Text style={styles.textInfor} >Ngày sinh:  {this.state.customerInfor ? convertDateTimeToDate(this.state.customerInfor.dob) : ""}</Text>
+                <View style={styles.infoArea}>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.textInfor} >Tên hiển thị:  {this.state.customerInfor ? this.state.customerInfor.name : ""}</Text>
                     </View>
-                    <View style={styles.genderContainer}>
-                        <Text style={styles.textInfor} >Giới tính: {this.state.customerInfor ? this.state.customerInfor.gender === 0 ? "Nữ" : "Nam" : ""}</Text>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.textInfor} >Số điện thoại:  {this.state.customerInfor ? this.state.customerInfor.phoneNumber : ""}</Text>
                     </View>
-                </View>
-
-                <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Địa chỉ: {this.state.customerInfor ? this.state.customerInfor.address : ""}</Text>
-                </View>
-                <View style={styles.textContainer}>
-                    <Text style={styles.textInfor} >Email: {this.state.customerInfor ? this.state.customerInfor.email : ""}</Text>
+                    <View style={styles.dobGenderContainer}>
+                        <View style={styles.dobContainer}>
+                            <Text style={styles.textInfor} >Ngày sinh:  {this.state.customerInfor ? convertDateTimeToDate(this.state.customerInfor.dob) : ""}</Text>
+                        </View>
+                        <View style={styles.genderContainer}>
+                            <Text style={styles.textInfor} >Giới tính: {this.state.customerInfor ? this.state.customerInfor.gender === 0 ? "Nữ" : "Nam" : ""}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.textInfor} >Địa chỉ: {this.state.customerInfor ? this.state.customerInfor.address : ""}</Text>
+                    </View>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.textInfor} >Email: {this.state.customerInfor ? this.state.customerInfor.email : ""}</Text>
+                    </View>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.btnConfirm}
@@ -127,7 +128,7 @@ class customerInformation extends Component {
                         <Text style={styles.textBtn}>Đổi mật khẩu</Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </ScrollView >
         );
     }
 }
@@ -165,6 +166,20 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: '#25345D',
     },
+    infoArea: {
+        height: 285,
+        width: Dimensions.get('window').width - 20,
+        backgroundColor: 'white',
+        marginTop: 5,
+        marginBottom: 5,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        borderRadius: 10,
+        paddingTop: 3,
+        paddingBottom: 10,
+        marginHorizontal: 10
+    },
     textContainer: {
         marginTop: 10,
         borderWidth: 1,
@@ -178,6 +193,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         marginTop: 10,
+        alignItems: 'center',
+        marginHorizontal: 17,
+        // backgroundColor: 'red'
     },
     dobContainer: {
         flex: 70,
@@ -186,7 +204,6 @@ const styles = StyleSheet.create({
         height: 45,
         justifyContent: 'center',
         paddingLeft: 10,
-        marginLeft: 25,
     },
     genderContainer: {
         flex: 45,
@@ -196,7 +213,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingLeft: 10,
         marginLeft: 10,
-        marginRight: 30,
     },
     textInfor: {
         fontSize: 16,
@@ -209,12 +225,15 @@ const styles = StyleSheet.create({
         width: 130,
         height: 45,
         borderRadius: 5,
-        backgroundColor: '#0A6ADA',
+        backgroundColor: 'white',
         justifyContent: 'center',
-        marginTop: 30,
+        borderWidth: 3,
+        borderColor: '#0A6ADA',
+        paddingBottom: 3,
+        marginTop: 30
     },
     textBtn: {
-        color: 'white',
+        color: '#0A6ADA',
         textAlign: "center",
         fontSize: 16,
     },

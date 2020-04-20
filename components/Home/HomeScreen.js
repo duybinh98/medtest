@@ -150,7 +150,6 @@ class HomeScreen extends Component {
         const { error, isLoaded, articlesList } = this.state;
         // debugger;
         // const abc = this.props.customerInfor;
-        // const a = this.state.customerId;
         return (
             <View style={{
                 flex: 1,

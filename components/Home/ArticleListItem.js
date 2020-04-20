@@ -66,10 +66,11 @@ const styles = StyleSheet.create({
     articleTitle:{
         height:48,
         alignItems: 'stretch',
+        fontWeight: 'bold',
         fontSize:19
     },
     articleShortContent:{
-        height:80,
+        height:78,
         alignItems: 'stretch',
         fontSize:13
     }

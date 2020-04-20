@@ -86,8 +86,8 @@ class CreateAppointmentScreen extends Component {
                                 appointment_time: this.state.apointmentTime,
                                 appointment_status: 'pending',
                                 appointment_statusName: 'Đợi xác nhận',
-                                appointment_createdTime: convertDateTimeToTime(this.props.appointment_createdTime),
-                                appointment_createdDate: convertDateTimeToDate(this.props.appointment_createdTime),
+                                appointment_createdTime: result.appointment_createdTime,
+                                appointment_createdDate: result.appointment_createdTime,
                                 backScreen: 'HomeScreen',
                             },
                         })

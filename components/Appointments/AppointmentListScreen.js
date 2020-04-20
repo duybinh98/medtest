@@ -123,7 +123,7 @@ class AppointmentListScreen extends Component {
                 </View>
                     </View>
                     
-                    <ScreenBottomMenu></ScreenBottomMenu>
+                    <ScreenBottomMenu  {...this.props}></ScreenBottomMenu>
                 </View>  
         );
     }

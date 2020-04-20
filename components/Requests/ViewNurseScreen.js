@@ -41,17 +41,17 @@ export default class ViewNurseScreen extends Component {
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
             >
-                    <ScreenTopMenuBack navigation={this.props.navigation}></ScreenTopMenuBack>
-                    <View>
-                        <View style={styles.logoContainer}>
-                            <ImageBackground
-                                source={{ uri: this.state.image }}
-                                style={styles.logo} >
+                <ScreenTopMenuBack navigation={this.props.navigation}></ScreenTopMenuBack>
+                <View>
+                    <View style={styles.logoContainer}>
+                        <ImageBackground
+                            source={{ uri: this.state.image }}
+                            style={styles.logo} >
 
-                            </ImageBackground>
-                        </View>
+                        </ImageBackground>
                     </View>
-                    <View style={styles.infoArea}>
+                </View>
+                <View style={styles.infoArea}>
                     <View style={styles.textContainer}>
                         <Text style={styles.textInfor} >Tên hiển thị:  {this.state.name}</Text>
                     </View>
@@ -73,8 +73,8 @@ export default class ViewNurseScreen extends Component {
                     <View style={styles.textContainer}>
                         <Text style={styles.textInfor} >Email: {this.state.email}</Text>
                     </View>
-                    </View>
-                    {/* <View style={styles.buttonContainer}>  
+                </View>
+                {/* <View style={styles.buttonContainer}>  
                     <View/>                  
                     <TouchableOpacity style={styles.btnConfirm}
                         onPress={() => this.props.navigation.navigate('ChangePassword')}
@@ -83,7 +83,7 @@ export default class ViewNurseScreen extends Component {
                     </TouchableOpacity>
                 </View> */}
 
-                    {/* <ScreenBottomMenu {...this.props}></ScreenBottomMenu> */}
+                {/* <ScreenBottomMenu {...this.props}></ScreenBottomMenu> */}
             </ScrollView>
         );
     }

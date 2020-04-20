@@ -161,30 +161,42 @@ class UpdateInformationScreen extends Component {
         return `${townName}`;
     }
     submit = values => {
-        const customerInforReducer = {
-            id: this.state.customerId,
-            phoneNumber: this.state.phoneNumber,
-            name: this.state.name,
-            email: this.state.email,
-            gender: this.state.gender,
-            districtCode: this.state.districtCode,
-            townCode: this.state.townCode,
-            address: this.state.address,
-            dob: convertDateToDateTime(this.state.dob),
-            phoneNumber: this.state.phoneNumber,
-            image: this.state.image,
-        }
+        Alert.alert(
+            'Thay đổi thông tin',
+            'Bạn có muốn cập nhật các thông tin trên?',
+            [
+                { text: 'Hủy', onPress: () => { return null } },
+                {
+                    text: 'Xác nhận', onPress: () => {
+                        const customerInforReducer = {
+                            id: this.state.customerId,
+                            phoneNumber: this.state.phoneNumber,
+                            name: this.state.name,
+                            email: this.state.email,
+                            gender: this.state.gender,
+                            districtCode: this.state.districtCode,
+                            townCode: this.state.townCode,
+                            address: this.state.address,
+                            dob: convertDateToDateTime(this.state.dob),
+                            phoneNumber: this.state.phoneNumber,
+                            image: this.state.image,
+                        }
 
-        this.callApi()
-        this.props.loadCustomerInfor(customerInforReducer),
-            this.props.navigation.dispatch(
-                CommonActions.navigate({
-                    name: 'CustomerInformation',
-                    params: {
-                        customerInfor: customerInforReducer
-                    },
-                })
-            )
+                        this.callApi()
+                        this.props.loadCustomerInfor(customerInforReducer),
+                            this.props.navigation.dispatch(
+                                CommonActions.navigate({
+                                    name: 'CustomerInformation',
+                                    params: {
+                                        customerInfor: customerInforReducer
+                                    },
+                                })
+                            )
+                    }
+                },
+            ]
+        )
+
     }
     selectItem(id) {
         this.setState({
@@ -468,13 +480,16 @@ const styles = StyleSheet.create({
         width: WIDTH - 170,
         height: 45,
         borderRadius: 5,
-        backgroundColor: '#0A6ADA',
+        backgroundColor: 'white',
         justifyContent: 'center',
+        borderWidth: 3,
+        borderColor: '#0A6ADA',
+        paddingBottom: 3,
         marginTop: 10,
         marginHorizontal: 85
     },
     textBtn: {
-        color: 'white',
+        color: '#0A6ADA',
         textAlign: "center",
         fontSize: 16,
     },
