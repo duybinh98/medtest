@@ -70,20 +70,41 @@ class UpdateInformationScreen extends Component {
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
-            // const customerInforReducer = {
-            //     email: this.props.customerInfor.email,
-            //     address: this.props.customerInfor.address,
-            //     name: this.props.customerInfor.name,
-            // }
-            // this.props.load(customerInforReducer)
+            setTimeout(() => {
+                this.state.districtList.forEach(district => {
+                    if (district.districtCode === this.props.customerInfor.districtCode) {
+                        this.setState({
+                            districtName: district.districtName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+                this.state.townList.forEach(town => {
+                    if (town.townCode === this.props.customerInfor.townCode) {
+                        this.setState({
+                            townName: town.townName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+            }, 12000);
+            const customerInfor = {
+                username: this.props.customerInfor ? this.props.customerInfor.name : '',
+                phonenumber:  this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
+                address: this.props.customerInfor ? this.props.customerInfor.address : '',
+                email: this.props.customerInfor ? this.props.customerInfor.email : '',
+            }
+            this.props.load(customerInfor);
         }
-
     }
     componentDidMount = value => {
         const customerInfor = {
-            name: this.props.customerInfor.name,
-            address: this.props.customerInfor.address,
-            email: this.props.customerInfor.email,
+            username: this.props.customerInfor ? this.props.customerInfor.name : '',
+            phonenumber:  this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
+            address: this.props.customerInfor ? this.props.customerInfor.address : '',
+            email: this.props.customerInfor ? this.props.customerInfor.email : '',
         }
         this.props.load(customerInfor);
         this.callApiGetDistrictCode();
@@ -198,6 +219,7 @@ class UpdateInformationScreen extends Component {
                                         },
                                     })
                                 )
+                            this.props.reset();
                         }
                     },
                 ]
@@ -265,7 +287,7 @@ class UpdateInformationScreen extends Component {
                         <Text style={styles.logoText}>Chỉnh sửa thông tin</Text>
                     </View>
                 </View>
-                <Field name="name" keyboardType="default" component={renderField} iconName="rename-box"
+                <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                     iconType="material-community" placeholder="Tên hiển thị" secureText={false}
                     onChange={(text) => { this.setState({ name: text }) }}
                     validate={[required]}

@@ -33,8 +33,10 @@ class changePassword extends Component {
     }
     componentWillMount = value => {
         const customerInfor = {
-            username: this.state.name,
-            phonenumber: this.state.phonenumber
+            username: this.props.customerInforLoad ? this.props.customerInforLoad.name : '',
+            phonenumber:  this.props.customerInforLoad ? this.props.customerInforLoad.phoneNumber : '0000000000',
+            address: this.props.customerInforLoad ? this.props.customerInforLoad.address : '',
+            email: this.props.customerInforLoad ? this.props.customerInforLoad.email : '',
         }
         this.props.load(customerInfor)
     }
@@ -46,8 +48,10 @@ class changePassword extends Component {
             })
         }
         const customerInfor = {
-            username: this.state.name,
-            phonenumber: this.state.phonenumber
+            username: this.props.customerInforLoad ? this.props.customerInforLoad.name : '',
+            phonenumber:  this.props.customerInforLoad ? this.props.customerInforLoad.phoneNumber : '0000000000',
+            address: this.props.customerInforLoad ? this.props.customerInforLoad.address : '',
+            email: this.props.customerInforLoad ? this.props.customerInforLoad.email : '',
         }
         this.props.load(customerInfor)
     }

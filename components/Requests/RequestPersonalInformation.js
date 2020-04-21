@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert} from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { Field, reduxForm } from 'redux-form';
@@ -76,9 +76,10 @@ class RequestPersonalInformation extends Component {
         this.callApiGetDistrictCode();
         this.callApiGetTownCode();
         const customerInforReducer = {
-            email: this.state.email,
-            address: this.state.address,
-            username: this.state.name,
+            username: this.props.customerInfor ? this.props.customerInfor.name : '',
+            phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
+            address: this.props.customerInfor ? this.props.customerInfor.address : '',
+            email: this.props.customerInfor ? this.props.customerInfor.email : '',
         }
         this.props.load(customerInforReducer)
         setTimeout(() => {
@@ -106,11 +107,32 @@ class RequestPersonalInformation extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
             const customerInforReducer = {
-                email: this.props.customerInfor.email,
-                address: this.props.customerInfor.address,
-                username: this.props.customerInfor.name,
+                username: this.props.customerInfor ? this.props.customerInfor.name : '',
+                phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
+                address: this.props.customerInfor ? this.props.customerInfor.address : '',
+                email: this.props.customerInfor ? this.props.customerInfor.email : '',
             }
             this.props.load(customerInforReducer)
+            setTimeout(() => {
+                this.state.districtList.forEach(district => {
+                    if (district.districtCode === this.props.customerInfor.districtCode) {
+                        this.setState({
+                            districtName: district.districtName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+                this.state.townList.forEach(town => {
+                    if (town.townCode === this.props.customerInfor.townCode) {
+                        this.setState({
+                            townName: town.townName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+            }, 12000);
         }
     }
     resetRequestPersonalInfor = value => {

@@ -26,15 +26,17 @@ class CreateAppointmentScreen extends Component {
             name: this.props.customerInfor ? this.props.customerInfor.name : '',
             phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '',
             dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
-            apointmentDate:(new Date().getDate() + 1) + '-' +formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear(),
-            apointmentTime: '07:30',          
+            apointmentDate: (new Date().getDate() + 1) + '-' + formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear(),
+            apointmentTime: '07:30',
         };
         this.submit = this.submit.bind(this)
     }
     componentDidMount = value => {
         const customerInfor = {
-            username: this.state.name,
-            phonenumber: this.state.phonenumber
+            username: this.props.customerInfor ? this.props.customerInfor.name : '',
+            phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
+            address: this.props.customerInfor ? this.props.customerInfor.address : '',
+            email: this.props.customerInfor ? this.props.customerInfor.email : '',
         }
         this.props.load(customerInfor)
     }
@@ -48,8 +50,10 @@ class CreateAppointmentScreen extends Component {
                 dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
             })
             const customerInfor = {
-                username: this.state.name,
-                phonenumber: this.state.phonenumber
+                username: this.props.customerInfor ? this.props.customerInfor.name : '',
+                phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
+                address: this.props.customerInfor ? this.props.customerInfor.address : '',
+                email: this.props.customerInfor ? this.props.customerInfor.email : '',
             }
             this.props.load(customerInfor)
         }
@@ -74,11 +78,12 @@ class CreateAppointmentScreen extends Component {
             .then(
                 (result) => {
                     console.log(result)
+
                     this.props.navigation.dispatch(
                         CommonActions.navigate({
                             name: 'AppointmentDetailScreen',
                             params: {
-                                appointment_id : result.appointment_id,
+                                appointment_id: result.appointment_id,
                                 appointment_userName: this.state.name,
                                 appointment_phoneNumber: this.state.phonenumber,
                                 appointment_DOB: this.state.dob,
@@ -92,7 +97,7 @@ class CreateAppointmentScreen extends Component {
                             },
                         })
                     )
-
+                    this.props.reset();
                 },
                 (error) => {
                     console.log(error)
