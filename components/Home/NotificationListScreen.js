@@ -17,18 +17,27 @@ class NotificationListScreen extends Component {
         notiList: [],
         // notiList: this.props.route.params.notiList ? this.props.route.params.notiList : [],
         dataChanged: true,
+        // dataChanged: this.props.route.params.dataChanged ? this.props.route.params.dataChanged : true,
         testsList: [],
     };
     }
 
     componentDidMount() {
-        this.callNotiApi();
         this.callApiTestList();
+        this.callNotiApi();
         this.props.navigation.addListener("focus", () => {
             this.callNotiApi();
         })
     } 
-
+    componentDidUpdate(prevProps, prevState) {
+        // if (prevProps !== this.props) {
+        //     this.setState({
+        //         notiList: this.props.route.params.notiList ? this.props.route.params.notiList : [],
+        //         customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
+        //         dataChanged: this.props.route.params.dataChanged ? this.props.route.params.dataChanged : true,
+        //     })
+        // }
+    }
     callNotiApi(){
         fetch(getApiUrl()+'/users/'+this.state.customerId+'/notifications/list', {
             method: 'GET',
@@ -78,6 +87,9 @@ class NotificationListScreen extends Component {
         // } else if (!isLoaded) {
         // return <div>Loading...</div>;
         // } else {
+            debugger;
+            const a = this.props.customerInfor;
+            const b = this.state.notiList;
         return(
                 <View style={{flex:1}}>
                     <ScreenTopMenuBack {...this.props} backScreen='HomeScreen'></ScreenTopMenuBack>

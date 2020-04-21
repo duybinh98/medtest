@@ -30,7 +30,7 @@ class ScreenTopMenu extends Component {
             .then(
                 (result) => {
                     console.log(result)
-                    result.message ? null :
+                    // result.message ? null :
                         this.setState(previousState => ({
                             notiList: result,
                             dataChanged: !this.state.dataChanged,
@@ -73,7 +73,7 @@ class ScreenTopMenu extends Component {
                     //         name: 'NotificationListScreen',
                     //         params: {
                     //             notiList: this.state.notiList,
-                    //             dataChanged: true,
+                    //             dataChanged: this.state.dataChanged,
                     //             testsList: [],
                     //         },
                     //     })

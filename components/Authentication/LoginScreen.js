@@ -74,13 +74,13 @@ class LoginComponent extends Component {
         this.props.login(phoneNumber, password)
         let count = 0;
 
-        var waitForIt = setInterval(() => {
-            if (this.props.isLoginSuccess == true || count > 50) {
-                clearInterval(waitForIt);
-            }
-            else console.log('wait')
-            count += 1
-        }, 100);
+        // var waitForIt = setInterval(() => {
+        //     if (this.props.isLoginSuccess == true || count > 50) {
+        //         clearInterval(waitForIt);
+        //     }
+        //     else console.log('wait')
+        //     count += 1
+        // }, 100);
         setTimeout(() => {
             if (this.props.customerInfoFromLogin != null) {
                 this.props.load(this.props.customerInfoFromLogin)
@@ -109,7 +109,7 @@ class LoginComponent extends Component {
                 console.log('error at screen aa')
             }
         }
-            , 14000)
+            , 18000)
         // 
     }
     render() {

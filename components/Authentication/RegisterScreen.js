@@ -50,6 +50,7 @@ class RegisterScreen extends Component {
             },
             body: JSON.stringify({
                 phoneNumber: this.state.phonenumber,
+                role : "CUSTOMER"
             }),
         })
             .then(res => res.json())

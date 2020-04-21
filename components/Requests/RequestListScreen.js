@@ -15,6 +15,7 @@ class RequestListScreen extends Component {
             customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
             isDone: false,
             requestsList: [],
+            requestsList123: [],
             testsList: testList,
             testListVersion: 1,
         };
@@ -77,7 +78,7 @@ class RequestListScreen extends Component {
         .then(
             (result) => {
             console.log(result)
-            this.setState(previousState => ({
+            this.setState( ({
                 requestsList: result,
             }));
             },            
