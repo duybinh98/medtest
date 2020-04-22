@@ -15,7 +15,6 @@ class RequestListScreen extends Component {
             customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
             isDone: false,
             requestsList: [],
-            requestsList123: [],
             testsList: testList,
             testListVersion: 1,
         };
@@ -33,7 +32,14 @@ class RequestListScreen extends Component {
             this.callApiRequestList();
         })
     }
-
+    componentDidUpdate(prevProps){
+        if (prevProps !== this.props) {
+            this.setState({
+                customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
+            })
+            this.callApiRequestList();
+        }
+    }
     // callApiTestList = async () => {
     //     fetch(getApiUrl()+"/tests/versions/lastest-version-test")
     //     .then(res => res.json())
@@ -77,10 +83,16 @@ class RequestListScreen extends Component {
         .then(res => res.json())
         .then(
             (result) => {
+                if(result.success == false){
+                    this.setState( ({
+                        requestsList: [],
+                    }));
+                }else {
+                    this.setState( ({
+                        requestsList: result,
+                    }));
+                }
             console.log(result)
-            this.setState( ({
-                requestsList: result,
-            }));
             },            
             (error) => {
                 console.log(error)

@@ -200,7 +200,7 @@ class UpdateInformationScreen extends Component {
                                 phoneNumber: this.state.phoneNumber,
                                 name: this.state.name,
                                 email: this.state.email,
-                                gender: this.state.gender,
+                                gender: this.state.gender == 'Nữ'? 0 : 1  ,
                                 districtCode: this.state.districtCode,
                                 townCode: this.state.townCode,
                                 address: this.state.address,
@@ -229,7 +229,9 @@ class UpdateInformationScreen extends Component {
     selectItem(id) {
         this.setState({
             disableDropdownTown: false,
-            selectTownList: this.state.districtList[id].listTown
+            selectTownList: this.state.districtList[id].listTown,
+            townCode: this.state.districtList[id].listTown[0].townCode?  this.state.districtList[id].listTown[0].townCode : '',
+            townName: this.state.districtList[id].listTown[0].townName? this.state.districtList[id].listTown[0].townName : '',
         })
     }
     callApi = async () => {

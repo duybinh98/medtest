@@ -18,13 +18,13 @@ class ConfirmOPTScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: this.props.route.params.name,
-            phonenumber: this.props.route.params.phonenumber,
-            email: this.props.route.params.email,
-            dob: this.props.route.params.dob,
-            password: this.props.route.params.password,
-            gender: this.props.route.params.gender,
-            backScreen: this.props.route.params.backScreen,
+            name: this.props.route.params.name ? this.props.route.params.name : '',
+            phonenumber: this.props.route.params.phonenumber ? this.props.route.params.phonenumber :'',
+            email: this.props.route.params.email ?this.props.route.params.email : '' ,
+            dob: this.props.route.params.dob ? this.props.route.params.dob :'',
+            password: this.props.route.params.password ? this.props.route.params.password : '',
+            gender: this.props.route.params.gender ? this.props.route.params.gender :'',
+            backScreen: this.props.route.params.backScreen ? this.props.route.params.backScreen : '',
             otp: '',
             disabledButton: true,
             timer: 20,
@@ -43,10 +43,6 @@ class ConfirmOPTScreen extends Component {
     decrementClock = () => {
         if (this.state.timer === 1) {
             clearInterval(this.clockCall);
-            Alert.alert(
-                'Xác nhận OTP',
-                "Nếu không nhận được OTP, bạn có thể nhấn nút gửi lại OTP",
-            )
             this.setState({
                 disabledButton: false
             })
@@ -58,8 +54,8 @@ class ConfirmOPTScreen extends Component {
 
     resendOTP = value => {
         this.setState({
-            disabledButton : true,
-            timer : 20,
+            disabledButton: true,
+            timer: 20,
         })
         this.startTimer();
         fetch(getApiUrl() + '/users/resend-otp', {
@@ -70,7 +66,7 @@ class ConfirmOPTScreen extends Component {
             },
             body: JSON.stringify({
                 phoneNumber: this.state.phonenumber,
-                role : "CUSTOMER"
+                role: "CUSTOMER"
             }),
         })
             .then(res => res.json())
@@ -151,7 +147,7 @@ class ConfirmOPTScreen extends Component {
     render() {
         const { handleSubmit } = this.props;
         debugger;
-        const abc = this.props.route.params.name;
+        // const abc = this.props.route.params.name;
         const a = this.state.name;
         return (
             <View style={styles.background}>
@@ -172,7 +168,16 @@ class ConfirmOPTScreen extends Component {
                     >
                         <Text style={styles.textBtn}>Xác nhận</Text>
                     </TouchableOpacity>
+                    {this.state.disabledButton == false ?
+                            <View style={styles.viewNoti}>
+                                <Text style={styles.textNoti}>Nếu không nhận được OTP, bạn có thể nhấn nút "Gửi lại OTP"</Text>
+                            </View>
+                            : 
+                            <View style={styles.viewNoti}>
+
+                            </View>}
                     <View style={styles.buttonContainer}>
+                        
                         <TouchableOpacity style={styles.buttonView}
                             onPress={() => {
                                 this.state.backScreen ? this.props.navigation.navigate(this.state.backScreen) : this.props.navigation.goBack();
@@ -248,24 +253,24 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
         backgroundColor: 'white'
     },
-    // btnResetPassword: {
-    //     width: WIDTH - 170,
-    //     height: 45,
-    //     borderRadius: 5,
-    //     backgroundColor: '#0A6ADA',
-    //     justifyContent: 'center',
-    //     marginTop: 10,
-    //     marginHorizontal: 85
-    // },
+    viewNoti: {
+        height : 50,
+        alignItems: "flex-start",
+        marginHorizontal: 20,
+        marginTop: 40,
+    },
+    textNoti: {
+        color: 'red',
+        fontSize: 18,
+        textAlign: 'center'
+    },
     buttonContainer: {
         marginLeft: 20,
         width: WIDTH - 40,
-        height: 300,
-        // height: 60,
+        height: 250,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
-        // backgroundColor: 'red'
     },
     buttonConfirm: {
         marginTop: 20,

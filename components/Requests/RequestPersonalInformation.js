@@ -254,8 +254,8 @@ class RequestPersonalInformation extends Component {
         this.setState({
             disableDropdownTown: false,
             selectTownList: this.state.districtList[id].listTown,
-            // townCode: this.state.districtList[id].listTown[0].townCode?  this.state.districtList[id].listTown[0].townCode : '',
-            // townName: this.state.districtList[id].listTown[0].townName? this.state.districtList[id].listTown[0].townName : '',
+            townCode: this.state.districtList[id].listTown[0].townCode?  this.state.districtList[id].listTown[0].townCode : '',
+            townName: this.state.districtList[id].listTown[0].townName? this.state.districtList[id].listTown[0].townName : '',
         })
     }
     render() {

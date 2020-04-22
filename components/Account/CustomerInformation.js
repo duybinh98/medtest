@@ -99,7 +99,7 @@ class customerInformation extends Component {
                             <Text style={styles.textInfor} >Ngày sinh:  {this.state.customerInfor ? convertDateTimeToDate(this.state.customerInfor.dob) : ""}</Text>
                         </View>
                         <View style={styles.genderContainer}>
-                            <Text style={styles.textInfor} >Giới tính: {this.state.customerInfor ? this.state.customerInfor.gender === 0 ? "Nữ" : "Nam" : ""}</Text>
+                            <Text style={styles.textInfor} >Giới tính: {this.state.customerInfor ? this.state.customerInfor.gender == 0 ? "Nữ" : "Nam" : ""}</Text>
                         </View>
                     </View>
                     <View style={styles.textContainer}>
