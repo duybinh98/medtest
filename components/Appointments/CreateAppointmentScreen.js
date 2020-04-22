@@ -28,6 +28,7 @@ class CreateAppointmentScreen extends Component {
             dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
             apointmentDate: (new Date().getDate() + 1) + '-' + formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear(),
             apointmentTime: '07:30',
+            disabledButton : false,
         };
         this.submit = this.submit.bind(this)
     }
@@ -62,6 +63,9 @@ class CreateAppointmentScreen extends Component {
 
 
     submit = values => {
+        this.setState({
+            disabledButton : true,
+        })
         fetch(getApiUrl() + '/appointments/create', {
             method: 'POST',
             headers: {
@@ -78,7 +82,9 @@ class CreateAppointmentScreen extends Component {
             .then(
                 (result) => {
                     console.log(result)
-
+                    this.setState({
+                        disabledButton : false,
+                    })
                     this.props.navigation.dispatch(
                         CommonActions.navigate({
                             name: 'AppointmentDetailScreen',
@@ -194,7 +200,7 @@ class CreateAppointmentScreen extends Component {
                             onDateChange={(time) => { this.setState({ apointmentTime: time }) }}
                         />
                     </View>
-                    <TouchableOpacity style={styles.btnRegister} onPress={handleSubmit(this.submit)}>
+                    <TouchableOpacity style={styles.btnRegister} disabled={this.state.disabledButton} onPress={handleSubmit(this.submit)}>
                         <Text style={styles.textBtn}>Đặt lịch</Text>
                     </TouchableOpacity>
                     <View>

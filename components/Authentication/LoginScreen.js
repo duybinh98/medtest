@@ -24,7 +24,8 @@ class LoginComponent extends Component {
             phoneNumber: '',
             password: '',
             customerInfoFromLogin: this.props.customerInfoFromLogin ? this.props.customerInfoFromLogin : null,
-            isLoginSuccess: this.props.isLoginSuccess
+            isLoginSuccess: this.props.isLoginSuccess,
+            disabledButton : false,
         };
         this.submit = this.submit.bind(this)
         this._unsubscribeSiFocus = this.props.navigation.addListener('focus', e => {
@@ -70,6 +71,9 @@ class LoginComponent extends Component {
         }
     }
     submit = value => {
+        this.setState({
+            disabledButton : true,
+        })
         const { phoneNumber, password } = this.state;
         this.props.login(phoneNumber, password)
         let count = 0;
@@ -82,7 +86,11 @@ class LoginComponent extends Component {
         //     count += 1
         // }, 100);
         setTimeout(() => {
+            this.setState({
+                disabledButton : false,
+            })
             if (this.props.customerInfoFromLogin != null) {
+                
                 this.props.load(this.props.customerInfoFromLogin)
                 if (this.props.customerInfoFromLogin.address === null) {
                     this.props.navigation.dispatch(
@@ -145,7 +153,7 @@ class LoginComponent extends Component {
                     onChange={(text) => { this.setState({ password: text }) }}
                     validate={[required, isWeakPassword]}
                 />
-                <TouchableOpacity style={styles.btnLogin} onPress={handleSubmit(this.submit)}>
+                <TouchableOpacity style={styles.btnLogin} disabled={this.state.disabledButton} onPress={handleSubmit(this.submit)}>
                     <Text style={styles.textBtn}>Đăng nhập</Text>
                 </TouchableOpacity>
                 <View style={styles.textLinkView} >

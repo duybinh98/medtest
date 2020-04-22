@@ -28,6 +28,8 @@ class RequestConfirmScreen extends Component {
             selectedTest: this.props.route.params.selectedTest,
             testsList: this.props.route.params.testsList,
             totalPrice: this.props.route.params.totalPrice,
+            
+            disabledButton : false,
         };
         this.isSelected = this.isSelected.bind(this);
         this.onConfirm = this.onConfirm.bind(this);
@@ -61,6 +63,9 @@ class RequestConfirmScreen extends Component {
     }
 
     onConfirm = async () => {
+        this.setState({
+            disabledButton : true,
+        })
         fetch(getApiUrl() + '/requests/create', {
             method: 'POST',
             headers: {
@@ -80,6 +85,9 @@ class RequestConfirmScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    this.setState({
+                        disabledButton : false,
+                    })
                     this.props.route.params.resetSelectedTestOnConfirm()
                     this.props.route.params.resetRequestPersonalInformation()
                     console.log(result)
@@ -190,7 +198,7 @@ class RequestConfirmScreen extends Component {
                         <View style={styles.totalMoneyContainer}>
                             <Text>Tổng tiền: {convertMoney(this.props.route.params.totalPrice)} đ</Text>
                         </View>
-                        <TouchableOpacity style={styles.btnConfirm} onPress={() => { this.onConfirm() }} >
+                        <TouchableOpacity style={styles.btnConfirm} disabled={this.state.disabledButton} onPress={() => { this.onConfirm() }} >
                             <Text style={styles.textBtn}>Xác nhận</Text>
                         </TouchableOpacity>
                     </View>

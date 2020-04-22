@@ -65,8 +65,8 @@ class RequestPersonalInformation extends Component {
             districtList: [],
             selectTownList: [],
             townList: [],
-            townName: 'Loading...',
-            districtName: 'Loading...',
+            townName: 'Huyện...',
+            districtName: 'Quận...',
             disableDropdownTown: true,
         };
         this.selectItem = this.selectItem.bind(this)
@@ -220,7 +220,7 @@ class RequestPersonalInformation extends Component {
             )
     }
     submit = values => {
-        if (this.state.districtName == 'Loading...' || this.state.townName == 'Loading...') {
+        if (this.state.districtName == 'Quận...' || this.state.townName == 'Huyện...') {
             Alert.alert(
                 'Thay đổi thông tin',
                 'Bạn phải chọn quận và phường!',

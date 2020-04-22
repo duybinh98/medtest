@@ -56,6 +56,7 @@ class UpdateAddress extends Component {
             districtList: [],
             townList: [],
             disableDropdownTown: true,
+            disabledButton : false,
         };
         this.submit = this.submit.bind(this)
     }
@@ -157,6 +158,9 @@ class UpdateAddress extends Component {
         })
     }
     callApi = async () => {
+        this.setState({
+            disabledButton : true,
+        })
         fetch(getApiUrl() + '/users/customers/detail/address/update/' + this.state.customerId, {
             method: 'PUT',
             headers: {
@@ -173,6 +177,9 @@ class UpdateAddress extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    this.setState({
+                        disabledButton : false,
+                    })
                     console.log(result)
                     this.props.loadCustomer(result)
                 },
@@ -246,7 +253,7 @@ class UpdateAddress extends Component {
                     <TouchableOpacity style={styles.btnConfirm} onPress={this.skip}>
                         <Text style={styles.textBtn}>Bỏ qua</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnConfirm} onPress={handleSubmit(this.submit)}>
+                    <TouchableOpacity style={styles.btnConfirm} disabled={this.state.disabledButton} onPress={handleSubmit(this.submit)}>
                         <Text style={styles.textBtn}>Xác nhận</Text>
                     </TouchableOpacity>
                 </View>

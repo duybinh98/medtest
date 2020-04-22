@@ -28,6 +28,7 @@ class changePassword extends Component {
             phonenumber: this.props.customerInforLoad ? this.props.customerInforLoad.phoneNumber : '',
             password: '',
             newPassword: '',
+            disabledButton : false,
         };
         this.submit = this.submit.bind(this)
     }
@@ -56,6 +57,9 @@ class changePassword extends Component {
         this.props.load(customerInfor)
     }
     submit = values => {
+        this.setState({
+            disabledButton : true,
+        })
         if (values.password === values.newPassword) {
             Alert.alert(
                 'Đổi mật khẩu',
@@ -83,6 +87,9 @@ class changePassword extends Component {
                 .then(res => res.json())
                 .then(
                     (result) => {
+                        this.setState({
+                            disabledButton : false,
+                        })
                         console.log('.' + result.changedSuccess + '.')
                         if (result.changedSuccess == true) {
                             Alert.alert(
@@ -157,7 +164,7 @@ class changePassword extends Component {
                         iconType="material-community" placeholder="Xác nhận mật khẩu mới" secureText={true}
                         validate={[required, isWeakPassword]}
                     />
-                    <TouchableOpacity style={styles.btnChangePassword} onPress={handleSubmit(this.submit)}>
+                    <TouchableOpacity style={styles.btnChangePassword} disabled={this.state.disabledButton} onPress={handleSubmit(this.submit)}>
                         <Text style={styles.textBtn}>Xác nhận đổi mật khẩu</Text>
                     </TouchableOpacity>
                     <View>
@@ -178,6 +185,7 @@ const mapStateToDispatch = (dispatch) => {
 let ChangePasswordForm = reduxForm({
     form: 'changePassword',
     enableReinitialize: true,
+    destroyOnUnmount : false,
 })(changePassword);
 
 ChangePasswordForm = connect(

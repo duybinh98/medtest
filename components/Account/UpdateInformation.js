@@ -60,11 +60,12 @@ class UpdateInformationScreen extends Component {
             image: this.props.customerInfor ? this.props.customerInfor.image : '',
 
             selectTownList: [],
-            townName: 'Loading...',
-            districtName: 'Loading...',
+            townName: 'Huyện...',
+            districtName: 'Quận...',
             districtList: [],
             townList: [],
             disableDropdownTown: true,
+            disabledButton : false,
         };
         this.submit = this.submit.bind(this)
     }
@@ -182,7 +183,7 @@ class UpdateInformationScreen extends Component {
         return `${townName}`;
     }
     submit = values => {
-        if (this.state.districtName == 'Loading...' || this.state.townName == 'Loading...') {
+        if (this.state.districtName == 'Quận...' || this.state.townName == 'Huyện...') {
             Alert.alert(
                 'Thay đổi thông tin',
                 'Bạn phải chọn quận và phường!',
@@ -235,6 +236,9 @@ class UpdateInformationScreen extends Component {
         })
     }
     callApi = async () => {
+        this.setState({
+            disabledButton : true,
+        })
         fetch(getApiUrl() + '/users/customers/detail/update/' + this.state.customerId, {
             method: 'PUT',
             headers: {
@@ -255,6 +259,9 @@ class UpdateInformationScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    this.setState({
+                        disabledButton : false,
+                    })
                     if (result.message) {
                         Alert.alert(
                             'Lỗi cập nhật thông tin',
@@ -395,7 +402,7 @@ class UpdateInformationScreen extends Component {
                     iconType="material-community" placeholder="Email" secureText={false}
                     validate={[required, isEmail]}
                 />
-                <TouchableOpacity style={styles.btnConfirm} onPress={handleSubmit(this.submit)}>
+                <TouchableOpacity style={styles.btnConfirm} disabled={this.state.disabledButton} onPress={handleSubmit(this.submit)}>
                     <Text style={styles.textBtn}>Xác nhận</Text>
                 </TouchableOpacity>
                 <View>

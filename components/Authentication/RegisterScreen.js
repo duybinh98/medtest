@@ -30,6 +30,7 @@ class RegisterScreen extends Component {
             dob: '01-01-1970',
             password: '',
             gender: 'Nam',
+            disabledButton : false,
         };
         this.submit = this.submit.bind(this)
     }
@@ -42,6 +43,9 @@ class RegisterScreen extends Component {
     }
 
     callApi = async () => {
+        this.setState({
+            disabledButton : true,
+        })
         fetch(getApiUrl() + '/users/send-otp', {
             method: 'POST',
             headers: {
@@ -56,6 +60,9 @@ class RegisterScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    this.setState({
+                        disabledButton : false,
+                    })
                     if (result.messageSent == true) {
                         Alert.alert(
                             'Đăng ký',
@@ -186,7 +193,7 @@ class RegisterScreen extends Component {
                         iconType="material-community" placeholder="Xác nhận mật khẩu" secureText={true}
                         validate={[required, isWeakPassword]}
                     />
-                    <TouchableOpacity style={styles.btnRegister} onPress={handleSubmit(this.submit)}>
+                    <TouchableOpacity style={styles.btnRegister} disabled={this.state.disabledButton} onPress={handleSubmit(this.submit)}>
                         <Text style={styles.textBtn}>Đăng ký</Text>
                     </TouchableOpacity>
                     <View>

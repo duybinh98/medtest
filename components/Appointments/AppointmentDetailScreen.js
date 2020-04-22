@@ -164,10 +164,10 @@ class AppointmentDetailScreen extends Component {
                     }
                     <TouchableOpacity style={styles.buttonView}
                         onPress={() => {
-                            this.state.backScreen ? this.props.navigation.navigate(this.state.backScreen) : this.props.navigation.goBack();
+                             this.props.navigation.goBack();
                         }}
                     >
-                        <Text style={styles.textBtn}>Quay lại</Text>
+                        <Text style={styles.textBtn}>OK</Text>
                     </TouchableOpacity>
                 </View>
 

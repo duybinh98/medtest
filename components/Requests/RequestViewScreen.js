@@ -33,6 +33,8 @@ class RequestViewScreen extends Component {
             backScreen: this.props.route.params.backScreen ? this.props.route.params.backScreen : "RequestListScreen",
             currentVersion: this.props.route.params.currentVersion ? this.props.route.params.currentVersion : 1,
             requestVersion: this.props.route.params.requestVersion ? this.props.route.params.requestVersion : 1,
+
+            disabledButton: false,
         };
         this.isSelected = this.isSelected.bind(this);
         this.viewResult = this.viewResult.bind(this);
@@ -106,6 +108,9 @@ class RequestViewScreen extends Component {
     }
 
     cancelRequest() {
+        this.setState({
+            disabledButton : true,
+        })
         fetch(getApiUrl() + "/requests/update/" + this.state.requestId, {
             method: 'POST',
             headers: {
@@ -123,6 +128,9 @@ class RequestViewScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    this.setState({
+                        disabledButton : false,
+                    })
                     // console.log(result)
                     this.props.navigation.dispatch(
                         CommonActions.navigate({
@@ -298,7 +306,7 @@ class RequestViewScreen extends Component {
                     </View>
                     <View style={styles.buttonContainer}>
                         {this.state.status == 'pending' ?
-                            <TouchableOpacity style={styles.btnConfirm}
+                            <TouchableOpacity style={styles.btnConfirm}  disabled={this.state.disabledButton}
                                 onPress={() => {
                                     Alert.alert(
                                         'Hủy xét nghiệm',
@@ -317,7 +325,7 @@ class RequestViewScreen extends Component {
                                 <Text style={styles.textBtn}>{'Hủy đơn xét nghiệm'}</Text>
                             </TouchableOpacity>
                             : this.state.status == 'accepted' ?
-                                <TouchableOpacity style={styles.btnConfirm}
+                                <TouchableOpacity style={styles.btnConfirm}   disabled={this.state.disabledButton}
                                     onPress={() => {
                                         Alert.alert(
                                             'Hủy xét nghiệm',
