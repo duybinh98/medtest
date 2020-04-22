@@ -243,6 +243,7 @@ class RequestPersonalInformation extends Component {
                         selectedTest: this.props.route.params.selectedTest,
                         testsList: this.props.route.params.testsList,
                         totalPrice: this.props.route.params.totalPrice,
+                        currentVersion: this.props.route.params.current_version,
                         resetSelectedTestOnConfirm: this.props.route.params.resetSelectedTestOnConfirm,
                         resetRequestPersonalInformation: this.resetRequestPersonalInfor,
                     },

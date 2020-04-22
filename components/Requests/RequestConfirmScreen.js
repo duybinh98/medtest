@@ -98,6 +98,8 @@ class RequestConfirmScreen extends Component {
                                 selectedTest: this.state.selectedTest,
                                 testsList: this.state.testsList,
                                 totalAmount : this.state.totalPrice,
+                                currentVersion: this.props.route.params.currentVersion,
+                                requestVersion: result.versionOfTest,
                                 createdTime:  convertDateTimeToDate(result.requestCreatedTime),
                             },
                         })

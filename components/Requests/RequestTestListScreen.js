@@ -22,6 +22,7 @@ class RequestTestListScreen extends Component {
             totalPrice: '0',
             customerInfo: this.props.route.params.customerInfo ? this.props.route.params.customerInfo : null,
             resetList: true,
+            current_version : this.props.route.params.current_version ? this.props.route.params.current_version : 1,
         }
         this.selectItem = this.selectItem.bind(this)
         this.resetSelectedTestOnConfirm = this.resetSelectedTestOnConfirm.bind(this)
@@ -144,6 +145,7 @@ class RequestTestListScreen extends Component {
                                         totalPrice: this.state.totalPrice,
                                         testsList: this.state.testsList,
                                         customerInfo: this.state.customerInfo,
+                                        current_version : this.props.route.params.current_version,
                                         resetSelectedTestOnConfirm: this.resetSelectedTestOnConfirm
                                     },
                                 })

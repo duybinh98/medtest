@@ -28,9 +28,11 @@ class RequestViewScreen extends Component {
             nurseId: this.props.route.params.nurseId ? this.props.route.params.nurseId : '',
             nurseName: this.props.route.params.nurseName ? this.props.route.params.nurseName : '',
             totalAmount: this.props.route.params.totalAmount ? this.props.route.params.totalAmount : '0',
-            createdTime : this.props.route.params.createdTime ? this.props.route.params.createdTime : '',
+            createdTime: this.props.route.params.createdTime ? this.props.route.params.createdTime : '',
             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : testList,
             backScreen: this.props.route.params.backScreen ? this.props.route.params.backScreen : "RequestListScreen",
+            currentVersion: this.props.route.params.currentVersion ? this.props.route.params.currentVersion : 1,
+            requestVersion: this.props.route.params.requestVersion ? this.props.route.params.requestVersion : 1,
         };
         this.isSelected = this.isSelected.bind(this);
         this.viewResult = this.viewResult.bind(this);
@@ -56,13 +58,46 @@ class RequestViewScreen extends Component {
                 nurseName: this.props.route.params.nurseName ? this.props.route.params.nurseName : '',
                 nurseId: this.props.route.params.nurseId ? this.props.route.params.nurseId : '',
                 totalAmount: this.props.route.params.totalAmount ? this.props.route.params.totalAmount : '0',
-                createdTime : this.props.route.params.createdTime ? this.props.route.params.createdTime : '',
+                createdTime: this.props.route.params.createdTime ? this.props.route.params.createdTime : '',
+                testsList: this.props.route.params.testsList ? this.props.route.params.testsList : testList,
                 backScreen: this.props.route.params.backScreen ? this.props.route.params.backScreen : "RequestListScreen",
+                currentVersion: this.props.route.params.currentVersion ? this.props.route.params.currentVersion : 1,
+                requestVersion: this.props.route.params.requestVersion ? this.props.route.params.requestVersion : 1,
             }));
+            if(this.props.route.params.currentVersion  != this.props.route.params.requestVersion){
+                this.callApiTestList(this.props.route.params.requestVersion);
+            }
         }
+        // if(prevProps != this.props) {
+            
+        // }
+        
     }
 
-
+    callApiTestList = async (version) => {
+        // fetch(getApiUrl() + "/tests/versions/list-all-test/" + this.state.requestVersion)
+        fetch(getApiUrl() + "/tests/versions/list-all-test/" + version, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer '+this.props.token,
+            }
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    // console.log('123  + ' + JSON.stringify(result))
+                    this.setState(previousState => ({
+                        testsList: result.lsTests,
+                        // testListVersion: result.versionID,
+                    }));
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
+    }
     isSelected(id) {
         const found = this.state.selectedTest.findIndex(test => test == id);
         let result = false;
@@ -88,7 +123,7 @@ class RequestViewScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result)
+                    // console.log(result)
                     this.props.navigation.dispatch(
                         CommonActions.navigate({
                             name: 'RequestListScreen',
@@ -151,6 +186,11 @@ class RequestViewScreen extends Component {
 
 
     render() {
+        debugger;
+        const a = this.state.testsList;
+        const b = this.props.customerInfor; 
+        // console.log('result listest:'+JSON.stringify(this.state.testsList.lsTests))
+        // console.log('result:'+JSON.stringify(this.state.testsList))
         return (
             <View style={{ flex: 1 }}>
                 <ScreenTopMenuBack navigation={this.props.navigation} backScreen={this.state.backScreen}></ScreenTopMenuBack>
@@ -168,7 +208,7 @@ class RequestViewScreen extends Component {
                     <View style={styles.infoArea}>
                         <View style={styles.textContainer}>
                             <Text style={styles.textInfor} >Mã đơn xét nghiệm:  {this.state.requestId}</Text>
-                        </View>                     
+                        </View>
                         <View style={styles.textContainer}>
                             <Text style={styles.textInfor} >Tên hiển thị:  {this.state.name}</Text>
                         </View>
@@ -197,7 +237,7 @@ class RequestViewScreen extends Component {
                             </View>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={styles.textInfor} >Tổng tiền: {convertMoney(this.state.totalAmount) +'đ'}</Text>
+                            <Text style={styles.textInfor} >Tổng tiền: {convertMoney(this.state.totalAmount) + 'đ'}</Text>
                         </View>
                         <View style={styles.doubleContainer}>
                             <View style={{
@@ -245,6 +285,7 @@ class RequestViewScreen extends Component {
                                         <TestCategoryItem
                                             categoryName={item.testTypeName}
                                             test={item.listTest}
+                                            // test={item.lsTests}
                                             viewOnly={true}
                                             isSelected={this.isSelected}
                                         >

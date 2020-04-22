@@ -15,7 +15,7 @@ class RequestListScreen extends Component {
             customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
             isDone: false,
             requestsList: [],
-            testsList: testList,
+            testsList: [],
             testListVersion: 1,
         };
         this.viewDone = this.viewDone.bind(this);
@@ -40,28 +40,16 @@ class RequestListScreen extends Component {
             this.callApiRequestList();
         }
     }
-    // callApiTestList = async () => {
-    //     fetch(getApiUrl()+"/tests/versions/lastest-version-test")
-    //     .then(res => res.json())
-    //     .then(
-    //         (result) => {
-    //         this.setState(previousState => ({
-    //             testsList: result.lsTests,
-    //             testListVersion : result.versionID,
-    //         }));
-    //         },            
-    //         (error) => {
-    //             console.log(error)
-    //         }
-    //     )  
-    // }
     callApiTestList = async () => {
-        fetch(getApiUrl()+"/test-types/type-test")
+        fetch(getApiUrl()+"/tests/versions/lastest-version-test")
         .then(res => res.json())
         .then(
             (result) => {
+                console.log('Test list API : ' +JSON.stringify(result) )
             this.setState(previousState => ({
-                testsList: result,
+                testsList: result.lsTests,
+                // testsList : result,
+                testListVersion : result.versionID,
             }));
             },            
             (error) => {
@@ -69,6 +57,20 @@ class RequestListScreen extends Component {
             }
         )  
     }
+    // callApiTestList = async () => {
+    //     fetch(getApiUrl()+"/test-types/type-test")
+    //     .then(res => res.json())
+    //     .then(
+    //         (result) => {
+    //         this.setState(previousState => ({
+    //             testsList: result,
+    //         }));
+    //         },            
+    //         (error) => {
+    //             console.log(error)
+    //         }
+    //     )  
+    // }
 
 
     callApiRequestList(){
@@ -106,6 +108,7 @@ class RequestListScreen extends Component {
         debugger;
         const a = this.state.testListVersion;
         const b = this.props.customerInfor;
+        // console.log('result listest:'+JSON.stringify(this.state.testsList))
         return(
                 <View style={{flex:1}}>
                     <ScreenTopMenuBack navigation={this.props.navigation} backScreen="HomeScreen"></ScreenTopMenuBack>
@@ -169,6 +172,8 @@ class RequestListScreen extends Component {
                                                 selectedTest={item.lsSelectedTest}
                                                 req_amount={item.requestAmount}
                                                 req_status={item.requestStatus}
+                                                req_version= {item.versionOfTest}
+                                                current_version = {this.state.testListVersion}
                                                 viewDone={this.viewDone}
                                                 testList={this.state.testsList}
                                                 navigation={this.props.navigation}

@@ -20,6 +20,7 @@ class HomeScreen extends Component {
             articlesList: [],
             testsList: [],
             token: null,
+            testListVersion : 1,
         };
         this.onPressCreateRequest = this.onPressCreateRequest.bind(this);
         this.onPressCreateAppointment = this.onPressCreateAppointment.bind(this);
@@ -103,21 +104,35 @@ class HomeScreen extends Component {
             )
     }
 
+    // callApiTestList = async () => {
+    //     fetch(getApiUrl() + "/test-types/type-test")
+    //         .then(res => res.json())
+    //         .then(
+    //             (result) => {
+    //                 this.setState(previousState => ({
+    //                     testsList: result,
+    //                 }));
+    //             },
+    //             (error) => {
+    //                 console.log(error)
+    //             }
+    //         )
+    // }
     callApiTestList = async () => {
-        fetch(getApiUrl() + "/test-types/type-test")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState(previousState => ({
-                        testsList: result,
-                    }));
-                },
-                (error) => {
-                    console.log(error)
-                }
-            )
+        fetch(getApiUrl()+"/tests/versions/lastest-version-test")
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState(previousState => ({
+                testsList: result.lsTests,
+                testListVersion : result.versionID,
+            }));
+            },            
+            (error) => {
+                console.log(error)
+            }
+        )  
     }
-
     callApiCustomerInfo = async () => {
         fetch(getApiUrl() + "/users/customers/detail/" + this.state.customerId)
             .then(res => res.json())
@@ -153,6 +168,7 @@ class HomeScreen extends Component {
                 params: {
                     customerId: this.state.customerId,
                     testsList: this.state.testsList,
+                    current_version : this.state.testListVersion,
                     // customerInfo: this.state.customerInfo,
                 },
             }))

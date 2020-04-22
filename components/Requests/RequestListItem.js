@@ -69,7 +69,10 @@ export default class RequestListItem extends Component {
         return true;
     }
 
-    render(){        
+    render(){       
+        debugger;
+        const a = this.state.testListVersion;
+        const b = this.props.customerInfor; 
         return(
             <View>
             {this.isVisible() ?
@@ -93,6 +96,8 @@ export default class RequestListItem extends Component {
                                 nurseName: this.props.nurse_name,
                                 totalAmount: this.props.req_amount,
                                 testsList: this.props.testList,
+                                currentVersion: this.props.current_version,
+                                requestVersion: this.props.req_version,
                                 createdTime:  convertDateTimeToDate(this.props.request_createTime),
                                 backScreen:'RequestListScreen'
                             },
