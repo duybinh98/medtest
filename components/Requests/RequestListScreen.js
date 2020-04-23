@@ -102,9 +102,6 @@ class RequestListScreen extends Component {
         result => {
           if (result.success == false) {
             if (result.message == 'Hệ thống đang xử lý. Vui lòng tải lại!') {
-              setTimeout(() => {
-                this.callApiRequestList();
-              }, 5000);
               Alert.alert(
                 'Hệ thống: ',
                 'Hệ thống đang xử lý. Vui lòng tải lại',
