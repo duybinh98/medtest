@@ -27,6 +27,7 @@ class ConfirmOPTScreen extends Component {
             backScreen: this.props.route.params.backScreen ? this.props.route.params.backScreen : '',
             otp: '',
             disabledButton: true,
+            disabledConfirmButton: false,
             timer: 20,
         };
     }
@@ -98,7 +99,9 @@ class ConfirmOPTScreen extends Component {
     }
 
     submit = values => {
-
+        this.setState({
+            disabledConfirmButton: true,
+        })
         fetch(getApiUrl() + '/users/valid-phone-otp', {
             method: 'POST',
             headers: {
@@ -118,6 +121,9 @@ class ConfirmOPTScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    this.setState({
+                        disabledConfirmButton: false,
+                    })
                     if (result.valid == true) {
                         Alert.alert(
                             'Xác nhận OTP',
@@ -130,6 +136,7 @@ class ConfirmOPTScreen extends Component {
                                 },
                             })
                         )
+                        this.props.reset();
                     } else {
                         Alert.alert(
                             'Lỗi xác nhận OTP',
@@ -163,7 +170,7 @@ class ConfirmOPTScreen extends Component {
                         onChange={(text) => { this.setState({ otp: text }) }}
                         validate={[required, isNumber, isOTP]}
                     />
-                    <TouchableOpacity style={styles.buttonConfirm}
+                    <TouchableOpacity style={styles.buttonConfirm} disabled={this.state.disabledConfirmButton}
                         onPress={handleSubmit(this.submit)}
                     >
                         <Text style={styles.textBtn}>Xác nhận</Text>

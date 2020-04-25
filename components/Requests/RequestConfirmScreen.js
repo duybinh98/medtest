@@ -28,8 +28,8 @@ class RequestConfirmScreen extends Component {
             selectedTest: this.props.route.params.selectedTest,
             testsList: this.props.route.params.testsList,
             totalPrice: this.props.route.params.totalPrice,
-            
-            disabledButton : false,
+
+            disabledButton: false,
         };
         this.isSelected = this.isSelected.bind(this);
         this.onConfirm = this.onConfirm.bind(this);
@@ -64,7 +64,7 @@ class RequestConfirmScreen extends Component {
 
     onConfirm = async () => {
         this.setState({
-            disabledButton : true,
+            disabledButton: true,
         })
         fetch(getApiUrl() + '/requests/create', {
             method: 'POST',
@@ -86,7 +86,7 @@ class RequestConfirmScreen extends Component {
             .then(
                 (result) => {
                     this.setState({
-                        disabledButton : false,
+                        disabledButton: false,
                     })
                     this.props.route.params.resetSelectedTestOnConfirm()
                     this.props.route.params.resetRequestPersonalInformation()
@@ -105,10 +105,10 @@ class RequestConfirmScreen extends Component {
                                 status: 'pending',
                                 selectedTest: this.state.selectedTest,
                                 testsList: this.state.testsList,
-                                totalAmount : this.state.totalPrice,
+                                totalAmount: this.state.totalPrice,
                                 currentVersion: this.props.route.params.currentVersion,
                                 requestVersion: result.versionOfTest,
-                                createdTime:  convertDateTimeToDate(result.requestCreatedTime),
+                                createdTime: convertDateTimeToDate(result.requestCreatedTime),
                             },
                         })
                     )
@@ -248,16 +248,18 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     infoArea: {
-        height: 150,
+        alignSelf: 'stretch',
         width: Dimensions.get('window').width - 20,
         backgroundColor: 'white',
-        marginTop: 5,
-        marginBottom: 5,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
         borderRadius: 10,
-        // paddingTop: 
+        marginTop: 5,
+        marginBottom: 5,
+        paddingTop: 3,
+        marginLeft: 10,
+        paddingBottom: 10,
     },
     textContainer: {
         marginTop: 10,
@@ -311,14 +313,14 @@ const styles = StyleSheet.create({
         width: 130,
         height: 45,
         borderRadius: 5,
-        backgroundColor: 'white',
+        backgroundColor: '#0A6ADA',
         justifyContent: 'center',
-        borderWidth: 3,
-        borderColor: '#0A6ADA',
+        // borderWidth: 3,
+        // borderColor: '#0A6ADA',
         paddingBottom: 3
     },
     textBtn: {
-        color: '#0A6ADA',
+        color: 'white',
         textAlign: "center",
         fontSize: 16,
     },

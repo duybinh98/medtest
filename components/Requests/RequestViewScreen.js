@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,8 +10,8 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import {CommonActions} from '@react-navigation/native';
-import {connect} from 'react-redux';
+import { CommonActions } from '@react-navigation/native';
+import { connect } from 'react-redux';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import TestCategoryItem from './TestCategoryItem';
@@ -272,10 +272,8 @@ class RequestViewScreen extends Component {
     debugger;
     const a = this.state.testsList;
     const b = this.props.customerInfor;
-    // console.log('result listest:'+JSON.stringify(this.state.testsList.lsTests))
-    // console.log('result:'+JSON.stringify(this.state.testsList))
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <ScreenTopMenuBack
           navigation={this.props.navigation}
           backScreen={this.state.backScreen}
@@ -288,13 +286,17 @@ class RequestViewScreen extends Component {
             alignItems: 'center',
           }}>
           <View style={styles.titleArea}>
-            <Text style={{fontSize: 22, color: '#25345D'}}>Đơn xét nghiệm</Text>
+            <Text style={{ fontSize: 22, color: '#25345D' }}>Đơn xét nghiệm</Text>
           </View>
           <View style={styles.infoArea}>
-            <View style={styles.textContainer}>
+            {/* <View style={styles.textContainerId}>
               <Text style={styles.textInfor}>
                 Mã đơn xét nghiệm: {this.state.requestId}
               </Text>
+            </View> */}
+            <View style={[styles.textContainerId]}>
+              <Text style={[styles.textInfor]} >Mã đơn xét nghiệm: </Text>
+              <Text style={[styles.textInforId]} > {this.state.requestId}</Text>
             </View>
             <View style={styles.textContainer}>
               <Text style={styles.textInfor}>
@@ -306,9 +308,9 @@ class RequestViewScreen extends Component {
                 Số điện thoại: {this.state.phone}
               </Text>
             </View>
-            <View style={styles.textContainer}>
+            {/* <View style={styles.textContainer}>
               <Text style={styles.textInfor}>Ngày sinh: {this.state.dob}</Text>
-            </View>
+            </View> */}
             <View style={styles.textContainer}>
               <Text style={styles.textInfor}>
                 Địa chỉ: {this.state.address}
@@ -352,7 +354,7 @@ class RequestViewScreen extends Component {
                   width: 180,
                 }}>
                 <Text
-                  style={[styles.textInfor, {color: this.state.statusColor}]}>
+                  style={[styles.textInfor, { color: this.state.statusColor }]}>
                   {this.state.statusName}
                 </Text>
               </View>
@@ -365,22 +367,24 @@ class RequestViewScreen extends Component {
                       <View
                         style={{
                           width: 205,
+                          flexDirection: 'row'
                         }}>
                         <Text style={styles.textInfor}>
-                          Y tá: {this.state.nurseName}
+                          {/* Y tá: {this.state.nurseName} */}
+                          Y tá:
                         </Text>
+                        <TouchableOpacity
+                          style={[styles.btnViewNurse]}
+                          onPress={() => this.viewNurse()}>
+                          <Text style={[styles.textNurse]}>
+                            {this.state.nurseName}
+                          </Text>
+                        </TouchableOpacity>
                       </View>
                       <View
                         style={{
                           width: 110,
                         }}>
-                        <TouchableOpacity
-                          style={[styles.btnConfirm, {height: 26, width: 100}]}
-                          onPress={() => this.viewNurse()}>
-                          <Text style={[styles.textBtn, {fontSize: 12}]}>
-                            Xem thông tin
-                          </Text>
-                        </TouchableOpacity>
                       </View>
                     </View>
                   ) : null
@@ -397,7 +401,7 @@ class RequestViewScreen extends Component {
                 data={this.state.testsList}
                 extraData={this.state.selectedTest}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({item}) => {
+                renderItem={({ item }) => {
                   return (
                     <TestCategoryItem
                       categoryName={item.testTypeName}
@@ -420,8 +424,8 @@ class RequestViewScreen extends Component {
                   Alert.alert(
                     'Hủy xét nghiệm',
                     'Bạn có chắc chắn muốn hủy đơn xét nghiệm mã ' +
-                      this.state.requestId +
-                      ' không?',
+                    this.state.requestId +
+                    ' không?',
                     [
                       {
                         text: 'Hủy',
@@ -448,8 +452,8 @@ class RequestViewScreen extends Component {
                   Alert.alert(
                     'Hủy xét nghiệm',
                     'Bạn có chắc chắn muốn hủy đơn xét nghiệm mã ' +
-                      this.state.requestId +
-                      ' không?',
+                    this.state.requestId +
+                    ' không?',
                     [
                       {
                         text: 'Hủy',
@@ -475,8 +479,8 @@ class RequestViewScreen extends Component {
                 <Text style={styles.textBtn}>{'Xem kết quả'}</Text>
               </TouchableOpacity>
             ) : (
-              <View />
-            )}
+                    <View />
+                  )}
             <TouchableOpacity
               style={styles.btnConfirm}
               onPress={() =>
@@ -551,9 +555,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     justifyContent: 'center',
   },
-  textInfor: {
+  textContainerId: {
+    marginTop: 5,
+    width: Dimensions.get('window').width - 55,
+    alignSelf: 'stretch',
+    marginHorizontal: 15,
+    alignItems: 'center',
+    paddingLeft: 3,
+    flexDirection: 'row'
+},
+textInfor: {
     fontSize: 16,
-  },
+},
+textInforId: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#0A6ADA'
+},
   doubleContainer: {
     marginTop: 5,
     width: Dimensions.get('window').width - 55,
@@ -611,15 +629,24 @@ const styles = StyleSheet.create({
     width: 130,
     height: 45,
     borderRadius: 5,
-    backgroundColor: 'white',
+    backgroundColor: '#0A6ADA',
     justifyContent: 'center',
-    borderWidth: 3,
-    borderColor: '#0A6ADA',
     paddingBottom: 3,
   },
   textBtn: {
-    color: '#0A6ADA',
+    color: 'white',
     textAlign: 'center',
+    fontSize: 16,
+  },
+  btnViewNurse: {
+    width: 160,
+    height: 26,
+    paddingBottom: 3,
+  },
+  textNurse: {
+    color: 'black',
+    textDecorationLine: 'underline',
+    paddingLeft: 10,
     fontSize: 16,
   },
 });

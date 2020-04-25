@@ -60,8 +60,8 @@ class UpdateInformationScreen extends Component {
             image: this.props.customerInfor ? this.props.customerInfor.image : '',
 
             selectTownList: [],
-            townName: 'Huyện...',
-            districtName: 'Quận...',
+            townName: 'Phường/Xã...',
+            districtName: 'Quận/Huyện...',
             districtList: [],
             townList: [],
             disableDropdownTown: true,
@@ -183,7 +183,7 @@ class UpdateInformationScreen extends Component {
         return `${townName}`;
     }
     submit = values => {
-        if (this.state.districtName == 'Quận...' || this.state.townName == 'Huyện...') {
+        if (this.state.districtName == 'Quận/Huyện...' || this.state.townName == 'Phường/Xã...') {
             Alert.alert(
                 'Thay đổi thông tin',
                 'Bạn phải chọn quận và phường!',
@@ -517,16 +517,16 @@ const styles = StyleSheet.create({
         width: WIDTH - 170,
         height: 45,
         borderRadius: 5,
-        backgroundColor: 'white',
+        backgroundColor: '#0A6ADA',
         justifyContent: 'center',
-        borderWidth: 3,
-        borderColor: '#0A6ADA',
+        // borderWidth: 3,
+        // borderColor: '#0A6ADA',
         paddingBottom: 3,
         marginTop: 10,
         marginHorizontal: 85
     },
     textBtn: {
-        color: '#0A6ADA',
+        color: 'white',
         textAlign: "center",
         fontSize: 16,
     },

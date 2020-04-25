@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
@@ -13,8 +13,8 @@ import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import RequestListItem from './RequestListItem';
 import requestsList from './../../Data/RequestsList';
 import testList from './../../Data/Test';
-import {getApiUrl} from './../Common/CommonFunction';
-import {connect} from 'react-redux';
+import { getApiUrl } from './../Common/CommonFunction';
+import { connect } from 'react-redux';
 
 class RequestListScreen extends Component {
   constructor(props) {
@@ -55,7 +55,6 @@ class RequestListScreen extends Component {
       .then(res => res.json())
       .then(
         result => {
-          console.log('Test list API : ' + JSON.stringify(result));
           this.setState(previousState => ({
             testsList: result.lsTests,
             // testsList : result,
@@ -85,9 +84,9 @@ class RequestListScreen extends Component {
   callApiRequestList() {
     fetch(
       getApiUrl() +
-        '/users/customers/' +
-        this.state.customerId +
-        '/requests/list',
+      '/users/customers/' +
+      this.state.customerId +
+      '/requests/list',
       {
         method: 'GET',
         headers: {
@@ -146,18 +145,18 @@ class RequestListScreen extends Component {
     const b = this.props.customerInfor;
     // console.log('result listest:'+JSON.stringify(this.state.testsList))
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <ScreenTopMenuBack
           navigation={this.props.navigation}
           backScreen="HomeScreen"
         />
         <View style={styles.background}>
           <View style={styles.titleArea}>
-            <Text style={{fontSize: 22, color: '#25345D'}}>
+            <Text style={{ fontSize: 22, color: '#25345D' }}>
               Lịch sử xét nghiệm
             </Text>
           </View>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <View
               style={[
                 styles.titleArea,
@@ -168,7 +167,7 @@ class RequestListScreen extends Component {
               ]}>
               <TouchableOpacity
                 onPress={() =>
-                  this.setState(previousState => ({isDone: false}))
+                  this.setState(previousState => ({ isDone: false }))
                 }
                 style={[
                   styles.mainButton,
@@ -179,10 +178,10 @@ class RequestListScreen extends Component {
                     borderTopLeftRadius: 10,
                   },
                 ]}>
-                <Text style={{fontSize: 18}}>Đơn chưa xong</Text>
+                <Text style={{ fontSize: 18 }}>Đơn chưa xong</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.setState(previousState => ({isDone: true}))}
+                onPress={() => this.setState(previousState => ({ isDone: true }))}
                 style={[
                   styles.mainButton,
                   {
@@ -192,7 +191,7 @@ class RequestListScreen extends Component {
                     borderTopRightRadius: 10,
                   },
                 ]}>
-                <Text style={{fontSize: 18}}>Đơn đã xong</Text>
+                <Text style={{ fontSize: 18 }}>Đơn đã xong</Text>
               </TouchableOpacity>
             </View>
             <FlatList
@@ -202,7 +201,7 @@ class RequestListScreen extends Component {
               showsVerticalScrollIndicator={false}
               data={this.state.requestsList ? this.state.requestsList : []}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 return (
                   <View>
                     <RequestListItem

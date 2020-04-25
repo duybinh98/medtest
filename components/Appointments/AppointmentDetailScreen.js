@@ -112,8 +112,9 @@ class AppointmentDetailScreen extends Component {
                         <Text style={styles.logoText}>Lịch hẹn</Text>
                     </View>
                     <View style={styles.infoArea}>
-                        <View style={styles.textContainer}>
-                            <Text style={styles.textInfor} >Mã lịch hẹn:   {this.state.appointmentId}</Text>
+                        <View style={[styles.textContainerId]}>
+                            <Text style={[styles.textInfor]} >Mã lịch hẹn: </Text>
+                            <Text style={[styles.textInforId]} > {this.state.appointmentId}</Text>
                         </View>
                         <View style={styles.textContainer}>
                             <Text style={styles.textInfor} >Họ và tên:  {this.state.name}</Text>
@@ -146,7 +147,7 @@ class AppointmentDetailScreen extends Component {
                             onPress={() => {
                                 Alert.alert(
                                     'Hủy cuộc hẹn',
-                                    'Bạn có chắc chắn muốn hủy cuộc hẹn '+ this.state.appointmentId + ' không?',
+                                    'Bạn có chắc chắn muốn hủy cuộc hẹn ' + this.state.appointmentId + ' không?',
                                     [
                                         { text: 'Hủy', onPress: () => { return null } },
                                         {
@@ -164,7 +165,7 @@ class AppointmentDetailScreen extends Component {
                     }
                     <TouchableOpacity style={styles.buttonView}
                         onPress={() => {
-                             this.props.navigation.goBack();
+                            this.props.route.params.backScreen ? this.props.navigation.navigate(this.state.backScreen) : this.props.navigation.goBack();
                         }}
                     >
                         <Text style={styles.textBtn}>OK</Text>
@@ -240,6 +241,26 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingBottom: 10,
     },
+    textContainerId: {
+        marginTop: 5,
+        // borderWidth: 1,
+        width: WIDTH - 55,
+        height: 45,
+        marginHorizontal: 25,
+        // justifyContent: 'center',
+        alignItems: 'center',
+        paddingLeft: 10,
+        paddingBottom: 10,
+        flexDirection: 'row'
+    },
+    textInfor: {
+        fontSize: 16,
+    },
+    textInforId: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#0A6ADA'
+    },
     dateTimeContainer: {
         flexDirection: 'row',
         flex: 1,
@@ -262,9 +283,7 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginRight: 30,
     },
-    textInfor: {
-        fontSize: 16,
-    },
+
     buttonContainer: {
         marginLeft: 20,
         width: WIDTH - 40,
@@ -275,19 +294,25 @@ const styles = StyleSheet.create({
         marginBottom: 40,
     },
     buttonView: {
-        marginTop: 30,
+        // marginTop: 30,
+        // width: 130,
+        // height: 45,
+        // borderRadius: 5,
+        // backgroundColor: 'white',
+        // justifyContent: 'center',
+        // borderWidth: 3,
+        // borderColor: '#0A6ADA',
+        // paddingBottom: 3
         width: 130,
         height: 45,
         borderRadius: 5,
-        backgroundColor: 'white',
+        backgroundColor: '#0A6ADA',
         justifyContent: 'center',
-        borderWidth: 3,
-        borderColor: '#0A6ADA',
-        paddingBottom: 3
+        paddingBottom: 3,
     },
     textBtn: {
-        color: '#0A6ADA',
-        textAlign: "center",
+        color: 'white',
+        textAlign: 'center',
         fontSize: 16,
     },
 })

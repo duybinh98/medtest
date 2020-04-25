@@ -56,10 +56,7 @@ class changePassword extends Component {
         }
         this.props.load(customerInfor)
     }
-    submit = values => {
-        this.setState({
-            disabledButton : true,
-        })
+    submit = values => {     
         if (values.password === values.newPassword) {
             Alert.alert(
                 'Đổi mật khẩu',
@@ -71,6 +68,9 @@ class changePassword extends Component {
                 "Xác nhận mật khẩu mới không đúng!",
             )
         } else {
+            this.setState({
+                disabledButton : true,
+            })
             fetch(getApiUrl() + '/users/customers/change-password/' + this.state.customerId, {
                 method: 'POST',
                 headers: {

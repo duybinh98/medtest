@@ -225,15 +225,13 @@ const styles = StyleSheet.create({
         width: 130,
         height: 45,
         borderRadius: 5,
-        backgroundColor: 'white',
+        backgroundColor: '#0A6ADA',
         justifyContent: 'center',
-        borderWidth: 3,
-        borderColor: '#0A6ADA',
         paddingBottom: 3,
         marginTop: 30
     },
     textBtn: {
-        color: '#0A6ADA',
+        color: 'white',
         textAlign: "center",
         fontSize: 16,
     },

@@ -136,7 +136,7 @@ class RequestTestListScreen extends Component {
                             <Text style={{ fontSize: 15, paddingLeft: 10 }}>{'Tổng tiền: ' + convertMoney(this.state.totalPrice) + ' đ'}</Text>
                         </View>
                         <TouchableOpacity
-                            style={styles.btnConfirm}
+                            style={styles.btnConfirmTest}
                             onPress={() => this.state.customerId != '-1' ? this.state.selectedTest.length > 0 ? this.props.navigation.dispatch(
                                 CommonActions.navigate({
                                     name: 'RequestPersonalInformation',
@@ -161,7 +161,7 @@ class RequestTestListScreen extends Component {
 
                             }
                         >
-                            <Text style={styles.textBtn}>Đặt xét nghiệm</Text>
+                            <Text style={styles.textBtnTest}>Đặt xét nghiệm</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -258,6 +258,21 @@ const styles = StyleSheet.create({
     },
     textBtn: {
         color: '#0A6ADA',
+        textAlign: "center",
+        fontSize: 16,
+    },
+    btnConfirmTest: {
+        width: 130,
+        height: 45,
+        borderRadius: 5,
+        backgroundColor: '#0A6ADA',
+        justifyContent: 'center',
+        // borderWidth: 3,
+        // borderColor: '#0A6ADA',
+        paddingBottom: 3
+    },
+    textBtnTest: {
+        color: 'white',
         textAlign: "center",
         fontSize: 16,
     },

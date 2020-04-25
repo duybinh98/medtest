@@ -61,7 +61,18 @@ class CreateAppointmentScreen extends Component {
 
     }
 
-
+    resetCreateAppointmentForm() {
+        this.setState({
+            customerInfor: this.props.customerInfor,
+            name: this.props.customerInfor ? this.props.customerInfor.name : '',
+            phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '',
+            dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
+            apointmentDate: (new Date().getDate() + 1) + '-' + formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear(),
+            apointmentTime: '07:30',
+            disabledButton : false,
+        })
+        this.props.reset();
+    }
     submit = values => {
         this.setState({
             disabledButton : true,
@@ -99,11 +110,11 @@ class CreateAppointmentScreen extends Component {
                                 appointment_statusName: 'Đợi xác nhận',
                                 appointment_createdTime: result.appointment_createdTime,
                                 appointment_createdDate: result.appointment_createdTime,
-                                backScreen: 'HomeScreen',
+                                backScreen: 'AppointmentListScreen',
                             },
                         })
                     )
-                    this.props.reset();
+                    this.resetCreateAppointmentForm();
                 },
                 (error) => {
                     console.log(error)
