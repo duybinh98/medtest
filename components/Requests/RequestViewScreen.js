@@ -354,7 +354,7 @@ class RequestViewScreen extends Component {
                   width: 180,
                 }}>
                 <Text
-                  style={[styles.textInfor, { color: this.state.statusColor }]}>
+                  style={[styles.textInfor, { backgroundColor: this.state.statusColor, textAlign: 'center' }]}>
                   {this.state.statusName}
                 </Text>
               </View>

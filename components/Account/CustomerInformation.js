@@ -20,6 +20,10 @@ class customerInformation extends Component {
             token: this.props.token ? this.props.token : null,
             uploadedImage: '',
             // name: this.props.customerInfor ? this.props.customerInfor.name : '',
+            townName: "",
+            districtName: '',
+            districtList: [],
+            townList: [],
         };
         this.selectImage = this.selectImage.bind(this)
     }
@@ -32,10 +36,84 @@ class customerInformation extends Component {
                 // customerInfor: this.props.route.params.customerInfor ? this.props.route.params.customerInfor : this.state.customerInfor
                 customerInfor: this.props.customerInfor ? this.props.customerInfor : null
             }));
+            setTimeout(() => {
+                this.state.districtList.forEach(district => {
+                    if (district.districtCode === this.props.customerInfor.districtCode) {
+                        this.setState({
+                            districtName: district.districtName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+                this.state.townList.forEach(town => {
+                    if (town.townCode === this.props.customerInfor.townCode) {
+                        this.setState({
+                            townName: town.townName
+                        })
+                    } else {
+                        console.log("Error")
+                    }
+                });
+            }, 1000);
         }
     }
     componentDidMount() {
         this.callApiCustomerInfor();
+        this.callApiGetDistrictCode();
+        this.callApiGetTownCode();
+        setTimeout(() => {
+            this.state.districtList.forEach(district => {
+                if (district.districtCode === this.props.customerInfor.districtCode) {
+                    this.setState({
+                        districtName: district.districtName
+                    })
+                } else {
+                    console.log("Error")
+                }
+            });
+            this.state.townList.forEach(town => {
+                if (town.townCode === this.props.customerInfor.townCode) {
+                    this.setState({
+                        townName: town.townName
+                    })
+                } else {
+                    console.log("Error")
+                }
+            });
+        }, 1000);
+    }
+    callApiGetDistrictCode() {
+        fetch(getApiUrl() + "/management/districts/district-town-list")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState(previousState => ({
+                        districtList: result,
+                    }));
+                },
+                (error) => {
+                    this.setState({
+                        error
+                    });
+                }
+            )
+    }
+    callApiGetTownCode() {
+        fetch(getApiUrl() + "/management/districts/towns/list")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState(previousState => ({
+                        townList: result,
+                    }));
+                },
+                (error) => {
+                    this.setState({
+                        error
+                    });
+                }
+            )
     }
     callApiCustomerInfor() {
         fetch(getApiUrl() + '/users/customers/detail/' + this.state.customerId, {
@@ -64,7 +142,7 @@ class customerInformation extends Component {
             )
     }
 
-    selectImage(){
+    selectImage() {
         const options = {
             title: 'Thay ảnh hiển thị',
             cancelButtonTitle: 'Hủy',
@@ -81,30 +159,30 @@ class customerInformation extends Component {
         });
     }
 
-    callApiUploadImage (_data) {
-        let sendData = "data:"+_data.type+";base64,"+_data.data
+    callApiUploadImage(_data) {
+        let sendData = "data:" + _data.type + ";base64," + _data.data
         console.log(sendData)
-        fetch(getApiUrl()+'/uploadImage', {
-        method: 'POST',
-        headers: {      
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer '+this.state.token,
-        },
-        body: JSON.stringify({
-            "file": sendData
-        }),
-        })
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log('result:'+JSON.stringify(result))
-                this.setState({ uploadedImage: result.uri });
+        fetch(getApiUrl() + '/uploadImage', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + this.state.token,
             },
-            (error) => {
-                console.log('error:'+error)    
-            }
-        );
+            body: JSON.stringify({
+                "file": sendData
+            }),
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log('result:' + JSON.stringify(result))
+                    this.setState({ uploadedImage: result.uri });
+                },
+                (error) => {
+                    console.log('error:' + error)
+                }
+            );
     }
 
     render() {
@@ -117,9 +195,9 @@ class customerInformation extends Component {
             >
                 <ScreenTopMenuBack navigation={this.props.navigation} backScreen='HomeScreen'></ScreenTopMenuBack>
                 <View>
-                    <TouchableOpacity style={styles.logoContainer}  onPress={() => this.selectImage()}>
+                    <TouchableOpacity style={styles.logoContainer} onPress={() => this.selectImage()}>
                         <ImageBackground
-                            source={{ uri: this.state.uploadedImage? this.state.uploadedImage : this.state.customerInfor ? this.state.customerInfor.image : '' }}
+                            source={{ uri: this.state.uploadedImage ? this.state.uploadedImage : this.state.customerInfor ? this.state.customerInfor.image : '' }}
                             style={styles.logo} >
                             <TouchableOpacity><Icon
                                 name='camera'
@@ -147,7 +225,9 @@ class customerInformation extends Component {
                         </View>
                     </View>
                     <View style={styles.textContainer}>
-                        <Text style={styles.textInfor} >Địa chỉ: {this.state.customerInfor ? this.state.customerInfor.address : ""}</Text>
+                        <Text style={styles.textInfor} >
+                            Địa chỉ: {this.state.customerInfor ? this.state.customerInfor.address + ', ' + this.state.townName + ', ' + this.state.districtName  : ""}
+                        </Text>
                     </View>
                     <View style={styles.textContainer}>
                         <Text style={styles.textInfor} >Email: {this.state.customerInfor ? this.state.customerInfor.email : ""}</Text>
