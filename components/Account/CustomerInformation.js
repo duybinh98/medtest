@@ -7,6 +7,7 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
+import ImagePicker from 'react-native-image-picker';
 
 
 const { width: WIDTH } = Dimensions.get('window')
@@ -17,8 +18,10 @@ class customerInformation extends Component {
             customerInfor: null,
             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
             token: this.props.token ? this.props.token : null,
+            uploadedImage: '',
             // name: this.props.customerInfor ? this.props.customerInfor.name : '',
         };
+        this.selectImage = this.selectImage.bind(this)
     }
 
 
@@ -59,7 +62,49 @@ class customerInformation extends Component {
                     console.log(error)
                 }
             )
+    }
 
+    selectImage(){
+        const options = {
+            title: 'Thay ảnh hiển thị',
+            cancelButtonTitle: 'Hủy',
+            takePhotoButtonTitle: 'Mở camera...',
+            chooseFromLibraryButtonTitle: 'Mở thư viện ảnh...',
+
+        };
+        ImagePicker.showImagePicker(options, (response) => {
+            // console.log(response)
+            if (!response.didCancel) {
+                // console.log(response)
+                this.callApiUploadImage(response)
+            }
+        });
+    }
+
+    callApiUploadImage (_data) {
+        let sendData = "data:"+_data.type+";base64,"+_data.data
+        console.log(sendData)
+        fetch(getApiUrl()+'/uploadImage', {
+        method: 'POST',
+        headers: {      
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer '+this.state.token,
+        },
+        body: JSON.stringify({
+            "file": sendData
+        }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log('result:'+JSON.stringify(result))
+                this.setState({ uploadedImage: result.uri });
+            },
+            (error) => {
+                console.log('error:'+error)    
+            }
+        );
     }
 
     render() {
@@ -72,20 +117,19 @@ class customerInformation extends Component {
             >
                 <ScreenTopMenuBack navigation={this.props.navigation} backScreen='HomeScreen'></ScreenTopMenuBack>
                 <View>
-                    <View style={styles.logoContainer}>
+                    <TouchableOpacity style={styles.logoContainer}  onPress={() => this.selectImage()}>
                         <ImageBackground
-                            source={{ uri: this.state.customerInfor ? this.state.customerInfor.image : '' }}
+                            source={{ uri: this.state.uploadedImage? this.state.uploadedImage : this.state.customerInfor ? this.state.customerInfor.image : '' }}
                             style={styles.logo} >
                             <TouchableOpacity><Icon
                                 name='camera'
                                 type='material-community'
-                                color='gray'
+                                color='black'
                                 size={32}
                                 iconStyle={styles.imageIcon}
-                                onPress={() => console.log('hello')}
                             ></Icon></TouchableOpacity>
                         </ImageBackground>
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.infoArea}>
                     <View style={styles.textContainer}>
