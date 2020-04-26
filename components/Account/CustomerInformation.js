@@ -55,7 +55,7 @@ class customerInformation extends Component {
                         console.log("Error")
                     }
                 });
-            }, 1000);
+            }, 3000);
         }
     }
     componentDidMount() {
@@ -81,7 +81,7 @@ class customerInformation extends Component {
                     console.log("Error")
                 }
             });
-        }, 1000);
+        }, 3000);
     }
     callApiGetDistrictCode() {
         fetch(getApiUrl() + "/management/districts/district-town-list")

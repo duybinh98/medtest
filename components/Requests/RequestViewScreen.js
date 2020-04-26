@@ -563,15 +563,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 3,
     flexDirection: 'row'
-},
-textInfor: {
+  },
+  textInfor: {
     fontSize: 16,
-},
-textInforId: {
+  },
+  textInforId: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#0A6ADA'
-},
+  },
   doubleContainer: {
     marginTop: 5,
     width: Dimensions.get('window').width - 55,
