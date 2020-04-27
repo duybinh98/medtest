@@ -172,10 +172,14 @@ class RequestPersonalInformation extends Component {
     }
     _renderDistrictButtonText = rowData => {
         const { districtCode, districtName } = rowData;
+        const { townCode, townName } = rowData.listTown[0];
         this.setState({
             districtName: districtName,
             districtCode: districtCode,
+            townCode: townCode,
+            townName: townName
         })
+        this.townDropdown.select(-1);
         return `${districtName}`;
     }
     _renderTownButtonText = listTown => {
@@ -255,9 +259,8 @@ class RequestPersonalInformation extends Component {
         this.setState({
             disableDropdownTown: false,
             selectTownList: this.state.districtList[id].listTown,
-            townCode: this.state.districtList[id].listTown[0].townCode?  this.state.districtList[id].listTown[0].townCode : '',
-            townName: this.state.districtList[id].listTown[0].townName? this.state.districtList[id].listTown[0].townName : '',
         })
+
     }
     render() {
         debugger;
@@ -398,6 +401,7 @@ class RequestPersonalInformation extends Component {
 let RequestPersonalInformationForm = reduxForm({
     form: 'RequestPersonalInformation',
     enableReinitialize: true,
+    destroyOnUnmount: false,
 })(RequestPersonalInformation);
 RequestPersonalInformationForm = connect(
     state => ({

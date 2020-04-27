@@ -65,7 +65,7 @@ class UpdateInformationScreen extends Component {
             districtList: [],
             townList: [],
             disableDropdownTown: true,
-            disabledButton : false,
+            disabledButton: false,
         };
         this.submit = this.submit.bind(this)
     }
@@ -93,7 +93,7 @@ class UpdateInformationScreen extends Component {
             }, 12000);
             const customerInfor = {
                 username: this.props.customerInfor ? this.props.customerInfor.name : '',
-                phonenumber:  this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
+                phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
                 address: this.props.customerInfor ? this.props.customerInfor.address : '',
                 email: this.props.customerInfor ? this.props.customerInfor.email : '',
             }
@@ -103,7 +103,7 @@ class UpdateInformationScreen extends Component {
     componentDidMount = value => {
         const customerInfor = {
             username: this.props.customerInfor ? this.props.customerInfor.name : '',
-            phonenumber:  this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
+            phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
             address: this.props.customerInfor ? this.props.customerInfor.address : '',
             email: this.props.customerInfor ? this.props.customerInfor.email : '',
         }
@@ -168,10 +168,14 @@ class UpdateInformationScreen extends Component {
     }
     _renderDistrictButtonText = rowData => {
         const { districtCode, districtName } = rowData;
+        const { townCode, townName } = rowData.listTown[0];
         this.setState({
             districtName: districtName,
-            districtCode: districtCode
+            districtCode: districtCode,
+            townCode: townCode,
+            townName: townName
         })
+        this.townDropdown.select(-1);
         return `${districtName}`;
     }
     _renderTownButtonText = listTown => {
@@ -201,7 +205,7 @@ class UpdateInformationScreen extends Component {
                                 phoneNumber: this.state.phoneNumber,
                                 name: this.state.name,
                                 email: this.state.email,
-                                gender: this.state.gender == 'Nữ'? 0 : 1  ,
+                                gender: this.state.gender == 'Nữ' ? 0 : 1,
                                 districtCode: this.state.districtCode,
                                 townCode: this.state.townCode,
                                 address: this.state.address,
@@ -231,13 +235,11 @@ class UpdateInformationScreen extends Component {
         this.setState({
             disableDropdownTown: false,
             selectTownList: this.state.districtList[id].listTown,
-            townCode: this.state.districtList[id].listTown[0].townCode?  this.state.districtList[id].listTown[0].townCode : '',
-            townName: this.state.districtList[id].listTown[0].townName? this.state.districtList[id].listTown[0].townName : '',
         })
     }
     callApi = async () => {
         this.setState({
-            disabledButton : true,
+            disabledButton: true,
         })
         fetch(getApiUrl() + '/users/customers/detail/update/' + this.state.customerId, {
             method: 'PUT',
@@ -260,7 +262,7 @@ class UpdateInformationScreen extends Component {
             .then(
                 (result) => {
                     this.setState({
-                        disabledButton : false,
+                        disabledButton: false,
                     })
                     if (result.message) {
                         Alert.alert(
@@ -357,6 +359,7 @@ class UpdateInformationScreen extends Component {
                 </View>
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
+                        ref={(ref) => this.districtDropdown = ref}
                         options={this.state.districtList}
                         renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
                         renderRow={_renderDistrictRow.bind(this)}
@@ -375,6 +378,7 @@ class UpdateInformationScreen extends Component {
                 </View>
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
+                        ref={(ref) => this.townDropdown = ref}
                         disabled={this.state.disableDropdownTown}
                         options={this.state.selectTownList}
                         renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}

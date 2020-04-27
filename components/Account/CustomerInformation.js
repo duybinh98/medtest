@@ -81,7 +81,7 @@ class customerInformation extends Component {
                     console.log("Error")
                 }
             });
-        }, 3000);
+        }, 14000);
     }
     callApiGetDistrictCode() {
         fetch(getApiUrl() + "/management/districts/district-town-list")

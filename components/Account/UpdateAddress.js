@@ -101,11 +101,15 @@ class UpdateAddress extends Component {
             )
     }
     _renderDistrictButtonText = rowData => {
-        const { districtName, districtCode } = rowData;
+        const { districtCode, districtName } = rowData;
+        const { townCode, townName } = rowData.listTown[0];
         this.setState({
             districtName: districtName,
-            districtCode: districtCode
+            districtCode: districtCode,
+            townCode: townCode,
+            townName: townName
         })
+        this.townDropdown.select(-1);
         return `${districtName}`;
     }
     _renderTownButtonText = listTown => {
@@ -153,8 +157,6 @@ class UpdateAddress extends Component {
         this.setState({
             disableDropdownTown: false,
             selectTownList: this.state.districtList[id].listTown,
-            townCode: this.state.districtList[id].listTown[0].townCode?  this.state.districtList[id].listTown[0].townCode : '',
-            townName: this.state.districtList[id].listTown[0].townName? this.state.districtList[id].listTown[0].townName : '',
         })
     }
     callApi = async () => {
