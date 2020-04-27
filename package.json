@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@dudigital/react-native-zoomable-view": "^1.0.15",
     "@react-navigation/drawer": "^5.1.0",
     "@react-navigation/native": "^5.0.8",
     "date-fns": "^2.10.0",

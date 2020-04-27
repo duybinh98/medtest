@@ -99,6 +99,7 @@ export default class RequestListItem extends Component {
                                 currentVersion: this.props.current_version,
                                 requestVersion: this.props.req_version,
                                 createdTime:  convertDateTimeToDate(this.props.request_createTime),
+                                updatedTime:  this.props.request_updateTime,
                                 backScreen:'RequestListScreen'
                             },
                         })

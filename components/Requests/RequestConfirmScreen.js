@@ -109,6 +109,7 @@ class RequestConfirmScreen extends Component {
                                 currentVersion: this.props.route.params.currentVersion,
                                 requestVersion: result.versionOfTest,
                                 createdTime: convertDateTimeToDate(result.requestCreatedTime),
+                                updatedTime : result.requestUpdatedTime,
                             },
                         })
                     )

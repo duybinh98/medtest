@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'rea
 import { ScrollView } from 'react-native-gesture-handler';
 import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
-import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate, formatMonth } from './../Common/CommonFunction';
+import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate, formatMonth, getStateColor } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 
 const { width: WIDTH } = Dimensions.get('window')
@@ -19,6 +19,9 @@ class AppointmentDetailScreen extends Component {
             date: this.props.route.params.appointment_date ? this.props.route.params.appointment_date : '',
             freeTime: this.props.route.params.appointment_time ? this.props.route.params.appointment_time : '',
             status: this.props.route.params.appointment_status ? this.props.route.params.appointment_status : '',
+            statusColor: this.props.route.params.appointment_status
+                ? getStateColor(this.props.route.params.appointment_status)
+                : '#000',
             statusName: this.props.route.params.appointment_statusName ? this.props.route.params.appointment_statusName : '',
             createdTime: this.props.route.params.appointment_createdTime ? this.props.route.params.appointment_createdTime : '',
             createdDate: this.props.route.params.appointment_createdDate ? this.props.route.params.appointment_createdDate : '',
@@ -38,6 +41,9 @@ class AppointmentDetailScreen extends Component {
                 date: this.props.route.params.appointment_date ? this.props.route.params.appointment_date : '',
                 freeTime: this.props.route.params.appointment_time ? this.props.route.params.appointment_time : '',
                 status: this.props.route.params.appointment_status ? this.props.route.params.appointment_status : '',
+                statusColor: this.props.route.params.appointment_status
+                    ? getStateColor(this.props.route.params.appointment_status)
+                    : '#000',
                 createdTime: this.props.route.params.appointment_createdTime ? this.props.route.params.appointment_createdTime : '',
                 createdDate: this.props.route.params.appointment_createdDate ? this.props.route.params.appointment_createdDate : '',
                 statusName: this.props.route.params.appointment_statusName ? this.props.route.params.appointment_statusName : '',
@@ -52,21 +58,25 @@ class AppointmentDetailScreen extends Component {
             case 'pending':
                 this.setState(previousState => ({
                     statusName: 'Đợi xác nhận',
+                    statusColor: '#ffd66f'
                 }));
                 break;
             case 'accepted':
                 this.setState(previousState => ({
                     statusName: 'Đã được xác nhận',
+                    statusColor: '#a4d57b'
                 }));
                 break;
             case 'rejected':
                 this.setState(previousState => ({
                     statusName: 'Đơn bị từ chối',
+                    statusColor: '#f97867'
                 }));
                 break;
             case 'canceled':
                 this.setState(previousState => ({
                     statusName: 'Đơn đã hủy',
+                    statusColor: '#0a87da'
                 }));
                 break;
         }
@@ -136,8 +146,25 @@ class AppointmentDetailScreen extends Component {
                                 <Text style={styles.textInfor} >Giờ: {this.state.freeTime}</Text>
                             </View>
                         </View>
-                        <View style={styles.textContainer}>
-                            <Text style={styles.textInfor} >Trạng thái: {this.state.statusName}</Text>
+                        {/* <View style={styles.textContainer}>
+                            <Text style={[styles.textInfor, { backgroundColor: this.state.statusColor, textAlign: 'center' }]} >Trạng thái: {this.state.statusName}</Text>
+                        </View> */}
+                        <View style={styles.doubleContainer}>
+                            <View
+                                style={{
+                                    width: 82,
+                                }}>
+                                <Text style={styles.textInfor}>Trạng thái:</Text>
+                            </View>
+                            <View
+                                style={{
+                                    width: 180,
+                                }}>
+                                <Text
+                                    style={[styles.textInfor, { backgroundColor: this.state.statusColor, textAlign: 'center' }]}>
+                                    {this.state.statusName}
+                                </Text>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -216,7 +243,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
     },
     infoArea: {
-        height: 355,
+        height: 350,
         width: Dimensions.get('window').width - 25,
         backgroundColor: 'white',
         marginTop: 5,
@@ -240,6 +267,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingLeft: 10,
         paddingBottom: 10,
+    },
+    doubleContainer: {
+        marginTop: 5,
+        width: Dimensions.get('window').width - 55,
+        // alignSelf: 'stretch',
+        height: 45,
+        paddingLeft: 3,
+        marginHorizontal: 15,
+        flexDirection: 'row',
+        paddingLeft: 10,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
     },
     textContainerId: {
         marginTop: 5,
@@ -315,4 +354,5 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
     },
+
 })

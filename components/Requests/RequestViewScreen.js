@@ -22,6 +22,8 @@ import {
   getStateName,
   getStateColor,
   convertMoney,
+  convertDateTimeToDate,
+  convertDateTimeToTime,
 } from './../Common/CommonFunction';
 
 class RequestViewScreen extends Component {
@@ -60,6 +62,9 @@ class RequestViewScreen extends Component {
         : '0',
       createdTime: this.props.route.params.createdTime
         ? this.props.route.params.createdTime
+        : '',
+      updatedTime: this.props.route.params.updatedTime
+        ? this.props.route.params.updatedTime
         : '',
       testsList: this.props.route.params.testsList
         ? this.props.route.params.testsList
@@ -127,6 +132,9 @@ class RequestViewScreen extends Component {
           : '0',
         createdTime: this.props.route.params.createdTime
           ? this.props.route.params.createdTime
+          : '',
+        updatedTime: this.props.route.params.updatedTime
+          ? this.props.route.params.updatedTime
           : '',
         testsList: this.props.route.params.testsList
           ? this.props.route.params.testsList
@@ -340,6 +348,11 @@ class RequestViewScreen extends Component {
             <View style={styles.textContainer}>
               <Text style={styles.textInfor}>
                 Tổng tiền: {convertMoney(this.state.totalAmount) + 'đ'}
+              </Text>
+            </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.textInfor}>
+                Cập nhật mới nhất: {convertDateTimeToDate(this.state.updatedTime) + ' ' + convertDateTimeToTime(this.state.updatedTime)}
               </Text>
             </View>
             <View style={styles.doubleContainer}>
