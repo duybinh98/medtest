@@ -7,9 +7,9 @@ import { CommonActions } from '@react-navigation/native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
-import { load as loadAccount } from '../Store/Reducers/InitialValue';
-import { login } from '../Store/Reducers/LoginReducer';
-import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
+import { load as loadAccount } from '../Reducers/InitialValue';
+import { login } from '../Reducers/LoginReducer';
+import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 
 import renderField from '../../Validate/RenderField';
 

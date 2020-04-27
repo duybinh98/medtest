@@ -4,8 +4,8 @@ import { Button, Icon } from 'react-native-elements';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import { login, logout } from './Store/Reducers/LoginReducer';
-import { loadCustomerInfor } from './Store/Reducers/LoadInforReducer';
+import { login, logout } from './Reducers/LoginReducer';
+import { loadCustomerInfor } from './Reducers/LoadInforReducer';
 import { CommonActions } from '@react-navigation/native';
 
 import ChangePassword from './Account/ChangePassword';

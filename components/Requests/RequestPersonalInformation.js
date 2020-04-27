@@ -10,7 +10,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 // import districtList from '../../Data/District';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import { load as loadAccount } from '../Store/Reducers/InitialValue';
+import { load as loadAccount } from '../Reducers/InitialValue';
 import renderField from '../../Validate/RenderField'
 import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate, formatMonth } from './../Common/CommonFunction'
 

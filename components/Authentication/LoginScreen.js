@@ -5,9 +5,9 @@ import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import { login } from '../Store/Reducers/LoginReducer';
-import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
-import { load as loadAccount } from '../Store/Reducers/InitialValue';
+import { login } from '../Reducers/LoginReducer';
+import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
+import { load as loadAccount } from '../Reducers/InitialValue';
 import renderField from '../../Validate/RenderField';
 
 

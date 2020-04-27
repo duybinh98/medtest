@@ -10,8 +10,8 @@ import DatePicker from 'react-native-datepicker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
-import { load as loadAccount } from '../Store/Reducers/InitialValue';
-import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer'
+import { load as loadAccount } from '../Reducers/InitialValue';
+import { loadCustomerInfor } from '../Reducers/LoadInforReducer'
 import renderField from '../../Validate/RenderField'
 
 
@@ -90,7 +90,7 @@ class UpdateInformationScreen extends Component {
                         console.log("Error")
                     }
                 });
-            }, 12000);
+            }, 15000);
             const customerInfor = {
                 username: this.props.customerInfor ? this.props.customerInfor.name : '',
                 phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
@@ -130,7 +130,7 @@ class UpdateInformationScreen extends Component {
                     console.log("Error")
                 }
             });
-        }, 12000);
+        }, 15000);
         this.props.reset();
     }
 

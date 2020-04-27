@@ -8,7 +8,7 @@ import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
 import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate, formatMonth } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
-import { load as loadAccount } from '../Store/Reducers/InitialValue'
+import { load as loadAccount } from '../Reducers/InitialValue'
 import renderField from '../../Validate/RenderField'
 
 //validate conditions

@@ -6,7 +6,8 @@ import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
-import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
+// import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
+import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 import ImagePicker from 'react-native-image-picker';
 
 
@@ -55,7 +56,7 @@ class customerInformation extends Component {
                         console.log("Error")
                     }
                 });
-            }, 3000);
+            }, 5000);
         }
     }
     componentDidMount() {

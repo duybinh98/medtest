@@ -8,8 +8,8 @@ import ScreenBottomMenu from './../Common/ScreenBottomMenu';
 import ArticleListItem from './ArticleListItem';
 import { getApiUrl } from './../Common/CommonFunction';
 // import articlesList from './../../Data/Articles'
-import { login, logout } from '../Store/Reducers/LoginReducer';
-import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
+import { login, logout } from '../Reducers/LoginReducer';
+import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 
 class HomeScreen extends Component {
     constructor(props) {

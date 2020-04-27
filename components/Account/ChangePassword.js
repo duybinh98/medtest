@@ -7,9 +7,9 @@ import { CommonActions } from '@react-navigation/native';
 import { getApiUrl } from './../Common/CommonFunction';
 import renderField from '../../Validate/RenderField'
 import { connect } from 'react-redux';
-import { load as loadAccount } from '../Store/Reducers/InitialValue';
-import { loadCustomerInfor } from '../Store/Reducers/LoadInforReducer';
-import { login, logout } from '../Store/Reducers/LoginReducer';
+import { load as loadAccount } from '../Reducers/InitialValue';
+import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
+import { login, logout } from '../Reducers/LoginReducer';
 
 //validate conditions
 const required = values => values ? undefined : 'Bắt buộc';

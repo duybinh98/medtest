@@ -1,5 +1,6 @@
 import Promise from 'es6-promise';
-import { getApiUrl } from './../../Common/CommonFunction';
+// import { getApiUrl } from './../../Common/CommonFunction';
+import { getApiUrl } from './../Common/CommonFunction';
 import {Alert} from 'react-native';
 
 
