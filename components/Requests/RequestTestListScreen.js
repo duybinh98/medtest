@@ -22,13 +22,19 @@ class RequestTestListScreen extends Component {
             totalPrice: '0',
             customerInfo: this.props.route.params.customerInfo ? this.props.route.params.customerInfo : null,
             resetList: true,
-            current_version : this.props.route.params.current_version ? this.props.route.params.current_version : 1,
+            current_version: this.props.route.params.current_version ? this.props.route.params.current_version : 1,
         }
         this.selectItem = this.selectItem.bind(this)
         this.resetSelectedTestOnConfirm = this.resetSelectedTestOnConfirm.bind(this)
     }
 
-
+    // componentDidUpdate(prevProps) {
+    //     if (prevProps !== this.props) {
+    //         this.setState({
+    //             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : testList,
+    //         })
+    //     }
+    // }
     selectItem(id, price) {
         let _selectedTest = this.state.selectedTest;
         let _totalPrice = parseInt(this.state.totalPrice);
@@ -145,7 +151,7 @@ class RequestTestListScreen extends Component {
                                         totalPrice: this.state.totalPrice,
                                         testsList: this.state.testsList,
                                         customerInfo: this.state.customerInfo,
-                                        current_version : this.props.route.params.current_version,
+                                        current_version: this.props.route.params.current_version,
                                         resetSelectedTestOnConfirm: this.resetSelectedTestOnConfirm
                                     },
                                 })
@@ -220,7 +226,7 @@ const styles = StyleSheet.create({
     },
     TestListAreaBackground: {
         // height: 270,
-        flex :  50,
+        flex: 50,
         marginTop: 10,
     },
     TestListArea: {

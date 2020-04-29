@@ -6,7 +6,7 @@ import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
-import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate, formatMonth } from './../Common/CommonFunction';
+import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate, formatMonth, getTomorrowDate } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue'
 import renderField from '../../Validate/RenderField'
@@ -26,7 +26,7 @@ class CreateAppointmentScreen extends Component {
             name: this.props.customerInfor ? this.props.customerInfor.name : '',
             phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '',
             dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
-            apointmentDate: (new Date().getDate() + 1) + '-' + formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear(),
+            apointmentDate: getTomorrowDate(),
             apointmentTime: '07:30',
             disabledButton : false,
         };
@@ -67,7 +67,7 @@ class CreateAppointmentScreen extends Component {
             name: this.props.customerInfor ? this.props.customerInfor.name : '',
             phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '',
             dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
-            apointmentDate: (new Date().getDate() + 1) + '-' + formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear(),
+            apointmentDate: getTomorrowDate(),
             apointmentTime: '07:30',
             disabledButton : false,
         })
@@ -154,7 +154,7 @@ class CreateAppointmentScreen extends Component {
                             mode="date"
                             placeholder="Ngày hẹn"
                             format="DD-MM-YYYY"
-                            minDate={new Date().getDate() + 1}
+                            minDate={new Date(Date.now() + 24 * 60 * 60 * 1000)}
                             customStyles={{
                                 dateIcon: {
                                     position: 'absolute',

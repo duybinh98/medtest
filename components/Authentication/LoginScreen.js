@@ -117,7 +117,7 @@ class LoginComponent extends Component {
                 console.log('error at screen aa')
             }
         }
-            , 20000)
+            , 18000)
         // 
     }
     render() {

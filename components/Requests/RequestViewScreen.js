@@ -216,13 +216,29 @@ class RequestViewScreen extends Component {
           this.setState({
             disabledButton: false,
           });
-          // console.log(result)
-          this.props.navigation.dispatch(
-            CommonActions.navigate({
-              name: 'RequestListScreen',
-              params: {},
-            }),
-          );
+          console.log(result)
+          if (result.success == false) {
+            Alert.alert(
+              'Thông báo',
+              result.message,
+              [
+                {
+                  text: 'Xác nhận',
+                  onPress: () => {
+                    this.props.navigation.navigate('RequestListScreen');
+                  },
+                },
+              ],
+            );
+          } else {
+            this.props.navigation.dispatch(
+              CommonActions.navigate({
+                name: 'RequestListScreen',
+                params: {},
+              }),
+            );
+          }
+
         },
         error => {
           console.log(error);

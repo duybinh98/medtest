@@ -21,7 +21,7 @@ class customerInformation extends Component {
             token: this.props.token ? this.props.token : null,
             uploadedImage: '',
             // name: this.props.customerInfor ? this.props.customerInfor.name : '',
-            townName: "",
+            townName: '',
             districtName: '',
             districtList: [],
             townList: [],
@@ -56,7 +56,7 @@ class customerInformation extends Component {
                         console.log("Error")
                     }
                 });
-            }, 5000);
+            }, 20000);
         }
     }
     componentDidMount() {
@@ -82,7 +82,7 @@ class customerInformation extends Component {
                     console.log("Error")
                 }
             });
-        }, 14000);
+        }, 20000);
     }
     callApiGetDistrictCode() {
         fetch(getApiUrl() + "/management/districts/district-town-list")
@@ -227,7 +227,12 @@ class customerInformation extends Component {
                     </View>
                     <View style={styles.textContainer}>
                         <Text style={styles.textInfor} >
-                            Địa chỉ: {this.state.customerInfor ? this.state.customerInfor.address + ', ' + this.state.townName + ', ' + this.state.districtName  : ""}
+                            {/* Địa chỉ: {this.state.customerInfor ? this.state.customerInfor.address + ', ' + this.state.townName + ', ' + this.state.districtName  : ""} */}
+                            Địa chỉ:  {
+                            this.state.customerInfor ? 
+                            this.state.townName == '' || this.state.districtName == '' ? "Đang tải..." 
+                             : this.state.customerInfor.address + ', ' + this.state.townName + ', ' + this.state.districtName 
+                             : "" }
                         </Text>
                     </View>
                     <View style={styles.textContainer}>

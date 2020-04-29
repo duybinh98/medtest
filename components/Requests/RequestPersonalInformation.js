@@ -12,7 +12,7 @@ import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue';
 import renderField from '../../Validate/RenderField'
-import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate, formatMonth } from './../Common/CommonFunction'
+import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate, formatMonth, getTomorrowDate } from './../Common/CommonFunction'
 
 
 //validate conditions
@@ -52,7 +52,7 @@ class RequestPersonalInformation extends Component {
             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
             name: this.props.customerInfor.name,
             dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
-            apointmentDate: ((new Date().getDate() + 1) + '-' + formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear()),
+            apointmentDate: getTomorrowDate(),
             apointmentTime: '07:30',
             address: this.props.customerInfor.address,
             districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
@@ -61,7 +61,6 @@ class RequestPersonalInformation extends Component {
             selectedTest: this.props.route.params.selectedTest ? this.props.route.params.selectedTest : [],
             totalPrice: this.props.route.params.totalPrice ? this.props.route.params.totalPrice : '0',
             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : [],
-
             districtList: [],
             selectTownList: [],
             townList: [],
@@ -140,7 +139,7 @@ class RequestPersonalInformation extends Component {
             customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
             name: this.props.customerInfor ? this.props.customerInfor.name : '',
             dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
-            apointmentDate: ((new Date().getDate() + 1) + '-' + formatMonth(new Date().getMonth() + 1) + '-' + new Date().getFullYear()),
+            apointmentDate: getTomorrowDate(),
             apointmentTime: '07:30',
             address: this.props.customerInfor ? this.props.customerInfor.address : '',
             districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
@@ -275,7 +274,7 @@ class RequestPersonalInformation extends Component {
                     </View>
                 </View>
                 <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
-                    iconType="material-community" placeholder="Tên hiển thị" secureText={false}
+                    iconType="material-community" placeholder="Tên hiển thị" secureText={false} editable={false}
                     onChange={(text) => { this.setState({ name: text }) }}
                     // editable={false}
                     validate={[required]}
@@ -331,7 +330,7 @@ class RequestPersonalInformation extends Component {
                         mode="date"
                         placeholder="Ngày hẹn"
                         format="DD-MM-YYYY"
-                        minDate={new Date().getDate() + 1}
+                        minDate={ new Date(Date.now() + 24 * 60 * 60 * 1000)}
                         customStyles={{
                             dateIcon: {
                                 position: 'absolute',

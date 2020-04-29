@@ -20,7 +20,7 @@ class HomeScreen extends Component {
             articlesList: [],
             testsList: [],
             token: null,
-            testListVersion : 1,
+            testListVersion: 1,
         };
         this.onPressCreateRequest = this.onPressCreateRequest.bind(this);
         this.onPressCreateAppointment = this.onPressCreateAppointment.bind(this);
@@ -38,6 +38,22 @@ class HomeScreen extends Component {
         });
     }
     handleBackButton = () => {
+        Alert.alert(
+            'Cảnh báo!',
+            'Bạn có muốn tắt ứng dụng?',
+            [{
+                text: 'Hủy',
+                onPress: () => { return null },
+                style: 'cancel',
+            },
+            {
+                text: 'Xác nhận',
+                onPress: () => BackHandler.exitApp(),
+            },
+            ], {
+            cancelable: false,
+        },
+        );
         return true;
     };
     componentWillUnmount() {
@@ -49,9 +65,9 @@ class HomeScreen extends Component {
         this.callApiArticlesList();
         this.callApiTestList();
         this.callApiCustomerInfo();
-        this.props.navigation.addListener("focus", () => {
-
-        })
+        this.props.navigation.addListener('focus', () => {
+            this.callApiArticlesList();
+        });
     }
     callApiGetDistrictCode() {
         fetch(getApiUrl() + "/management/districts/district-town-list")
@@ -104,7 +120,7 @@ class HomeScreen extends Component {
             )
     }
 
-    // callApiTestList = async () => {
+    // callApiTestList1 = async () => {
     //     fetch(getApiUrl() + "/test-types/type-test")
     //         .then(res => res.json())
     //         .then(
@@ -119,19 +135,19 @@ class HomeScreen extends Component {
     //         )
     // }
     callApiTestList = async () => {
-        fetch(getApiUrl()+"/tests/versions/lastest-version-test")
-        .then(res => res.json())
-        .then(
-            (result) => {
-            this.setState(previousState => ({
-                testsList: result.lsTests,
-                testListVersion : result.versionID,
-            }));
-            },            
-            (error) => {
-                console.log(error)
-            }
-        )  
+        fetch(getApiUrl() + "/tests/versions/lastest-version-test")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState(previousState => ({
+                        testsList: result.lsTests,
+                        testListVersion: result.versionID,
+                    }));
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
     }
     callApiCustomerInfo = async () => {
         fetch(getApiUrl() + "/users/customers/detail/" + this.state.customerId)
@@ -168,7 +184,7 @@ class HomeScreen extends Component {
                 params: {
                     customerId: this.state.customerId,
                     testsList: this.state.testsList,
-                    current_version : this.state.testListVersion,
+                    current_version: this.state.testListVersion,
                     // customerInfo: this.state.customerInfo,
                 },
             }))
@@ -249,7 +265,6 @@ const mapStateToProps = (state) => {
         isLoginSuccess: state.login.isLoginSuccess,
         token: state.login.token,
         customerInforLoad: state.loadCustomer.customerInfor,
-        // customerInfor: state.login.customerInfor,
         isLoadSuccess: state.loadCustomer.isLoadSuccess,
         loadError: state.loadCustomer.LoadError
     };
