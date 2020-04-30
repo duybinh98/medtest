@@ -88,6 +88,8 @@ export default class RequestListItem extends Component {
                                 dob: convertDateTimeToDate(this.props.cust_DOB),
                                 phone: this.props.cust_phone,
                                 address: this.props.appoint_address,
+                                townName: this.props.town_name,
+                                districtName: this.props.district_name,
                                 date: convertDateTimeToDate(this.props.appoint_date),
                                 time: convertDateTimeToTime(this.props.appoint_date),
                                 selectedTest: this.props.selectedTest,   

@@ -212,6 +212,8 @@ class RequestListScreen extends Component {
                       cust_phone={item.customerPhoneNumber}
                       cust_DOB={item.customerDOB}
                       appoint_address={item.requestAddress}
+                      town_name = {item.requestTownName}
+                      district_name = {item.requestDistrictName}
                       appoint_date={item.requestMeetingTime}
                       appoint_time={item.requestMeetingTime}
                       nurse_name={item.nurseName}

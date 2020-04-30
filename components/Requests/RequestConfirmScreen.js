@@ -99,6 +99,8 @@ class RequestConfirmScreen extends Component {
                                 phone: this.state.phoneNumber,
                                 name: this.state.name,
                                 address: this.state.address,
+                                townName : this.state.townName,
+                                districtName : this.state.districtName,
                                 dob: convertDateTimeToDate(this.state.dob),
                                 date: this.state.date,
                                 time: this.state.time,
