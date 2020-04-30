@@ -84,6 +84,7 @@ class ConfirmOPTScreen extends Component {
                             result.message,
                         )
                     }
+                    this.props.reset();
                 },
                 (error) => {
                     this.setState({

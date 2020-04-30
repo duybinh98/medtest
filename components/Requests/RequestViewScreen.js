@@ -113,6 +113,12 @@ class RequestViewScreen extends Component {
         address: this.props.route.params.address
           ? this.props.route.params.address
           : '',
+        townName: this.props.route.params.townName
+          ? this.props.route.params.townName
+          : '',
+        districtName: this.props.route.params.districtName
+          ? this.props.route.params.districtName
+          : '',
         date: this.props.route.params.date ? this.props.route.params.date : '',
         time: this.props.route.params.time ? this.props.route.params.time : '',
         selectedTest: this.props.route.params.selectedTest

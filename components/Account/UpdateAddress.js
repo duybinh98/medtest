@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity ,BackHandler , Alert} from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
@@ -50,7 +50,6 @@ class UpdateAddress extends Component {
 
             customerInfor: this.props.customerInforLoad ? this.props.customerInforLoad : null,
 
-            selectTownList: [],
             townName: 'Chọn phường...',
             districtName: 'Chọn quận...',
             districtList: [],
@@ -59,11 +58,46 @@ class UpdateAddress extends Component {
             disabledButton : false,
         };
         this.submit = this.submit.bind(this)
+        this._unsubscribeSiFocus = this.props.navigation.addListener('focus', e => {
+            console.warn('focus signIn');
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        });
+        this._unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
+            console.warn('blur signIn');
+            BackHandler.removeEventListener(
+                'hardwareBackPress',
+                this.handleBackButton,
+            );
+        });
     }
 
+    handleBackButton = () => {
+        Alert.alert(
+            'Cảnh báo!',
+            'Bạn có muốn tắt ứng dụng?',
+            [{
+                text: 'Hủy',
+                onPress: () => { return null },
+                style: 'cancel',
+            },
+            {
+                text: 'Xác nhận',
+                onPress: () => BackHandler.exitApp(),
+            },
+            ], {
+            cancelable: false,
+        },
+        );
+        return true;
+    };
+    componentWillUnmount() {
+        this._unsubscribeSiFocus();
+        this._unsubscribeSiBlur();
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
     componentDidMount = value => {
         this.callApiGetDistrictCode();
-        this.callApiGetTownCode();
+        // this.callApiGetTownCode();
     }
 
     callApiGetDistrictCode() {
@@ -83,23 +117,23 @@ class UpdateAddress extends Component {
                 }
             )
     }
-    callApiGetTownCode() {
-        fetch(getApiUrl() + "/management/districts/towns/list")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result)
-                    this.setState(previousState => ({
-                        townList: result,
-                    }));
-                },
-                (error) => {
-                    this.setState({
-                        error
-                    });
-                }
-            )
-    }
+    // callApiGetTownCode() {
+    //     fetch(getApiUrl() + "/management/districts/towns/list")
+    //         .then(res => res.json())
+    //         .then(
+    //             (result) => {
+    //                 console.log(result)
+    //                 this.setState(previousState => ({
+    //                     townList: result,
+    //                 }));
+    //             },
+    //             (error) => {
+    //                 this.setState({
+    //                     error
+    //                 });
+    //             }
+    //         )
+    // }
     _renderDistrictButtonText = rowData => {
         const { districtCode, districtName } = rowData;
         const { townCode, townName } = rowData.listTown[0];
@@ -201,7 +235,7 @@ class UpdateAddress extends Component {
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
             >
-                <ScreenTopMenuBack {...this.props}></ScreenTopMenuBack>
+                <ScreenTopMenuBack navigation={this.props.navigation} backScreen={'HomeScreen'}></ScreenTopMenuBack>
                 <View>
                     <View style={styles.titleArea}>
                         <Text style={styles.logoText}>Cập nhật địa chỉ</Text>

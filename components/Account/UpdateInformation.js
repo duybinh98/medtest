@@ -90,7 +90,7 @@ class UpdateInformationScreen extends Component {
                         console.log("Error")
                     }
                 });
-            }, 15000);
+            }, 2000);
             const customerInfor = {
                 username: this.props.customerInfor ? this.props.customerInfor.name : '',
                 phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',

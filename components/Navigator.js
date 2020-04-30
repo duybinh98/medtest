@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert, BackHandler } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert, BackHandler, ImageBackground } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -107,7 +107,7 @@ function CustomDrawerContent(props, state, navigatorProps) {
     <View style={{ flex: 1 }}>
       <TouchableOpacity
         style={{
-          height: 130,
+          height: 200,
           flexDirection: 'column',
           alignItems: 'flex-start',
           justifyContent: 'flex-end',
@@ -118,17 +118,25 @@ function CustomDrawerContent(props, state, navigatorProps) {
         }}
         onPress={() => props.navigation.navigate('CustomerInformation')}
       >
-        <Icon
-          name='user'
-          type='antdesign'
-          color='#0A6ADA'
-          size={60}
-          iconStyle={{
-            marginLeft: 10,
-            marginBottom: 5
-          }}
-        >
-        </Icon>
+        {navigatorProps.customerInfor == null ?
+          <Icon
+            name='user'
+            type='antdesign'
+            color='#0A6ADA'
+            size={60}
+            iconStyle={{
+              marginLeft: 10,
+              marginBottom: 15
+            }}
+          >
+          </Icon>
+          : <ImageBackground
+            source={{ uri: navigatorProps.customerInfor.image ? navigatorProps.customerInfor.image : '' }}
+            // source={{ uri: '' }}
+            style={styles.logo} >
+          </ImageBackground>
+        }
+
         <Text style={{
           fontSize: 15,
           color: 'black',
@@ -291,8 +299,13 @@ const styles = StyleSheet.create({
   navigatorButtonText: {
     fontSize: 18,
     marginLeft: 7
-  }
-
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom : 10
+  },
 });
 
 
