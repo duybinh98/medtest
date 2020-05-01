@@ -5,12 +5,8 @@ import { CommonActions } from '@react-navigation/native';
 import TopMenuOutside from '../Common/TopMenuOutside';
 import { Field, reduxForm } from 'redux-form';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
-import renderField from '../../Validate/RenderField';
+import renderField, {isOTP, required, isNumber} from '../../Validate/RenderField';
 
-
-const required = values => values ? undefined : 'Bắt buộc';
-const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
-const isOTP = values => values && values.length == 6 ? undefined : 'Phải có 6 số';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -184,7 +180,7 @@ class ConfirmOPTScreen extends Component {
                         </View>
                     </View>
                     <Field name="otp" keyboardType="phone-pad" component={renderField} iconName="lock-question"
-                        iconType="material-community" placeholder="Nhập mã OTP" secureText={false}
+                        iconType="material-community" placeholder="Nhập mã OTP" secureText={false}  maxLength = {6}
                         onChange={(text) => { this.setState({ otp: text }) }}
                         validate={[required, isNumber, isOTP]}
                     />

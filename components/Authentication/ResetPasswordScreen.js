@@ -5,13 +5,9 @@ import { CommonActions } from '@react-navigation/native';
 import TopMenuOutside from './../Common/TopMenuOutside';
 import { Field, reduxForm } from 'redux-form';
 import { getApiUrl } from './../Common/CommonFunction'
-import renderField from '../../Validate/RenderField';
+import renderField, {required, isNumber, isPhonenumber} from '../../Validate/RenderField';
 import ScreenTopMenuBack from '../Common/ScreenTopMenuBack';
 
-
-const required = values => values ? undefined : 'Bắt buộc';
-const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
-const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -86,7 +82,7 @@ class ResetPasswordScreen extends Component {
                         </View>
                     </View>
                     <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
-                        iconType="material-community" placeholder="Số điện thoại" secureText={false}
+                        iconType="material-community" placeholder="Số điện thoại" secureText={false} maxLength = {10}
                         onChange={(text) => { this.setState({ phonenumber: text }) }}
                         validate={[required, isNumber, isPhonenumber]}
                     />

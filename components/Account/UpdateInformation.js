@@ -13,16 +13,8 @@ import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue';
 import { login, logout } from '../Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer'
-import renderField from '../../Validate/RenderField'
+import renderField, {required, isEmail, isWeakPassword} from '../../Validate/RenderField'
 
-
-//validate conditions
-const required = values => values ? undefined : 'Bắt buộc';
-const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
-const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
-const isEmail = values =>
-    values && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values) ? 'Email không hợp lệ' : undefined;
-const isWeakPassword = value => value && value.length >= 6 ? undefined : 'Mật khẩu phải có ít nhất 6 kí tự';
 
 //Render combobox selected value
 const _renderDistrictRow = rowData => {

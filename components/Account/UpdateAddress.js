@@ -11,12 +11,7 @@ import { load as loadAccount } from '../Reducers/InitialValue';
 import { login, logout } from '../Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 
-import renderField from '../../Validate/RenderField';
-
-
-//validate conditions
-const required = values => values ? undefined : 'Bắt buộc';
-
+import renderField , {required} from '../../Validate/RenderField';
 
 //Render combobox selected value
 const _renderDistrictRow = rowData => {

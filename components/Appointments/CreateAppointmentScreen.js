@@ -10,12 +10,8 @@ import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate, formatM
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue'
 import { login, logout } from '../Reducers/LoginReducer';
-import renderField from '../../Validate/RenderField'
+import renderField, {required, isNumber, isPhonenumber} from '../../Validate/RenderField'
 
-//validate conditions
-const required = values => values ? undefined : 'Bắt buộc';
-const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
-const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
 
 const { width: WIDTH } = Dimensions.get('window')
 

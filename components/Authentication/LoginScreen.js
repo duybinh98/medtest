@@ -8,14 +8,8 @@ import { connect } from 'react-redux';
 import { login,logout } from '../Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 import { load as loadAccount } from '../Reducers/InitialValue';
-import renderField from '../../Validate/RenderField';
+import renderField, {required , isNumber, isPhonenumber, isWeakPassword} from '../../Validate/RenderField';
 
-
-//validate conditions
-const required = value => value ? undefined : 'Bắt buộc';
-const isNumber = value => value && isNaN(Number(value)) ? 'Phải nhập số điện thoại' : undefined;
-const isPhonenumber = value => value && value.length == 10 ? undefined : 'Phải có 10 số';
-const isWeakPassword = value => value && value.length >= 6 ? undefined : 'Mật khẩu phải có ít nhất 6 kí tự';
 
 class LoginComponent extends Component {
     constructor(props) {
@@ -94,7 +88,6 @@ class LoginComponent extends Component {
                 disabledButton : false,
             })
             if (this.props.customerInfoFromLogin != null) {
-                
                 this.props.load(this.props.customerInfoFromLogin)
                 if (this.props.customerInfoFromLogin.address == null) {
                     this.props.navigation.dispatch(
@@ -121,25 +114,20 @@ class LoginComponent extends Component {
                 console.log('error at screen aa')
             }
         }
-            , 20000)
+            , 18000)
             // , 15000)
         // 
     }
     render() {
         const { handleSubmit } = this.props;
-        // // debugger;
-        // const abc = this.props.customerInforReducer;
-        // const a = this.state.customerInfoFromLogin;
         return (
             <ScrollView
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
             >
-                {/* <ScreenTopMenu {...this.props} ></ScreenTopMenu> */}
                 <View>
                     <View style={styles.logoContainer}>
                         <Image
-                            // source={{ uri: 'https://getdrawings.com/free-icon/react-icon-69.png' }}
                             source={require('./../../Image/LogoMedtest.png')}
                             style={styles.logo}
                         ></Image>
@@ -148,8 +136,8 @@ class LoginComponent extends Component {
                         </View>
                     </View>
                 </View>
-                <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
-                    iconType="material-community" placeholder="Số điện thoại" secureText={false}
+                <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone" maxLength = {10}
+                    iconType="material-community" placeholder="Số điện thoại" secureText={false}  
                     onChange={(text) => { this.setState({ phoneNumber: text }) }}
                     validate={[required, isNumber, isPhonenumber]}
                 />
@@ -179,7 +167,6 @@ class LoginComponent extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        // initialValues: state.initialValue.data,
         isLoginPending: state.login.isLoginPending,
         isLoginSuccess: state.login.isLoginSuccess,
         LoginError: state.login.LoginError,
@@ -189,7 +176,6 @@ const mapStateToProps = (state) => {
 }
 const mapStateToDispatch = (dispatch) => {
     return {
-        // loadInitValue: (data) => dispatch(loadAccount(data)),
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
         login: (phoneNumber, password) => dispatch(login(phoneNumber, password)),
         logout: () => dispatch(logout()),

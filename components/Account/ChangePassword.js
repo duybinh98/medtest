@@ -5,17 +5,12 @@ import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
 import { getApiUrl } from './../Common/CommonFunction';
-import renderField from '../../Validate/RenderField'
+import renderField, {required, isWeakPassword, isNumber, isPhonenumber} from '../../Validate/RenderField'
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 import { login, logout } from '../Reducers/LoginReducer';
 
-//validate conditions
-const required = values => values ? undefined : 'Bắt buộc';
-const isWeakPassword = value => value && value.length >= 6 ? undefined : 'Mật khẩu phải có ít nhất 6 kí tự';
-const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
-const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
 
 const { width: WIDTH } = Dimensions.get('window')
 

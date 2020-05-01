@@ -119,7 +119,7 @@ export default class RequestListItem extends Component {
                     <Text style={{fontSize:17}}>{"Ngày tạo:  "+convertDateTimeToDate(this.props.request_createTime)}</Text>
                     </View>
                     <View style={{backgroundColor:getStateColor(this.props.req_status), padding:4, width:130,alignItems: 'center',}}>
-                    <Text style={{fontSize:11}}>{getStateName(this.props.req_status)}</Text>
+                    <Text style={{fontSize:11, textAlign: 'center'}}>{getStateName(this.props.req_status)}</Text>
                     </View> 
                 </View>   
                 <View style={[styles.requestListTextContainer,{

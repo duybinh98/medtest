@@ -28,8 +28,8 @@ export function getTomorrowDate() {
     var day = tomorrowDate.getDate();
     var month = tomorrowDate.getMonth() + 1;
     var year = tomorrowDate.getFullYear();
-    tomorrowDate =( formatDate(day) + '-' + formatMonth(month) + '-' + year)
-    console.log('this is date: '  + tomorrowDate)
+    tomorrowDate = (formatDate(day) + '-' + formatMonth(month) + '-' + year)
+    console.log('this is date: ' + tomorrowDate)
     return tomorrowDate;
 
 }
@@ -62,8 +62,8 @@ export function convertMoney(_price) {
 }
 
 export function getApiUrl() {
-    // return "https://medtest-backend.herokuapp.com";
-    return "http://192.168.1.6:8080"
+    return "https://medtest-backend.herokuapp.com";
+    // return "http://192.168.1.6:8080"
 }
 export function getStateName(status) {
     switch (status) {
@@ -71,7 +71,7 @@ export function getStateName(status) {
             return 'Đang đợi y tá nhận đơn';
             break;
         case 'coordinatorlostsample':
-            return 'Đang đợi y tá nhận đơn';
+            return 'Điều phối viên làm mất mẫu';
             break;
         case 'accepted':
             return 'Đang đợi lấy mẫu';
@@ -87,6 +87,15 @@ export function getStateName(status) {
             break;
         case 'closed':
             return 'Đã xong';
+            break;
+        case 'reaccepted':
+            return 'Đã nhận đơn bị mất do điều phối viên';
+            break;
+        case 'retransporting':
+            return 'Đang vận chuyển đơn bị mất do điều phối viên';
+            break;
+        case 'relostsample':
+            return 'Đang đợi lấy lại mẫu do điều phối viên làm mất';
             break;
         case 'canceled':
             return 'Đã hủy';
@@ -118,6 +127,11 @@ export function getStateColor(status) {
             break;
         case 'canceled':
             return '#6398d6';
+            break;
+        case 'reaccepted':
+        case 'retransporting':
+        case 'relostsample':
+            return '#a4d57b';
             break;
     }
 }

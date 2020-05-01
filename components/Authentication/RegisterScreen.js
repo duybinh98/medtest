@@ -7,16 +7,9 @@ import TopMenuOutside from './../Common/TopMenuOutside';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { CommonActions } from '@react-navigation/native';
-import renderField from '../../Validate/RenderField';
+import renderField,{required , isNumber, isPhonenumber, isWeakPassword, isEmail} from '../../Validate/RenderField';
 import { getApiUrl, convertDateToDateTime, convertDateTimeToDate } from './../Common/CommonFunction';
 
-//validate conditions
-const required = values => values ? undefined : 'Bắt buộc';
-const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
-const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
-const isEmail = values =>
-    values && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values) ? 'Email không hợp lệ' : undefined;
-const isWeakPassword = value => value && value.length >= 6 ? undefined : 'Mật khẩu phải có ít nhất 6 kí tự';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -130,12 +123,12 @@ class RegisterScreen extends Component {
                         </View>
                     </View>
                     <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
-                        iconType="material-community" placeholder="Tên hiển thị" secureText={false}
+                        iconType="material-community" placeholder="Tên hiển thị" secureText={false} 
                         onChange={(text) => { this.setState({ name: text }) }}
                         validate={[required]}
                     />
                     <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
-                        iconType="material-community" placeholder="Số điện thoại" secureText={false}
+                        iconType="material-community" placeholder="Số điện thoại" secureText={false} maxLength = {10}
                         onChange={(text) => { this.setState({ phonenumber: text }) }}
                         validate={[required, isNumber, isPhonenumber]}
                     />

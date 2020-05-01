@@ -3,20 +3,20 @@ import { Text, View, StyleSheet, Dimensions,  } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { TextInput } from 'react-native-gesture-handler';
 
-
+//validate conditions
+export const required = value => value ? undefined : 'Bắt buộc';
+export const isNumber = value => value && isNaN(Number(value)) ? 'Phải nhập số điện thoại' : undefined;
+export const isPhonenumber = value => value && value.replace(/([^0-9])+/i, "").length == 10 ? undefined : 'Số điện thoại phải có 10 số';
+export const isWeakPassword = value => value && value.length >= 6 ? undefined : 'Mật khẩu phải có ít nhất 6 kí tự';
+export const isEmail = values =>
+values && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values) ? 'Email không hợp lệ' : undefined;
+export const isOTP = values => values && value.replace(/([^0-9])+/i, "").length == 6 ? undefined : 'Mã xác thực có 6 chữ số';
 
 //Field input for redux-form
 const renderField = ({
     iconName, iconType, keyboardType, meta: { touched, error, warning }, secureText,
-    input: { onChange, ...restInput }, placeholder, editable
+    input: { onChange, ...restInput }, placeholder, editable, maxLength
 }) => {
-    //validate conditions
-    const required = values => values ? undefined : 'Bắt buộc';
-    const isNumber = values => values && isNaN(Number(values)) ? 'Phải nhập số' : undefined;
-    const isPhonenumber = values => values && values.length == 10 ? undefined : 'Phải có 10 số';
-    const isEmail = values =>
-        values && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values) ? 'Email không hợp lệ' : undefined;
-    const isWeakPassword = values => values && values.length == 6 ? undefined : 'Mật khẩu phải có 6 kí tự';
     return (
         <View style={{ flex: 1 }}>
             <View style={styles.inputContainer}>
@@ -28,7 +28,8 @@ const renderField = ({
                     iconStyle={styles.inputIcon}
                 ></Icon>
                 <TextInput style={styles.input} placeholder={placeholder} secureTextEntry={secureText}
-                    keyboardType={keyboardType} editable={editable}
+                    keyboardType={keyboardType} maxLength = {maxLength}
+                     editable={editable}
                     onChangeText={onChange} {...restInput} autoCapitalize='none'
                 ></TextInput>
             </View>
@@ -38,7 +39,9 @@ const renderField = ({
     );
 }
 
+//Screen's width
 const { width: WIDTH } = Dimensions.get('window')
+
 styles = StyleSheet.create({
     inputContainer: {
         width: WIDTH - 30,
@@ -65,7 +68,6 @@ styles = StyleSheet.create({
         borderColor: '#0A6ADA',
         backgroundColor: 'rgba(255,255,255,0.7)',
         color: 'black',
-        // marginB
     },
 })
 export default renderField;
