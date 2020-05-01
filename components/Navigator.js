@@ -62,6 +62,7 @@ class Navigator extends Component {
       <NavigationContainer>
 
         <Drawer.Navigator initialRouteName="LoginScreen"
+        //  <Drawer.Navigator initialRouteName="HomeScreen"
           drawerContent={props => CustomDrawerContent(props, this.state ? this.state : null, this.props)}
         >
           {/* <Drawer.Navigator initialRouteName="ConfirmOTPScreen"

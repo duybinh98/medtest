@@ -11,6 +11,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue';
+import { login, logout } from '../Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer'
 import renderField from '../../Validate/RenderField'
 
@@ -71,26 +72,33 @@ class UpdateInformationScreen extends Component {
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
-            setTimeout(() => {
-                this.state.districtList.forEach(district => {
-                    if (district.districtCode === this.props.customerInfor.districtCode) {
-                        this.setState({
-                            districtName: district.districtName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-                this.state.townList.forEach(town => {
-                    if (town.townCode === this.props.customerInfor.townCode) {
-                        this.setState({
-                            townName: town.townName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-            }, 2000);
+            if (this.props.customerInfor.districtCode == null || this.props.customerInfor.townCode == null) {
+                this.setState({
+                    townName: 'Phường/Xã...',
+                    districtName: 'Quận/Huyện...',
+                })
+            } else {
+                setTimeout(() => {
+                    this.state.districtList.forEach(district => {
+                        if (district.districtCode === this.props.customerInfor.districtCode) {
+                            this.setState({
+                                districtName: district.districtName
+                            })
+                        } else {
+                            console.log("Error")
+                        }
+                    });
+                    this.state.townList.forEach(town => {
+                        if (town.townCode === this.props.customerInfor.townCode) {
+                            this.setState({
+                                townName: town.townName
+                            })
+                        } else {
+                            console.log("Error")
+                        }
+                    });
+                }, 2000);
+            }
             const customerInfor = {
                 username: this.props.customerInfor ? this.props.customerInfor.name : '',
                 phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
@@ -200,31 +208,7 @@ class UpdateInformationScreen extends Component {
                     { text: 'Hủy', onPress: () => { return null } },
                     {
                         text: 'Xác nhận', onPress: () => {
-                            const customerInforReducer = {
-                                id: this.state.customerId,
-                                phoneNumber: this.state.phoneNumber,
-                                name: this.state.name,
-                                email: this.state.email,
-                                gender: this.state.gender == 'Nữ' ? 0 : 1,
-                                districtCode: this.state.districtCode,
-                                townCode: this.state.townCode,
-                                address: this.state.address,
-                                dob: convertDateToDateTime(this.state.dob),
-                                phoneNumber: this.state.phoneNumber,
-                                image: this.state.image,
-                            }
-
                             this.callApi()
-                            this.props.loadCustomerInfor(customerInforReducer),
-                                this.props.navigation.dispatch(
-                                    CommonActions.navigate({
-                                        name: 'CustomerInformation',
-                                        params: {
-                                            customerInfor: customerInforReducer
-                                        },
-                                    })
-                                )
-                            this.props.reset();
                         }
                     },
                 ]
@@ -264,14 +248,55 @@ class UpdateInformationScreen extends Component {
                     this.setState({
                         disabledButton: false,
                     })
-                    if (result.message) {
-                        Alert.alert(
-                            'Lỗi cập nhật thông tin',
-                            result.message,
-                        )
-                        this.props.reset();
+                    console.log(result.success == false)
+                    console.log(result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!')
+                    if (result.success == false) {
+                        if (result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!') {
+                            Alert.alert(
+                                'Thông báo',
+                                result.message,
+                                [
+                                    {
+                                        text: 'Xác nhận',
+                                        onPress: () => {
+                                            this.props.reset();
+                                            this.props.logout();
+                                            this.props.navigation.navigate('LoginScreen');
+                                        },
+                                    },
+                                ],
+                            );
+                        } else {
+                            Alert.alert(
+                                'Lỗi cập nhật thông tin',
+                                result.message,
+                            )
+                            this.props.reset();
+                        }
                     } else {
-                        // this.props.load(result)
+                        const customerInforReducer = {
+                            id: this.state.customerId,
+                            phoneNumber: this.state.phoneNumber,
+                            name: this.state.name,
+                            email: this.state.email,
+                            gender: this.state.gender == 'Nữ' ? 0 : 1,
+                            districtCode: this.state.districtCode,
+                            townCode: this.state.townCode,
+                            address: this.state.address,
+                            dob: convertDateToDateTime(this.state.dob),
+                            phoneNumber: this.state.phoneNumber,
+                            image: this.state.image,
+                        }
+                        this.props.loadCustomerInfor(customerInforReducer),
+                            this.props.navigation.dispatch(
+                                CommonActions.navigate({
+                                    name: 'CustomerInformation',
+                                    params: {
+                                        customerInfor: customerInforReducer
+                                    },
+                                })
+                            )
+                        this.props.reset();
                     }
                 },
                 (error) => {
@@ -426,14 +451,13 @@ const mapStateToDispatch = (dispatch) => {
     return {
         load: (data) => dispatch(loadAccount(data)),
         loadCustomerInfor: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+        logout: () => dispatch(logout()),
     };
 }
 let UpdateInformationForm = reduxForm({
     form: 'UpdateInformation',
     enableReinitialize: true,
     destroyOnUnmount: false,
-    keepDirtyOnReinitialize: true,
-    forceUnregisterOnUnmount: true
 })(UpdateInformationScreen);
 UpdateInformationForm = connect(
     state => ({

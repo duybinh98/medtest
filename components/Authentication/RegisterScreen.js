@@ -39,7 +39,20 @@ class RegisterScreen extends Component {
             alert("Xác nhận mật khẩu không đúng!")
         } else {
             this.callApi()
+            // this.callApi1();
         }
+    }
+    resetScreen() {
+        this.setState({
+            name: '',
+            phonenumber: '',
+            email: '',
+            dob: '01-01-1970',
+            password: '',
+            gender: 'Nam',
+            disabledButton : false,
+        })
+        this.props.reset();
     }
 
     callApi = async () => {
@@ -82,7 +95,8 @@ class RegisterScreen extends Component {
                                 },
                             })
                         )
-                        this.props.reset();
+                        // this.props.reset();
+                        this.resetScreen();
                     } else {
                         Alert.alert(
                             'Lỗi đăng ký',

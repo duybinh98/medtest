@@ -40,7 +40,15 @@ class ConfirmOPTScreen extends Component {
             console.log("abc " + this.state.timer)
         }, 1000);
     }
-
+    resetScreen() {
+        this.setState({
+            otp: '',
+            disabledButton: true,
+            disabledConfirmButton: false,
+            timer: 20,
+        })
+        this.props.reset();
+    }
     decrementClock = () => {
         if (this.state.timer === 1) {
             clearInterval(this.clockCall);
@@ -84,7 +92,8 @@ class ConfirmOPTScreen extends Component {
                             result.message,
                         )
                     }
-                    this.props.reset();
+                    // this.props.reset();
+                    this.resetScreen();
                 },
                 (error) => {
                     this.setState({
@@ -137,7 +146,7 @@ class ConfirmOPTScreen extends Component {
                                 },
                             })
                         )
-                        this.props.reset();
+                        this.resetScreen();
                     } else {
                         Alert.alert(
                             'Lỗi xác nhận OTP',

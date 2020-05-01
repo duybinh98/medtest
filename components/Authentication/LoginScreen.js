@@ -5,7 +5,7 @@ import ScreenTopMenu from './../Common/ScreenTopMenu';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
-import { login } from '../Reducers/LoginReducer';
+import { login,logout } from '../Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 import { load as loadAccount } from '../Reducers/InitialValue';
 import renderField from '../../Validate/RenderField';
@@ -48,8 +48,11 @@ class LoginComponent extends Component {
                 style: 'cancel',
             },
             {
-                text: 'Xác nhận',
-                onPress: () => BackHandler.exitApp(),
+                text: 'Xác nhận',            
+                onPress: () => {
+                    this.props.logout();
+                    BackHandler.exitApp();
+                }
             },
             ], {
             cancelable: false,
@@ -70,6 +73,7 @@ class LoginComponent extends Component {
             })
         }
     }
+
     submit = value => {
         this.setState({
             disabledButton : true,
@@ -79,7 +83,7 @@ class LoginComponent extends Component {
         let count = 0;
 
         var waitForIt = setInterval(() => {
-            if (this.props.isLoginSuccess == true || count > 50) {
+            if (this.props.isLoginSuccess == true || count > 200) {
                 clearInterval(waitForIt);
             }
             else console.log('wait')
@@ -92,7 +96,7 @@ class LoginComponent extends Component {
             if (this.props.customerInfoFromLogin != null) {
                 
                 this.props.load(this.props.customerInfoFromLogin)
-                if (this.props.customerInfoFromLogin.address === null) {
+                if (this.props.customerInfoFromLogin.address == null) {
                     this.props.navigation.dispatch(
                         CommonActions.navigate({
                             name: 'UpdateAddress',
@@ -117,7 +121,8 @@ class LoginComponent extends Component {
                 console.log('error at screen aa')
             }
         }
-            , 18000)
+            , 20000)
+            // , 15000)
         // 
     }
     render() {
@@ -186,7 +191,8 @@ const mapStateToDispatch = (dispatch) => {
     return {
         // loadInitValue: (data) => dispatch(loadAccount(data)),
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
-        login: (phoneNumber, password) => dispatch(login(phoneNumber, password))
+        login: (phoneNumber, password) => dispatch(login(phoneNumber, password)),
+        logout: () => dispatch(logout()),
     };
 }
 const LoginForm = reduxForm({

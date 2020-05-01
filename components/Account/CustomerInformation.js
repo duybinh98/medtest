@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, ImageBackground, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 // import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 import ImagePicker from 'react-native-image-picker';
+import { login, logout } from '../Reducers/LoginReducer';
 
 
 const { width: WIDTH } = Dimensions.get('window')
@@ -36,8 +37,10 @@ class customerInformation extends Component {
         if (prevProps !== this.props) {
             this.setState(previousState => ({
                 token: this.props.token,
-                // customerInfor: this.props.route.params.customerInfor ? this.props.route.params.customerInfor : this.state.customerInfor
-                customerInfor: this.props.customerInfor ? this.props.customerInfor : null
+                customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
+                customerInfor: this.props.customerInfor ? this.props.customerInfor : null,
+                // townName: '',
+                // districtName: '',
             }));
             setTimeout(() => {
                 this.state.districtList.forEach(district => {
@@ -229,10 +232,26 @@ class customerInformation extends Component {
             .then(
                 (result) => {
                     if (result.success == false) {
-                        Alert.alert(
-                            'Lỗi thay ảnh',
-                            result.message,
-                        )
+                        if (result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!') {
+                            Alert.alert(
+                                'Thông báo',
+                                result.message,
+                                [
+                                    {
+                                        text: 'Xác nhận',
+                                        onPress: () => {
+                                            this.props.logout();
+                                            this.props.navigation.navigate('LoginScreen');
+                                        },
+                                    },
+                                ],
+                            );
+                        } else {
+                            Alert.alert(
+                                'Lỗi thay ảnh',
+                                result.message,
+                            )
+                        }
                     } else {
                         console.log('result:' + JSON.stringify(result))
                         this.setState({ serverImage: result.image });
@@ -249,6 +268,8 @@ class customerInformation extends Component {
     render() {
         debugger;
         const { gender } = this.state;
+        const a = this.state.customerInfor.address;
+        // console.log(this.state.customerInfor.address == null)
         const { abc } = this.props;
         return (
             <ScrollView
@@ -288,14 +309,14 @@ class customerInformation extends Component {
                     </View>
                     <View style={styles.textContainer}>
                         <Text style={styles.textInfor} >
-                            {/* Địa chỉ: {this.state.customerInfor ? this.state.customerInfor.address + ', ' + this.state.townName + ', ' + this.state.districtName  : ""} */}
                             Địa chỉ:  {
                                 this.props.customerInfor ?
-                                    // this.state.customerInfor.address == null ? 
-                                    this.state.townName == '' || this.state.districtName == '' ? "Đang tải..."
-                                        : this.state.customerInfor.address + ', ' + this.state.townName + ', ' + this.state.districtName
-                                    // : "abc" 
-                                    : "a"}
+                                    this.state.customerInfor.address != null ?
+                                        this.state.townName == '' || this.state.districtName == '' ?
+                                            "Đang tải..."
+                                            : this.state.customerInfor.address + ', ' + this.state.townName + ', ' + this.state.districtName
+                                        : "Chưa có địa chỉ!"
+                                    : ""}
                         </Text>
                     </View>
                     <View style={styles.textContainer}>
@@ -336,6 +357,7 @@ const mapStateToProps = (state) => {
 const mapStateToDispatch = (dispatch) => {
     return {
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+        logout: () => dispatch(logout()),
     };
 }
 

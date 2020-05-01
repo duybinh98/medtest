@@ -28,14 +28,14 @@ class changePassword extends Component {
             phonenumber: this.props.customerInforLoad ? this.props.customerInforLoad.phoneNumber : '',
             password: '',
             newPassword: '',
-            disabledButton : false,
+            disabledButton: false,
         };
         this.submit = this.submit.bind(this)
     }
     componentWillMount = value => {
         const customerInfor = {
             username: this.props.customerInforLoad ? this.props.customerInforLoad.name : '',
-            phonenumber:  this.props.customerInforLoad ? this.props.customerInforLoad.phoneNumber : '0000000000',
+            phonenumber: this.props.customerInforLoad ? this.props.customerInforLoad.phoneNumber : '0000000000',
             address: this.props.customerInforLoad ? this.props.customerInforLoad.address : '',
             email: this.props.customerInforLoad ? this.props.customerInforLoad.email : '',
         }
@@ -50,26 +50,21 @@ class changePassword extends Component {
         }
         const customerInfor = {
             username: this.props.customerInforLoad ? this.props.customerInforLoad.name : '',
-            phonenumber:  this.props.customerInforLoad ? this.props.customerInforLoad.phoneNumber : '0000000000',
+            phonenumber: this.props.customerInforLoad ? this.props.customerInforLoad.phoneNumber : '0000000000',
             address: this.props.customerInforLoad ? this.props.customerInforLoad.address : '',
             email: this.props.customerInforLoad ? this.props.customerInforLoad.email : '',
         }
         this.props.load(customerInfor)
     }
-    submit = values => {     
-        if (values.password === values.newPassword) {
-            Alert.alert(
-                'Đổi mật khẩu',
-                "Mật khẩu mới phải khác mật khẩu cũ!",
-            )
-        } else if (values.cfNewPassword !== values.newPassword) {
+    submit = values => {
+        if (values.cfNewPassword !== values.newPassword) {
             Alert.alert(
                 'Đổi mật khẩu',
                 "Xác nhận mật khẩu mới không đúng!",
             )
         } else {
             this.setState({
-                disabledButton : true,
+                disabledButton: true,
             })
             fetch(getApiUrl() + '/users/customers/change-password/' + this.state.customerId, {
                 method: 'POST',
@@ -88,7 +83,7 @@ class changePassword extends Component {
                 .then(
                     (result) => {
                         this.setState({
-                            disabledButton : false,
+                            disabledButton: false,
                         })
                         console.log('.' + result.changedSuccess + '.')
                         if (result.changedSuccess == true) {
@@ -107,10 +102,26 @@ class changePassword extends Component {
                                 })
                             )
                         } else {
-                            Alert.alert(
-                                'Lỗi đổi mật khẩu',
-                                result.message,
-                            )
+                            if (result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!') {
+                                Alert.alert(
+                                    'Thông báo',
+                                    result.message,
+                                    [
+                                        {
+                                            text: 'Xác nhận',
+                                            onPress: () => {
+                                                this.props.logout();
+                                                this.props.navigation.navigate('LoginScreen');
+                                            },
+                                        },
+                                    ],
+                                );
+                            } else {
+                                Alert.alert(
+                                    'Lỗi đổi mật khẩu',
+                                    result.message,
+                                )
+                            }
                         }
                     },
                     (error) => {
@@ -120,7 +131,7 @@ class changePassword extends Component {
                         console.log(error)
                     }
                 );
-                this.props.reset();
+            this.props.reset();
         }
     }
 
@@ -185,7 +196,7 @@ const mapStateToDispatch = (dispatch) => {
 let ChangePasswordForm = reduxForm({
     form: 'changePassword',
     enableReinitialize: true,
-    destroyOnUnmount : false,
+    destroyOnUnmount: false,
 })(changePassword);
 
 ChangePasswordForm = connect(

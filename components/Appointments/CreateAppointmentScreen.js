@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
@@ -9,6 +9,7 @@ import { CommonActions } from '@react-navigation/native';
 import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate, formatMonth, getTomorrowDate } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue'
+import { login, logout } from '../Reducers/LoginReducer';
 import renderField from '../../Validate/RenderField'
 
 //validate conditions
@@ -28,7 +29,7 @@ class CreateAppointmentScreen extends Component {
             dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
             apointmentDate: getTomorrowDate(),
             apointmentTime: '07:30',
-            disabledButton : false,
+            disabledButton: false,
         };
         this.submit = this.submit.bind(this)
     }
@@ -69,13 +70,13 @@ class CreateAppointmentScreen extends Component {
             dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '',
             apointmentDate: getTomorrowDate(),
             apointmentTime: '07:30',
-            disabledButton : false,
+            disabledButton: false,
         })
         this.props.reset();
     }
     submit = values => {
         this.setState({
-            disabledButton : true,
+            disabledButton: true,
         })
         fetch(getApiUrl() + '/appointments/create', {
             method: 'POST',
@@ -94,26 +95,45 @@ class CreateAppointmentScreen extends Component {
                 (result) => {
                     console.log(result)
                     this.setState({
-                        disabledButton : false,
+                        disabledButton: false,
                     })
-                    this.props.navigation.dispatch(
-                        CommonActions.navigate({
-                            name: 'AppointmentDetailScreen',
-                            params: {
-                                appointment_id: result.appointment_id,
-                                appointment_userName: this.state.name,
-                                appointment_phoneNumber: this.state.phonenumber,
-                                appointment_DOB: this.state.dob,
-                                appointment_date: this.state.apointmentDate,
-                                appointment_time: this.state.apointmentTime,
-                                appointment_status: 'pending',
-                                appointment_statusName: 'Đợi xác nhận',
-                                appointment_createdTime: result.appointment_createdTime,
-                                appointment_createdDate: result.appointment_createdTime,
-                                backScreen: 'AppointmentListScreen',
-                            },
-                        })
-                    )
+                    if (result.success == false) {
+                        if (result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!') {
+                            Alert.alert(
+                                'Thông báo',
+                                result.message,
+                                [
+                                    {
+                                        text: 'Xác nhận',
+                                        onPress: () => {
+                                            this.props.logout();
+                                            this.props.navigation.navigate('LoginScreen');
+                                        },
+                                    },
+                                ],
+                            );
+                        }
+                    }else {
+                        this.props.navigation.dispatch(
+                            CommonActions.navigate({
+                                name: 'AppointmentDetailScreen',
+                                params: {
+                                    appointment_id: result.appointment_id,
+                                    appointment_userName: this.state.name,
+                                    appointment_phoneNumber: this.state.phonenumber,
+                                    appointment_DOB: this.state.dob,
+                                    appointment_date: this.state.apointmentDate,
+                                    appointment_time: this.state.apointmentTime,
+                                    appointment_status: 'pending',
+                                    appointment_statusName: 'Đợi xác nhận',
+                                    appointment_createdTime: result.appointment_createdTime,
+                                    appointment_createdDate: result.appointment_createdTime,
+                                    backScreen: 'AppointmentListScreen',
+                                },
+                            })
+                        )
+                    }
+                    
                     this.resetCreateAppointmentForm();
                 },
                 (error) => {
@@ -222,12 +242,18 @@ class CreateAppointmentScreen extends Component {
     }
 }
 
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (data) => dispatch(loadAccount(data)),
+        loadCustomerInfor: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+        logout: () => dispatch(logout()),
+    };
+}
+
 let AppointmentForm = reduxForm({
     form: 'createAppointment',
     enableReinitialize: true,
     destroyOnUnmount: false,
-    // keepDirtyOnReinitialize: true,
-    // forceUnregisterOnUnmount: true
 })(CreateAppointmentScreen);
 AppointmentForm = connect(
     state => ({
@@ -235,7 +261,7 @@ AppointmentForm = connect(
         customerInfor: state.loadCustomer.customerInfor,
         token: state.login.token
     }),
-    { load: loadAccount } // bind account loading action creator
+    mapStateToDispatch
 )(AppointmentForm);
 export default AppointmentForm;
 //#25345D

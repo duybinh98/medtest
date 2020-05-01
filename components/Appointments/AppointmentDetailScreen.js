@@ -5,6 +5,7 @@ import { CommonActions } from '@react-navigation/native';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate, formatMonth, getStateColor } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
+import { login, logout } from '../Reducers/LoginReducer';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -26,6 +27,7 @@ class AppointmentDetailScreen extends Component {
             createdTime: this.props.route.params.appointment_createdTime ? this.props.route.params.appointment_createdTime : '',
             createdDate: this.props.route.params.appointment_createdDate ? this.props.route.params.appointment_createdDate : '',
             backScreen: this.props.route.params.backScreen ? this.props.route.params.backScreen : null,
+            disabledButton : false,
         };
         this.setStatusNameAndColor(this.props.route.params.appointment_status ? this.props.route.params.appointment_status : '')
         this.onCancelAppointment = this.onCancelAppointment.bind(this)
@@ -84,6 +86,9 @@ class AppointmentDetailScreen extends Component {
 
 
     onCancelAppointment() {
+        this.setState({
+            disabledButton: true,
+        })
         fetch(getApiUrl() + "/appointments/update/" + this.state.appointmentId, {
             method: 'PUT',
             headers: {
@@ -99,12 +104,40 @@ class AppointmentDetailScreen extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    this.props.navigation.dispatch(
-                        CommonActions.navigate({
-                            name: 'AppointmentListScreen',
-                            params: {
-                            },
-                        }))
+                    this.setState({
+                        disabledButton: false,
+                    })
+                    if(result.success== false) {
+                        if (result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!') {
+                            Alert.alert(
+                                'Thông báo',
+                                result.message,
+                                [
+                                    {
+                                        text: 'Xác nhận',
+                                        onPress: () => {
+                                            this.props.logout();
+                                            this.props.navigation.navigate('LoginScreen');
+                                        },
+                                    },
+                                ],
+                            );
+                        } else {
+                            Alert.alert(
+                                'Lỗi cập nhật thông tin',
+                                result.message,
+                            )
+                            this.props.reset();
+                        }
+                    } else {
+                        this.props.navigation.dispatch(
+                            CommonActions.navigate({
+                                name: 'AppointmentListScreen',
+                                params: {
+                                },
+                            }))
+                    }
+                    
                 },
                 (error) => {
                     console.log(error)
@@ -170,7 +203,7 @@ class AppointmentDetailScreen extends Component {
                 </View>
                 <View style={styles.buttonContainer}>
                     {this.state.status == 'pending' ?
-                        <TouchableOpacity style={styles.buttonView}
+                        <TouchableOpacity style={styles.buttonView} disabled = {this.state.disabledButton}
                             onPress={() => {
                                 Alert.alert(
                                     'Hủy cuộc hẹn',
@@ -214,6 +247,7 @@ const mapStateToProps = (state) => {
 const mapStateToDispatch = (dispatch) => {
     return {
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+        logout: () => dispatch(logout()),
     };
 }
 

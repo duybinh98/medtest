@@ -48,7 +48,10 @@ class HomeScreen extends Component {
             },
             {
                 text: 'Xác nhận',
-                onPress: () => BackHandler.exitApp(),
+                onPress: () => {
+                    this.props.logout();
+                    BackHandler.exitApp();
+                }
             },
             ], {
             cancelable: false,
@@ -273,7 +276,7 @@ const mapStateToDispatch = (dispatch) => {
     return {
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
         // login: (phoneNumber, password) => dispatch(login(phoneNumber, password)),
-        // logout: () => dispatch(logout()),
+        logout: () => dispatch(logout()),
     };
 }
 

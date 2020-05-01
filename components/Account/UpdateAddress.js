@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity ,BackHandler , Alert} from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, BackHandler, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import { Field, reduxForm } from 'redux-form';
@@ -8,7 +8,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { getApiUrl, convertDateTimeToDate, convertDateToDateTime } from './../Common/CommonFunction';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue';
-import { login } from '../Reducers/LoginReducer';
+import { login, logout } from '../Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 
 import renderField from '../../Validate/RenderField';
@@ -55,7 +55,7 @@ class UpdateAddress extends Component {
             districtList: [],
             townList: [],
             disableDropdownTown: true,
-            disabledButton : false,
+            disabledButton: false,
         };
         this.submit = this.submit.bind(this)
         this._unsubscribeSiFocus = this.props.navigation.addListener('focus', e => {
@@ -82,7 +82,10 @@ class UpdateAddress extends Component {
             },
             {
                 text: 'Xác nhận',
-                onPress: () => BackHandler.exitApp(),
+                onPress: () => {
+                    this.props.logout();
+                    BackHandler.exitApp();
+                }
             },
             ], {
             cancelable: false,
@@ -99,7 +102,15 @@ class UpdateAddress extends Component {
         this.callApiGetDistrictCode();
         // this.callApiGetTownCode();
     }
-
+    resetScreen() {
+        this.setState({
+            townName: 'Chọn phường...',
+            districtName: 'Chọn quận...',
+        })
+        this.districtDropdown.select(-1);
+        this.townDropdown.select(-1);
+        this.props.reset();
+    }
     callApiGetDistrictCode() {
         fetch(getApiUrl() + "/management/districts/district-town-list")
             .then(res => res.json())
@@ -164,18 +175,8 @@ class UpdateAddress extends Component {
             this.setState({
                 customerInfor: this.props.customerInforLoad
             })
-            this.callApi().then(
-                this.props.load(this.state.customerInfor),
-                this.props.navigation.dispatch(
-                    CommonActions.navigate({
-                        name: 'HomeScreen',
-                        params: {
-                        },
-                    })
-                ))
-            this.districtDropdown.select(-1);
-            this.townDropdown.select(-1);
-            this.props.reset();
+            this.callApi()
+
         }
     }
     skip = values => {
@@ -195,7 +196,7 @@ class UpdateAddress extends Component {
     }
     callApi = async () => {
         this.setState({
-            disabledButton : true,
+            disabledButton: true,
         })
         fetch(getApiUrl() + '/users/customers/detail/address/update/' + this.state.customerId, {
             method: 'PUT',
@@ -214,10 +215,43 @@ class UpdateAddress extends Component {
             .then(
                 (result) => {
                     this.setState({
-                        disabledButton : false,
+                        disabledButton: false,
                     })
-                    console.log(result)
-                    this.props.loadCustomer(result)
+                    if (result.success == false) {
+                        if (result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!') {
+                            Alert.alert(
+                                'Thông báo',
+                                result.message,
+                                [
+                                    {
+                                        text: 'Xác nhận',
+                                        onPress: () => {
+                                            this.resetScreen();
+                                            this.props.logout();
+                                            this.props.navigation.navigate('LoginScreen');
+                                        },
+                                    },
+                                ],
+                            );
+                        } else {
+                            Alert.alert(
+                                'Lỗi thay ảnh',
+                                result.message,
+                            )
+                        }
+                    } else {
+                        this.props.load(this.state.customerInfor),
+                            this.props.navigation.dispatch(
+                                CommonActions.navigate({
+                                    name: 'HomeScreen',
+                                    params: {
+                                    },
+                                })
+                            )
+                        this.resetScreen();
+                        this.props.loadCustomer(result)
+                    }
+
                 },
                 (error) => {
                     console.log(error);
@@ -301,6 +335,14 @@ class UpdateAddress extends Component {
     }
 }
 
+
+const mapStateToDispatch = (dispatch) => {
+    return {
+        load: (data) => dispatch(loadAccount(data)),
+        loadCustomerInfor: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+        logout: () => dispatch(logout()),
+    };
+}
 let UpdateAddressForm = reduxForm({
     form: 'UpdateAddress',
     enableReinitialize: true,
@@ -312,10 +354,7 @@ UpdateAddressForm = connect(
         customerInforLoad: state.loadCustomer.customerInfor,
         customerInfor: state.login.customerInfo
     }),
-    {
-        load: loadAccount,
-        loadCustomer: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
-    }
+    mapStateToDispatch
 )(UpdateAddressForm);
 export default UpdateAddressForm;
 
