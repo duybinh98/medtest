@@ -33,6 +33,14 @@ class ConfirmOPTScreen extends Component {
     }
     componentDidMount() {
         this.startTimer()
+        this.props.navigation.addListener('focus', () => {
+            this.setState({
+                disabledButton: true,
+                timer: 20,
+            })
+            this.startTimer();
+            this.props.reset();
+        });
     }
     startTimer = () => {
         this.clockCall = setInterval(() => {
