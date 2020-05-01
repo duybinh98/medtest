@@ -25,6 +25,7 @@ import {
   convertDateTimeToDate,
   convertDateTimeToTime,
 } from './../Common/CommonFunction';
+import { login, logout } from '../Reducers/LoginReducer';
 
 class RequestViewScreen extends Component {
   constructor(props) {
@@ -230,18 +231,34 @@ class RequestViewScreen extends Component {
           });
           console.log(result)
           if (result.success == false) {
-            Alert.alert(
-              'Thông báo',
-              result.message,
-              [
-                {
-                  text: 'Xác nhận',
-                  onPress: () => {
-                    this.props.navigation.navigate('RequestListScreen');
+            if (result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!') {
+              Alert.alert(
+                'Thông báo',
+                result.message,
+                [
+                  {
+                    text: 'Xác nhận',
+                    onPress: () => {
+                      this.props.logout();
+                      this.props.navigation.navigate('LoginScreen');
+                    },
                   },
-                },
-              ],
-            );
+                ],
+              );
+            } else {
+              Alert.alert(
+                'Thông báo',
+                result.message,
+                [
+                  {
+                    text: 'Xác nhận',
+                    onPress: () => {
+                      this.props.navigation.navigate('RequestListScreen');
+                    },
+                  },
+                ],
+              );
+            }
           } else {
             this.props.navigation.dispatch(
               CommonActions.navigate({
@@ -549,6 +566,7 @@ const mapStateToProps = state => {
 const mapStateToDispatch = dispatch => {
   return {
     load: customerInfor => dispatch(loadCustomerInfor(customerInfor)),
+    logout: () => dispatch(logout()),
   };
 };
 

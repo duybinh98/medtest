@@ -108,11 +108,11 @@ class RequestTestListScreen extends Component {
                     <View style={styles.titleArea}>
                         <Text style={{ fontSize: 30, color: '#25345D' }}>Đặt xét nghiệm</Text>
                     </View>
-                    <TextInput
+                    {/* <TextInput
                         style={styles.searchArea}
                         placeholder={'Tìm xét nghiệm'}
                         underlineColorAndroid='transparent'
-                    />
+                    /> */}
                     <View style={styles.TestListAreaBackground}>
                         <View style={styles.TestListArea}>
                             <FlatList

@@ -7,6 +7,7 @@ import TestCategoryItem from './TestCategoryItem'
 import TestViewItem from './TestViewItem'
 import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate, convertMoney } from './../Common/CommonFunction'
 import { connect } from 'react-redux';
+import { login, logout } from '../Reducers/LoginReducer';
 
 
 class RequestConfirmScreen extends Component {
@@ -90,31 +91,55 @@ class RequestConfirmScreen extends Component {
                     })
                     this.props.route.params.resetSelectedTestOnConfirm()
                     this.props.route.params.resetRequestPersonalInformation()
-                    console.log(result)
-                    this.props.navigation.dispatch(
-                        CommonActions.navigate({
-                            name: 'RequestViewScreen',
-                            params: {
-                                id: result.requestID,
-                                phone: this.state.phoneNumber,
-                                name: this.state.name,
-                                address: this.state.address,
-                                townName : this.state.townName,
-                                districtName : this.state.districtName,
-                                dob: convertDateTimeToDate(this.state.dob),
-                                date: this.state.date,
-                                time: this.state.time,
-                                status: 'pending',
-                                selectedTest: this.state.selectedTest,
-                                testsList: this.state.testsList,
-                                totalAmount: this.state.totalPrice,
-                                currentVersion: this.props.route.params.currentVersion,
-                                requestVersion: result.versionOfTest,
-                                createdTime: convertDateTimeToDate(result.requestCreatedTime),
-                                updatedTime : result.requestUpdatedTime,
-                            },
-                        })
-                    )
+                    if (result.success == false) {
+                        if (result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!') {
+                            Alert.alert(
+                                'Thông báo',
+                                result.message,
+                                [
+                                    {
+                                        text: 'Xác nhận',
+                                        onPress: () => {
+                                            this.props.logout();
+                                            this.props.navigation.navigate('LoginScreen');
+                                        },
+                                    },
+                                ],
+                            );
+                        } else {
+                            Alert.alert(
+                                'Lỗi tạo xét nghiệm',
+                                result.message,
+                            )
+                            this.props.reset();
+                        }
+                    } else {
+                        console.log(result)
+                        this.props.navigation.dispatch(
+                            CommonActions.navigate({
+                                name: 'RequestViewScreen',
+                                params: {
+                                    id: result.requestID,
+                                    phone: this.state.phoneNumber,
+                                    name: this.state.name,
+                                    address: this.state.address,
+                                    townName: this.state.townName,
+                                    districtName: this.state.districtName,
+                                    dob: convertDateTimeToDate(this.state.dob),
+                                    date: this.state.date,
+                                    time: this.state.time,
+                                    status: 'pending',
+                                    selectedTest: this.state.selectedTest,
+                                    testsList: this.state.testsList,
+                                    totalAmount: this.state.totalPrice,
+                                    currentVersion: this.props.route.params.currentVersion,
+                                    requestVersion: result.versionOfTest,
+                                    createdTime: convertDateTimeToDate(result.requestCreatedTime),
+                                    updatedTime: result.requestUpdatedTime,
+                                },
+                            })
+                        )
+                    }
                 },
                 (error) => {
                     console.log(error)
@@ -223,6 +248,7 @@ const mapStateToProps = (state) => {
 const mapStateToDispatch = (dispatch) => {
     return {
         load: (customerInfor) => dispatch(loadCustomerInfor(customerInfor)),
+        logout: () => dispatch(logout()),
     };
 }
 
