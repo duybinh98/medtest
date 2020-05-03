@@ -89,7 +89,7 @@ class UpdateInformationScreen extends Component {
                             console.log("Error")
                         }
                     });
-                }, 2000);
+                }, 12000);
             }
             const customerInfor = {
                 username: this.props.customerInfor ? this.props.customerInfor.name : '',
@@ -130,7 +130,7 @@ class UpdateInformationScreen extends Component {
                     console.log("Error")
                 }
             });
-        }, 15000);
+        }, 20000);
         this.props.reset();
     }
 
