@@ -10,7 +10,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue';
-import renderField, {required} from '../../Validate/RenderField'
+import renderField, { required } from '../../Validate/RenderField'
 import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate, formatMonth, getTomorrowDate } from './../Common/CommonFunction'
 
 const { width: WIDTH } = Dimensions.get('window');
@@ -56,11 +56,14 @@ class RequestPersonalInformation extends Component {
             townName: 'Phường/Xã...',
             districtName: 'Quận/Huyện...',
             disableDropdownTown: true,
+
+            townNameLoading: 'Phường/Xã...',
+            districtNameLoading: 'Quận/Huyện...',
         };
         this.selectItem = this.selectItem.bind(this)
         this.submit = this.submit.bind(this)
     }
-    componentDidMount = value => {
+    async componentDidMount() {
         this.callApiGetDistrictCode();
         this.callApiGetTownCode();
         const customerInforReducer = {
@@ -70,30 +73,41 @@ class RequestPersonalInformation extends Component {
             email: this.props.customerInfor ? this.props.customerInfor.email : '',
         }
         this.props.load(customerInforReducer)
-        setTimeout(() => {
+        let getName = await setTimeout(() => {
             this.state.districtList.forEach(district => {
-                if (district.districtCode === this.props.customerInfor.districtCode) {
+                if (district.districtCode === this.state.customerInfor.districtCode) {
                     this.setState({
-                        districtName: district.districtName
+                        districtNameLoading: district.districtName
                     })
                 } else {
                     console.log("Error")
                 }
             });
             this.state.townList.forEach(town => {
-                if (town.townCode === this.props.customerInfor.townCode) {
+                if (town.townCode === this.state.customerInfor.townCode) {
                     this.setState({
-                        townName: town.townName
+                        townNameLoading: town.townName
                     })
                 } else {
                     console.log("Error")
                 }
             });
-        }, 14000);
+            if (this.state.districtName == 'Quận/Huyện...' || this.state.townName == 'Phường/Xã...') {
+                console.log('check district code: ' + this.state.districtName)
+                this.setState({
+                    districtName: this.state.districtNameLoading,
+                    townName: this.state.townNameLoading,
+                })
+            }
+        }, 20000);
+
+
 
     }
-    componentDidUpdate(prevProps, prevState) {
+    async componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
+            this.districtDropdown.select(-1);
+            this.townDropdown.select(-1);
             const customerInforReducer = {
                 username: this.props.customerInfor ? this.props.customerInfor.name : '',
                 phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
@@ -101,26 +115,40 @@ class RequestPersonalInformation extends Component {
                 email: this.props.customerInfor ? this.props.customerInfor.email : '',
             }
             this.props.load(customerInforReducer)
-            setTimeout(() => {
-                this.state.districtList.forEach(district => {
-                    if (district.districtCode === this.props.customerInfor.districtCode) {
+            if (this.props.customerInfor.districtCode == null || this.props.customerInfor.townCode == null) {
+                this.setState({
+                    townName: 'Phường/Xã...',
+                    districtName: 'Quận/Huyện...',
+                })
+            } else {
+                let getName = await setTimeout(() => {
+                    this.state.districtList.forEach(district => {
+                        if (district.districtCode === this.state.customerInfor.districtCode) {
+                            this.setState({
+                                districtNameLoading: district.districtName
+                            })
+                        } else {
+                            console.log("Error")
+                        }
+                    });
+                    this.state.townList.forEach(town => {
+                        if (town.townCode === this.state.customerInfor.townCode) {
+                            this.setState({
+                                townNameLoading: town.townName
+                            })
+                        } else {
+                            console.log("Error")
+                        }
+                    });
+                    if (this.state.districtName == 'Quận/Huyện...' || this.state.townName == 'Phường/Xã...') {
                         this.setState({
-                            districtName: district.districtName
+                            districtName: this.state.districtNameLoading,
+                            townName: this.state.townNameLoading,
                         })
-                    } else {
-                        console.log("Error")
                     }
-                });
-                this.state.townList.forEach(town => {
-                    if (town.townCode === this.props.customerInfor.townCode) {
-                        this.setState({
-                            townName: town.townName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-            }, 12000);
+
+                }, 20000);
+            }
         }
     }
     resetRequestPersonalInfor = value => {
@@ -248,11 +276,11 @@ class RequestPersonalInformation extends Component {
             disableDropdownTown: false,
             selectTownList: this.state.districtList[id].listTown,
         })
-
     }
     render() {
         debugger;
         const abc = this.props.customerInfor;
+        const a = this.state.customerInfor;
         const { handleSubmit } = this.props;
         return (
             <ScrollView style={{ flex: 1 }}>
@@ -319,7 +347,7 @@ class RequestPersonalInformation extends Component {
                         mode="date"
                         placeholder="Ngày hẹn"
                         format="DD-MM-YYYY"
-                        minDate={ new Date(Date.now() + 24 * 60 * 60 * 1000)}
+                        minDate={new Date(Date.now() + 24 * 60 * 60 * 1000)}
                         customStyles={{
                             dateIcon: {
                                 position: 'absolute',

@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue';
 import { login, logout } from '../Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer'
-import renderField, {required, isEmail, isWeakPassword} from '../../Validate/RenderField'
+import renderField, { required, isEmail, isWeakPassword } from '../../Validate/RenderField'
 
 
 //Render combobox selected value
@@ -51,10 +51,12 @@ class UpdateInformationScreen extends Component {
             email: this.props.customerInfor ? this.props.customerInfor.email : '123@1234.com',
             phoneNumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
             image: this.props.customerInfor ? this.props.customerInfor.image : '',
-
+            customerInfor: this.props.customerInfor ? this.props.customerInfor : null,
             selectTownList: [],
             townName: 'Phường/Xã...',
             districtName: 'Quận/Huyện...',
+            townNameLoading: 'Phường/Xã...',
+            districtNameLoading: 'Quận/Huyện...',
             districtList: [],
             townList: [],
             disableDropdownTown: true,
@@ -62,7 +64,7 @@ class UpdateInformationScreen extends Component {
         };
         this.submit = this.submit.bind(this)
     }
-    componentDidUpdate(prevProps, prevState) {
+    async componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
             if (this.props.customerInfor.districtCode == null || this.props.customerInfor.townCode == null) {
                 this.setState({
@@ -70,26 +72,33 @@ class UpdateInformationScreen extends Component {
                     districtName: 'Quận/Huyện...',
                 })
             } else {
-                setTimeout(() => {
+                let getName = await setTimeout(() => {
                     this.state.districtList.forEach(district => {
-                        if (district.districtCode === this.props.customerInfor.districtCode) {
+                        if (district.districtCode === this.state.customerInfor.districtCode) {
                             this.setState({
-                                districtName: district.districtName
+                                districtNameLoading: district.districtName
                             })
                         } else {
                             console.log("Error")
                         }
                     });
                     this.state.townList.forEach(town => {
-                        if (town.townCode === this.props.customerInfor.townCode) {
+                        if (town.townCode === this.state.customerInfor.townCode) {
                             this.setState({
-                                townName: town.townName
+                                townNameLoading: town.townName
                             })
                         } else {
                             console.log("Error")
                         }
                     });
-                }, 12000);
+                    if (this.state.districtName == 'Quận/Huyện...' || this.state.townName == 'Phường/Xã...') {
+                        console.log('check district code: ' + this.state.districtName)
+                        this.setState({
+                            districtName: this.state.districtNameLoading,
+                            townName: this.state.townNameLoading,
+                        })
+                    }
+                }, 20000);
             }
             const customerInfor = {
                 username: this.props.customerInfor ? this.props.customerInfor.name : '',
@@ -100,7 +109,7 @@ class UpdateInformationScreen extends Component {
             this.props.load(customerInfor);
         }
     }
-    componentDidMount = value => {
+    async componentDidMount() {
         const customerInfor = {
             username: this.props.customerInfor ? this.props.customerInfor.name : '',
             phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
@@ -110,26 +119,32 @@ class UpdateInformationScreen extends Component {
         this.props.load(customerInfor);
         this.callApiGetDistrictCode();
         this.callApiGetTownCode();
-
-        setTimeout(() => {
+        let getName = await setTimeout(() => {
             this.state.districtList.forEach(district => {
-                if (district.districtCode === this.props.customerInfor.districtCode) {
+                if (district.districtCode === this.state.customerInfor.districtCode) {
                     this.setState({
-                        districtName: district.districtName
+                        districtNameLoading: district.districtName
                     })
                 } else {
                     console.log("Error")
                 }
             });
             this.state.townList.forEach(town => {
-                if (town.townCode === this.props.customerInfor.townCode) {
+                if (town.townCode === this.state.customerInfor.townCode) {
                     this.setState({
-                        townName: town.townName
+                        townNameLoading: town.townName
                     })
                 } else {
                     console.log("Error")
                 }
             });
+            if (this.state.districtName == 'Quận/Huyện...' || this.state.townName == 'Phường/Xã...') {
+                console.log('check district code: ' + this.state.districtName)
+                this.setState({
+                    districtName: this.state.districtNameLoading,
+                    townName: this.state.townNameLoading,
+                })
+            }
         }, 20000);
         this.props.reset();
     }

@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     totalMoneyContainer: {
-        width: 130,
+        width: 150,
         height: 45,
         justifyContent: 'center',
         paddingBottom: 5,

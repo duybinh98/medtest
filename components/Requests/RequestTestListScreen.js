@@ -28,13 +28,11 @@ class RequestTestListScreen extends Component {
         this.resetSelectedTestOnConfirm = this.resetSelectedTestOnConfirm.bind(this)
     }
 
-    // componentDidUpdate(prevProps) {
-    //     if (prevProps !== this.props) {
-    //         this.setState({
-    //             testsList: this.props.route.params.testsList ? this.props.route.params.testsList : testList,
-    //         })
-    //     }
-    // }
+    componentDidUpdate(prevProps) {
+        if (prevProps !== this.props) {
+            this.resetSelectedTestOnConfirm();
+        }
+    }
     selectItem(id, price) {
         let _selectedTest = this.state.selectedTest;
         let _totalPrice = parseInt(this.state.totalPrice);
