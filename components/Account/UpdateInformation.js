@@ -52,56 +52,33 @@ class UpdateInformationScreen extends Component {
             phoneNumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
             image: this.props.customerInfor ? this.props.customerInfor.image : '',
             customerInfor: this.props.customerInfor ? this.props.customerInfor : null,
-            selectTownList: [],
-            townName: 'Phường/Xã...',
-            districtName: 'Quận/Huyện...',
-            townNameLoading: 'Phường/Xã...',
-            districtNameLoading: 'Quận/Huyện...',
+            townName: this.props.customerInfor ? this.props.customerInfor.townName : "Chọn phường/xã",
+            districtName: this.props.customerInfor ? this.props.customerInfor.districtName : 'Chọn quận huyện',
             districtList: [],
-            townList: [],
             disableDropdownTown: true,
             disabledButton: false,
         };
         this.submit = this.submit.bind(this)
     }
-    async componentDidUpdate(prevProps, prevState) {
-        if (prevProps !== this.props) {
-            this.districtDropdown.select(-1);
-            this.townDropdown.select(-1);
-            if (this.props.customerInfor.districtCode == null || this.props.customerInfor.townCode == null) {
-                this.setState({
-                    townName: 'Phường/Xã...',
-                    districtName: 'Quận/Huyện...',
-                })
-            } else {
-                let getName = await setTimeout(() => {
-                    this.state.districtList.forEach(district => {
-                        if (district.districtCode === this.state.customerInfor.districtCode) {
-                            this.setState({
-                                districtNameLoading: district.districtName
-                            })
-                        } else {
-                            console.log("Error")
-                        }
-                    });
-                    this.state.townList.forEach(town => {
-                        if (town.townCode === this.state.customerInfor.townCode) {
-                            this.setState({
-                                townNameLoading: town.townName
-                            })
-                        } else {
-                            console.log("Error")
-                        }
-                    });
-                    if (this.state.districtName == 'Quận/Huyện...' || this.state.townName == 'Phường/Xã...') {
-                        console.log('check district code: ' + this.state.districtName)
-                        this.setState({
-                            districtName: this.state.districtNameLoading,
-                            townName: this.state.townNameLoading,
-                        })
-                    }
-                }, 20000);
-            }
+    componentDidUpdate(prevProps) {
+        if (prevProps.customerInfor !== this.props.customerInfor) {
+            // this.districtDropdown.select(-1);
+            // this.townDropdown.select(-1);
+            this.setState({
+                customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
+                name: this.props.customerInfor ? this.props.customerInfor.name : '',
+                dob: this.props.customerInfor ? convertDateTimeToDate(this.props.customerInfor.dob) : '01-01-1970',
+                gender: this.props.customerInfor ? this.props.customerInfor.gender === 0 ? 'Nữ' : 'Nam' : 'Nam',
+                address: this.props.customerInfor ? this.props.customerInfor.address : '',
+                districtCode: this.props.customerInfor.districtCode ? this.props.customerInfor.districtCode : '',
+                townCode: this.props.customerInfor.townCode ? this.props.customerInfor.townCode : '',
+                email: this.props.customerInfor ? this.props.customerInfor.email : '123@1234.com',
+                phoneNumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
+                image: this.props.customerInfor ? this.props.customerInfor.image : '',
+                customerInfor: this.props.customerInfor ? this.props.customerInfor : null,
+                townName: this.props.customerInfor ? this.props.customerInfor.townName : "Chọn phường/xã",
+                districtName: this.props.customerInfor ? this.props.customerInfor.districtName : 'Chọn quận huyện',
+            })
             const customerInfor = {
                 username: this.props.customerInfor ? this.props.customerInfor.name : '',
                 phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
@@ -111,16 +88,7 @@ class UpdateInformationScreen extends Component {
             this.props.load(customerInfor);
         }
     }
-    async componentDidMount() {
-        this.props.navigation.addListener('focus', () => {
-            this.setState({
-                townName: 'Phường/Xã...',
-                districtName: 'Quận/Huyện...',
-                districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
-                townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
-                disableDropdownTown: true,
-            })
-        });
+    componentDidMount() {
         const customerInfor = {
             username: this.props.customerInfor ? this.props.customerInfor.name : '',
             phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
@@ -129,35 +97,6 @@ class UpdateInformationScreen extends Component {
         }
         this.props.load(customerInfor);
         this.callApiGetDistrictCode();
-        this.callApiGetTownCode();
-        let getName = await setTimeout(() => {
-            this.state.districtList.forEach(district => {
-                if (district.districtCode === this.state.customerInfor.districtCode) {
-                    this.setState({
-                        districtNameLoading: district.districtName
-                    })
-                } else {
-                    console.log("Error")
-                }
-            });
-            this.state.townList.forEach(town => {
-                if (town.townCode === this.state.customerInfor.townCode) {
-                    this.setState({
-                        townNameLoading: town.townName
-                    })
-                } else {
-                    console.log("Error")
-                }
-            });
-            if (this.state.districtName == 'Quận/Huyện...' || this.state.townName == 'Phường/Xã...') {
-                console.log('check district code: ' + this.state.districtName)
-                this.setState({
-                    districtName: this.state.districtNameLoading,
-                    townName: this.state.townNameLoading,
-                })
-            }
-        }, 20000);
-        this.props.reset();
     }
 
     callApiGetDistrictCode() {
@@ -176,22 +115,6 @@ class UpdateInformationScreen extends Component {
                 }
             )
     }
-    callApiGetTownCode() {
-        fetch(getApiUrl() + "/management/districts/towns/list")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState(previousState => ({
-                        townList: result,
-                    }));
-                },
-                (error) => {
-                    this.setState({
-                        error
-                    });
-                }
-            )
-    }
     _renderDistrictButtonText = rowData => {
         const { districtCode, districtName } = rowData;
         const { townCode, townName } = rowData.listTown[0];
@@ -201,6 +124,7 @@ class UpdateInformationScreen extends Component {
             townCode: townCode,
             townName: townName
         })
+        this.districtDropdown.select(-1);
         this.townDropdown.select(-1);
         return `${districtName}`;
     }
@@ -304,6 +228,8 @@ class UpdateInformationScreen extends Component {
                             dob: convertDateToDateTime(this.state.dob),
                             phoneNumber: this.state.phoneNumber,
                             image: this.state.image,
+                            townName: this.state.townName,
+                            districtName: this.state.districtName
                         }
                         this.props.loadCustomerInfor(customerInforReducer),
                             this.props.navigation.dispatch(

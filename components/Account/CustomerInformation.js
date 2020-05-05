@@ -22,8 +22,8 @@ class customerInformation extends Component {
             token: this.props.token ? this.props.token : null,
             uploadedImage: '',
             // name: this.props.customerInfor ? this.props.customerInfor.name : '',
-            townName: '',
-            districtName: '',
+            townName: this.props.customerInfor ? this.props.customerInfor.townName : "Chọn phường/xã",
+            districtName: this.props.customerInfor ? this.props.customerInfor.districtName : 'Chọn quận huyện',
             districtList: [],
             townList: [],
 
@@ -34,85 +34,25 @@ class customerInformation extends Component {
 
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps !== this.props) {
+        if (prevProps.customerInfor !== this.props.customerInfor) {
             this.setState(previousState => ({
                 token: this.props.token,
                 customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
                 customerInfor: this.props.customerInfor ? this.props.customerInfor : null,
-                townName: '',
-                districtName: '',
+                townName: this.props.customerInfor ? this.props.customerInfor.townName : "Chọn phường/xã",
+                districtName: this.props.customerInfor ? this.props.customerInfor.districtName : 'Chọn quận huyện',
             }));
-            setTimeout(() => {
-                this.state.districtList.forEach(district => {
-                    if (district.districtCode === this.props.customerInfor.districtCode) {
-                        this.setState({
-                            districtName: district.districtName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-                this.state.townList.forEach(town => {
-                    if (town.townCode === this.props.customerInfor.townCode) {
-                        this.setState({
-                            townName: town.townName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-            }, 20000);
         }
     }
     componentDidMount() {
         this.callApiCustomerInfor();
         this.callApiGetDistrictCode();
         this.callApiGetTownCode();
-        this.props.navigation.addListener('focus', () => {
-            this.callApiCustomerInfor();
-            this.callApiGetDistrictCode();
-            this.callApiGetTownCode();
-            setTimeout(() => {
-                this.state.districtList.forEach(district => {
-                    if (district.districtCode === this.props.customerInfor.districtCode) {
-                        this.setState({
-                            districtName: district.districtName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-                this.state.townList.forEach(town => {
-                    if (town.townCode === this.props.customerInfor.townCode) {
-                        this.setState({
-                            townName: town.townName
-                        })
-                    } else {
-                        console.log("Error")
-                    }
-                });
-            }, 20000);
-        });
-        setTimeout(() => {
-            this.state.districtList.forEach(district => {
-                if (district.districtCode === this.props.customerInfor.districtCode) {
-                    this.setState({
-                        districtName: district.districtName
-                    })
-                } else {
-                    console.log("Error")
-                }
-            });
-            this.state.townList.forEach(town => {
-                if (town.townCode === this.props.customerInfor.townCode) {
-                    this.setState({
-                        townName: town.townName
-                    })
-                } else {
-                    console.log("Error")
-                }
-            });
-        }, 20000);
+        // this.props.navigation.addListener('focus', () => {
+        //     this.callApiCustomerInfor();
+        //     this.callApiGetDistrictCode();
+        //     this.callApiGetTownCode();
+        // });
     }
     callApiGetDistrictCode() {
         fetch(getApiUrl() + "/management/districts/district-town-list")

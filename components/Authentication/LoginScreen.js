@@ -88,6 +88,7 @@ class LoginComponent extends Component {
                 disabledButton : false,
             })
             if (this.props.customerInfoFromLogin != null) {
+                console.log('Login success')
                 this.props.load(this.props.customerInfoFromLogin)
                 if (this.props.customerInfoFromLogin.address == null) {
                     this.props.navigation.dispatch(
@@ -114,8 +115,8 @@ class LoginComponent extends Component {
                 console.log('error at screen aa')
             }
         }
-            , 18000)
-            // , 15000)
+            // , 30000)
+            , 22000)
         // 
     }
     render() {

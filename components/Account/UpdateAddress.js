@@ -127,23 +127,6 @@ class UpdateAddress extends Component {
                 }
             )
     }
-    // callApiGetTownCode() {
-    //     fetch(getApiUrl() + "/management/districts/towns/list")
-    //         .then(res => res.json())
-    //         .then(
-    //             (result) => {
-    //                 console.log(result)
-    //                 this.setState(previousState => ({
-    //                     townList: result,
-    //                 }));
-    //             },
-    //             (error) => {
-    //                 this.setState({
-    //                     error
-    //                 });
-    //             }
-    //         )
-    // }
     _renderDistrictButtonText = rowData => {
         const { districtCode, districtName } = rowData;
         const { townCode, townName } = rowData.listTown[0];
@@ -249,7 +232,7 @@ class UpdateAddress extends Component {
                                 })
                             )
                         this.resetScreen();
-                        this.props.loadCustomer(result)
+                        // this.props.loadCustomer(result)
                     }
 
                 },
