@@ -10,7 +10,7 @@ import { getApiUrl, convertDateAndTimeToDateTime, convertDateTimeToDate, formatM
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue'
 import { login, logout } from '../Reducers/LoginReducer';
-import renderField, {required, isNumber, isPhonenumber} from '../../Validate/RenderField'
+import renderField, {required, isNumber, isPhonenumber, isAlphabetic} from '../../Validate/RenderField'
 
 
 const { width: WIDTH } = Dimensions.get('window')
@@ -156,7 +156,8 @@ class CreateAppointmentScreen extends Component {
                     <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                         iconType="material-community" placeholder="Tên hiển thị" secureText={false}
                         onChange={(text) => { this.setState({ name: text }) }} editable={false}
-                        validate={[required]} initialValue="123"
+                        validate={[required]} 
+                        // validate={[required, notContainNumeric,notContainSpecialCharacters]} 
                     />
                     <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
                         iconType="material-community" placeholder="Số điện thoại" secureText={false}

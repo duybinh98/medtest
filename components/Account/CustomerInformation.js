@@ -39,8 +39,8 @@ class customerInformation extends Component {
                 token: this.props.token,
                 customerId: this.props.customerInfor ? this.props.customerInfor.id : '-1',
                 customerInfor: this.props.customerInfor ? this.props.customerInfor : null,
-                // townName: '',
-                // districtName: '',
+                townName: '',
+                districtName: '',
             }));
             setTimeout(() => {
                 this.state.districtList.forEach(district => {

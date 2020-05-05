@@ -24,19 +24,22 @@ class ConfirmOPTScreen extends Component {
             otp: '',
             disabledButton: true,
             disabledConfirmButton: false,
-            timer: 20,
+            timer: 30,
         };
     }
     componentDidMount() {
-        this.startTimer()
+        this.startTimer();
         this.props.navigation.addListener('focus', () => {
             this.setState({
                 disabledButton: true,
-                timer: 20,
+                timer: 30,
             })
             this.startTimer();
             this.props.reset();
         });
+    }
+    componentWillUnmount(){
+        clearInterval(this.clockCall);
     }
     startTimer = () => {
         this.clockCall = setInterval(() => {
@@ -49,7 +52,7 @@ class ConfirmOPTScreen extends Component {
             otp: '',
             disabledButton: true,
             disabledConfirmButton: false,
-            timer: 20,
+            timer: 30,
         })
         this.props.reset();
     }
@@ -59,16 +62,22 @@ class ConfirmOPTScreen extends Component {
             this.setState({
                 disabledButton: false
             })
+        } else {
+            this.setState((prevstate) => ({
+                timer: prevstate.timer - 1
+            }));
         }
-        this.setState((prevstate) => ({
-            timer: prevstate.timer - 1
-        }));
+        
     };
-
+    cancelRegisterProcess() {
+        this.resetScreen();
+        clearInterval(this.clockCall);
+        this.state.backScreen ? this.props.navigation.navigate(this.state.backScreen) : this.props.navigation.goBack()
+    }
     resendOTP = value => {
         this.setState({
             disabledButton: true,
-            timer: 20,
+            timer: 30,
         })
         this.startTimer();
         fetch(getApiUrl() + '/users/resend-otp', {

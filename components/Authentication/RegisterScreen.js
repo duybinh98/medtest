@@ -7,7 +7,7 @@ import TopMenuOutside from './../Common/TopMenuOutside';
 import { Field, reduxForm } from 'redux-form';
 import DatePicker from 'react-native-datepicker';
 import { CommonActions } from '@react-navigation/native';
-import renderField,{required , isNumber, isPhonenumber, isWeakPassword, isEmail} from '../../Validate/RenderField';
+import renderField,{required , isNumber, isPhonenumber, isWeakPassword, isEmail, notContainSpecialCharacters, notContainNumeric} from '../../Validate/RenderField';
 import { getApiUrl, convertDateToDateTime, convertDateTimeToDate } from './../Common/CommonFunction';
 
 
@@ -125,7 +125,7 @@ class RegisterScreen extends Component {
                     <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                         iconType="material-community" placeholder="Tên hiển thị" secureText={false} 
                         onChange={(text) => { this.setState({ name: text }) }}
-                        validate={[required]}
+                        validate={[required, notContainNumeric,notContainSpecialCharacters]}
                     />
                     <Field name="phonenumber" keyboardType="phone-pad" component={renderField} iconName="cellphone"
                         iconType="material-community" placeholder="Số điện thoại" secureText={false} maxLength = {10}

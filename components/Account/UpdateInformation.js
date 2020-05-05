@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue';
 import { login, logout } from '../Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer'
-import renderField, { required, isEmail, isWeakPassword } from '../../Validate/RenderField'
+import renderField, { required, isEmail, isWeakPassword, notContainSpecialCharacters, notContainNumeric } from '../../Validate/RenderField'
 
 
 //Render combobox selected value
@@ -66,6 +66,8 @@ class UpdateInformationScreen extends Component {
     }
     async componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props) {
+            this.districtDropdown.select(-1);
+            this.townDropdown.select(-1);
             if (this.props.customerInfor.districtCode == null || this.props.customerInfor.townCode == null) {
                 this.setState({
                     townName: 'Phường/Xã...',
@@ -110,6 +112,15 @@ class UpdateInformationScreen extends Component {
         }
     }
     async componentDidMount() {
+        this.props.navigation.addListener('focus', () => {
+            this.setState({
+                townName: 'Phường/Xã...',
+                districtName: 'Quận/Huyện...',
+                districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
+                townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
+                disableDropdownTown: true,
+            })
+        });
         const customerInfor = {
             username: this.props.customerInfor ? this.props.customerInfor.name : '',
             phonenumber: this.props.customerInfor ? this.props.customerInfor.phoneNumber : '0000000000',
@@ -333,7 +344,7 @@ class UpdateInformationScreen extends Component {
                 <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                     iconType="material-community" placeholder="Tên hiển thị" secureText={false}
                     onChange={(text) => { this.setState({ name: text }) }}
-                    validate={[required]}
+                    validate={[required, notContainNumeric, notContainSpecialCharacters]}
                 />
                 <View style={styles.inputContainer}>
                     <DatePicker
@@ -430,7 +441,7 @@ class UpdateInformationScreen extends Component {
                 <Field name="address" keyboardType="default" component={renderField} iconName="map-marker"
                     iconType="material-community" placeholder="Địa chỉ" secureText={false}
                     onChange={(text) => { this.setState({ address: text }) }}
-                    validate={[required]}
+                    validate={[required, notContainSpecialCharacters]}
                 />
                 <Field name="email" keyboardType="email-address" component={renderField} iconName="email-outline"
                     defaultText={this.state.email}

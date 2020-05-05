@@ -10,7 +10,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import { load as loadAccount } from '../Reducers/InitialValue';
-import renderField, { required } from '../../Validate/RenderField'
+import renderField, { required, notContainSpecialCharacters } from '../../Validate/RenderField'
 import { getApiUrl, convertDateTimeToTime, convertDateTimeToDate, formatMonth, getTomorrowDate } from './../Common/CommonFunction'
 
 const { width: WIDTH } = Dimensions.get('window');
@@ -64,6 +64,17 @@ class RequestPersonalInformation extends Component {
         this.submit = this.submit.bind(this)
     }
     async componentDidMount() {
+        this.props.navigation.addListener('focus', () => {
+            this.setState({
+                townName: 'Phường/Xã...',
+                districtName: 'Quận/Huyện...',
+                districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
+                townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
+                disableDropdownTown: true,
+            })
+            // this.districtDropdown.select(-1);
+            // this.townDropdown.select(-1);
+        });
         this.callApiGetDistrictCode();
         this.callApiGetTownCode();
         const customerInforReducer = {
@@ -125,6 +136,7 @@ class RequestPersonalInformation extends Component {
                     this.state.districtList.forEach(district => {
                         if (district.districtCode === this.state.customerInfor.districtCode) {
                             this.setState({
+                                // districtName: district.districtName
                                 districtNameLoading: district.districtName
                             })
                         } else {
@@ -134,6 +146,7 @@ class RequestPersonalInformation extends Component {
                     this.state.townList.forEach(town => {
                         if (town.townCode === this.state.customerInfor.townCode) {
                             this.setState({
+                                // townName: town.townName
                                 townNameLoading: town.townName
                             })
                         } else {
@@ -158,6 +171,7 @@ class RequestPersonalInformation extends Component {
             dob: this.props.customerInfor ? this.props.customerInfor.dob : '',
             apointmentDate: getTomorrowDate(),
             apointmentTime: '07:30',
+            disableDropdownTown: true,
             address: this.props.customerInfor ? this.props.customerInfor.address : '',
             districtCode: this.props.customerInfor ? this.props.customerInfor.districtCode : '0',
             townCode: this.props.customerInfor ? this.props.customerInfor.townCode : '1',
@@ -293,8 +307,8 @@ class RequestPersonalInformation extends Component {
                 <Field name="username" keyboardType="default" component={renderField} iconName="rename-box"
                     iconType="material-community" placeholder="Tên hiển thị" secureText={false} editable={false}
                     onChange={(text) => { this.setState({ name: text }) }}
-                    // editable={false}
                     validate={[required]}
+                // validate={[required, notContainNumeric,notContainSpecialCharacters]} 
                 />
                 <View style={styles.dropdownContainer}>
                     <ModalDropdown
@@ -338,7 +352,7 @@ class RequestPersonalInformation extends Component {
                 <Field name="address" keyboardType="default" component={renderField} iconName="map-marker"
                     iconType="material-community" placeholder="Địa chỉ" secureText={false}
                     onChange={(text) => { this.setState({ address: text }) }}
-                    validate={[required]}
+                    validate={[required, notContainSpecialCharacters]}
                 />
                 <View style={styles.inputContainer}>
                     <DatePicker

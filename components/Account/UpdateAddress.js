@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, BackHandler, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
+import TopMenuFirstScreen from './../Common/TopMenuFirstScreen';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -11,7 +12,7 @@ import { load as loadAccount } from '../Reducers/InitialValue';
 import { login, logout } from '../Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 
-import renderField , {required} from '../../Validate/RenderField';
+import renderField , {required, notContainSpecialCharacters} from '../../Validate/RenderField';
 
 //Render combobox selected value
 const _renderDistrictRow = rowData => {
@@ -94,6 +95,9 @@ class UpdateAddress extends Component {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
     componentDidMount = value => {
+        this.props.navigation.addListener('focus', () => {
+            this.resetScreen();
+        });
         this.callApiGetDistrictCode();
         // this.callApiGetTownCode();
     }
@@ -175,6 +179,7 @@ class UpdateAddress extends Component {
         }
     }
     skip = values => {
+        this.resetScreen();
         this.props.navigation.dispatch(
             CommonActions.navigate({
                 name: 'HomeScreen',
@@ -264,7 +269,8 @@ class UpdateAddress extends Component {
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
             >
-                <ScreenTopMenuBack navigation={this.props.navigation} backScreen={'HomeScreen'}></ScreenTopMenuBack>
+                <TopMenuFirstScreen navigation={this.props.navigation} ></TopMenuFirstScreen>
+                {/* <ScreenTopMenuBack navigation={this.props.navigation} backScreen={'HomeScreen'}></ScreenTopMenuBack> */}
                 <View>
                     <View style={styles.titleArea}>
                         <Text style={styles.logoText}>Cập nhật địa chỉ</Text>
@@ -312,7 +318,7 @@ class UpdateAddress extends Component {
                 <Field name="address" keyboardType="default" component={renderField} iconName="map-marker"
                     iconType="material-community" placeholder="Địa chỉ" secureText={false}
                     onChange={(text) => { this.setState({ address: text }) }}
-                    validate={[required]}
+                    validate={[required, notContainSpecialCharacters]}
                 />
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.btnConfirm} onPress={this.skip}>

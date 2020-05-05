@@ -4,11 +4,11 @@ import {Button, Icon} from 'react-native-elements';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 
-export default class ScreenTopMenuBack extends Component {
+export default class TopMenuFirstScreen extends Component {
     render(){
         return(            
             <View style ={styles.menuArea}>                           
-                <Icon
+                {/* <Icon
                     name='chevron-left'
                     type='Entypo'
                     color={iconColor}
@@ -17,7 +17,7 @@ export default class ScreenTopMenuBack extends Component {
                     onPress= {() => {
                     this.props.backScreen ? this.props.navigation.navigate(this.props.backScreen) : this.props.navigation.goBack();
                     }}
-                ></Icon>
+                ></Icon> */}
                 <Text style={styles.title}> MedTest</Text>
                 <Icon
                     name='bell'
@@ -53,5 +53,6 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'center',
         fontWeight:'bold',
+        marginLeft: 60
     }
 });
