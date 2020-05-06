@@ -17,6 +17,8 @@ export default class ViewNurseScreen extends Component {
             gender: this.props.route.params.gender ? this.props.route.params.gender : '',
             email: this.props.route.params.email ? this.props.route.params.email : '',
             image: this.props.route.params.image ? this.props.route.params.image : '',
+            townName: this.props.route.params.townName ? this.props.route.params.townName : '',
+            districtName: this.props.route.params.districtName ? this.props.route.params.districtName : '',
         };
     }
 
@@ -30,6 +32,8 @@ export default class ViewNurseScreen extends Component {
                 address: this.props.route.params.address ? this.props.route.params.address : '',
                 gender: this.props.route.params.email ? this.props.route.params.email : '',
                 image: this.props.route.params.image ? this.props.route.params.image : '',
+                townName: this.props.route.params.townName ? this.props.route.params.townName : '',
+                districtName: this.props.route.params.districtName ? this.props.route.params.districtName : '',
             }));
         }
     }
@@ -67,7 +71,7 @@ export default class ViewNurseScreen extends Component {
                         </View>
                     </View>
                     <View style={styles.textContainer}>
-                        <Text style={styles.textInfor} >Địa chỉ: {this.state.address}</Text>
+                        <Text style={styles.textInfor} >Địa chỉ: {this.state.address + ', ' + this.state.townName + ', ' + this.state.districtName}</Text>
                         {/* <Text style={styles.textInfor} >Địa chỉ: {this.state.address}, phường Phúc Tân, Quận Hoàn Kiếm</Text> */}
                     </View>
                     <View style={styles.textContainer}>

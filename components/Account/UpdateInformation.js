@@ -59,6 +59,7 @@ class UpdateInformationScreen extends Component {
             disabledButton: false,
         };
         this.submit = this.submit.bind(this)
+        this.checkInformationChanged = this.checkInformationChanged.bind(this)
     }
     componentDidUpdate(prevProps) {
         if (prevProps.customerInfor !== this.props.customerInfor) {
@@ -143,18 +144,34 @@ class UpdateInformationScreen extends Component {
                 'Bạn phải chọn quận và phường!',
             )
         } else {
-            Alert.alert(
-                'Thay đổi thông tin',
-                'Bạn có muốn cập nhật các thông tin trên?',
-                [
-                    { text: 'Hủy', onPress: () => { return null } },
-                    {
-                        text: 'Xác nhận', onPress: () => {
-                            this.callApi()
-                        }
-                    },
-                ]
-            )
+            if (this.checkInformationChanged()) {
+                Alert.alert(
+                    'Thay đổi thông tin',
+                    'Bạn có muốn cập nhật các thông tin trên?',
+                    [
+                        { text: 'Hủy', onPress: () => { return null } },
+                        {
+                            text: 'Xác nhận', onPress: () => {
+                                this.callApi()
+                            }
+                        },
+                    ]
+                )
+            } else {
+                Alert.alert(
+                    'Thay đổi thông tin',
+                    'Thông tin không thay đổi?',
+                    [
+                        { text: 'Hủy', onPress: () => { return null } },
+                        {
+                            text: 'Xác nhận', onPress: () => {
+                                this.callApi()
+                            }
+                        },
+                    ]
+                )
+            }
+
         }
     }
     selectItem(id) {
@@ -162,6 +179,30 @@ class UpdateInformationScreen extends Component {
             disableDropdownTown: false,
             selectTownList: this.state.districtList[id].listTown,
         })
+    }
+    checkInformationChanged() {
+        if (this.props.customerInfor.name !== this.state.name) {
+            return true
+        }
+        if (this.props.customerInfor.dob !== this.state.dob) {
+            return true
+        }
+        if (this.props.customerInfor.gender !== this.state.gender) {
+            return true
+        }
+        if (this.props.customerInfor.townCode !== this.state.townCode) {
+            return true
+        }
+        if (this.props.customerInfor.districtCode !== this.state.districtCode) {
+            return true
+        }
+        if (this.props.customerInfor.address !== this.state.address) {
+            return true
+        }
+        if (this.props.customerInfor.email !== this.state.email) {
+            return true
+        }
+        return false;
     }
     callApi = async () => {
         this.setState({
@@ -190,8 +231,6 @@ class UpdateInformationScreen extends Component {
                     this.setState({
                         disabledButton: false,
                     })
-                    console.log(result.success == false)
-                    console.log(result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!')
                     if (result.success == false) {
                         if (result.message == 'Người dùng hiện tại đang bị khoá! Vui lòng liên hệ tới phòng khám để xử lý!') {
                             Alert.alert(

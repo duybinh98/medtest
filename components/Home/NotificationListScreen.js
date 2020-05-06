@@ -15,9 +15,7 @@ class NotificationListScreen extends Component {
     this.state = {
         customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
         notiList: [],
-        // notiList: this.props.route.params.notiList ? this.props.route.params.notiList : [],
         dataChanged: true,
-        // dataChanged: this.props.route.params.dataChanged ? this.props.route.params.dataChanged : true,
         testsList: [],
     };
     }
@@ -30,13 +28,12 @@ class NotificationListScreen extends Component {
         })
     } 
     componentDidUpdate(prevProps, prevState) {
-        // if (prevProps !== this.props) {
-        //     this.setState({
-        //         notiList: this.props.route.params.notiList ? this.props.route.params.notiList : [],
-        //         customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
-        //         dataChanged: this.props.route.params.dataChanged ? this.props.route.params.dataChanged : true,
-        //     })
-        // }
+        if(prevProps.customerInfor !== this.props.customerInfor){
+            this.setState({
+                customerId: this.props.customerInfor? this.props.customerInfor.id: '-1',
+                notiList: [],
+            })
+        }
     }
     callNotiApi(){
         fetch(getApiUrl()+'/users/'+this.state.customerId+'/notifications/list', {

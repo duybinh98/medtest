@@ -24,7 +24,7 @@ class customerInformation extends Component {
             // name: this.props.customerInfor ? this.props.customerInfor.name : '',
             townName: this.props.customerInfor ? this.props.customerInfor.townName : "Chọn phường/xã",
             districtName: this.props.customerInfor ? this.props.customerInfor.districtName : 'Chọn quận huyện',
-            serverImage: '',
+            serverImage: this.props.customerInfor? this.props.customerInfor.image : '',
         };
         this.selectImage = this.selectImage.bind(this)
     }
@@ -38,10 +38,12 @@ class customerInformation extends Component {
                 customerInfor: this.props.customerInfor ? this.props.customerInfor : null,
                 townName: this.props.customerInfor ? this.props.customerInfor.townName : "Chọn phường/xã",
                 districtName: this.props.customerInfor ? this.props.customerInfor.districtName : 'Chọn quận huyện',
+                serverImage: this.props.customerInfor? this.props.customerInfor.image : '',
             }));
         }
     }
     componentDidMount() {
+        // c
         this.callApiCustomerInfor();
         this.props.navigation.addListener('focus', () => {
             this.callApiCustomerInfor();

@@ -300,6 +300,8 @@ class RequestViewScreen extends Component {
                 email: result.email,
                 gender: result.gender,
                 image: result.image,
+                townName : result.townName,
+                districtName: result.districtName
               },
             }),
           );
