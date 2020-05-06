@@ -70,14 +70,7 @@ class RequestTestListScreen extends Component {
         this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
         this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
     }
-
-    // componentWillUnmount() {
-    //     this.keyboardDidShowSub.remove();
-    //     this.keyboardDidHideSub.remove();
-    // }
-
-
-
+    
     keyboardDidShow = (event) => {
         this.setState({
             showFooter: false
@@ -156,7 +149,7 @@ class RequestTestListScreen extends Component {
                             )
                                 : Alert.alert(
                                     'Lỗi đặt xét nghiệm',
-                                    'Bạn cần chọn ít nhất 1 loại xét nghiệm để có thể đặt xét nghiệm',
+                                    'Bạn phải chọn ít nhất 1 loại xét nghiệm để có thể đặt xét nghiệm',
                                 )
                                 : Alert.alert(
                                     'Lỗi đặt xét nghiệm',

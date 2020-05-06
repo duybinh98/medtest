@@ -14,7 +14,7 @@ export default class AppointmentListItem extends Component {
             createTime: '',
             appointmentDate: '',
             appointmentTime: '',
-            appointmentDob: '',
+            // appointmentDob: '',
         };
         this.isVisible = this.isVisible.bind(this);
     }
@@ -26,7 +26,7 @@ export default class AppointmentListItem extends Component {
             createDate: this.props.appointment_createdTime,
             appointmentDate: convertDateTimeToDate(this.props.appointment_meetingTime),
             appointmentTime: convertDateTimeToTime(this.props.appointment_meetingTime),
-            appointmentDob: convertDateTimeToDate(this.props.appointment_DOB),
+            // appointmentDob: convertDateTimeToDate(this.props.appointment_DOB),
 
         }));
         this.setStatusNameAndColor(this.props.appointment_status)
@@ -39,7 +39,7 @@ export default class AppointmentListItem extends Component {
                 createDate: this.props.appointment_createdTime,
                 appointmentDate: convertDateTimeToDate(this.props.appointment_meetingTime),
                 appointmentTime: convertDateTimeToTime(this.props.appointment_meetingTime),
-                appointmentDob: convertDateTimeToDate(this.props.appointment_DOB),
+                // appointmentDob: convertDateTimeToDate(this.props.appointment_DOB),
             })
             this.setStatusNameAndColor(this.props.appointment_status)
         }
@@ -97,7 +97,7 @@ export default class AppointmentListItem extends Component {
                                         appointment_id: this.props.appointment_id,
                                         appointment_userName: this.props.appointment_userName,
                                         appointment_phoneNumber: this.props.appointment_phoneNumber,
-                                        appointment_DOB: this.state.appointmentDob,
+                                        // appointment_DOB: this.state.appointmentDob,
                                         appointment_date: this.state.appointmentDate,
                                         appointment_time: this.state.appointmentTime,
                                         appointment_statusName: this.state.statusName,

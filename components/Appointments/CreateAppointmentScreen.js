@@ -117,7 +117,7 @@ class CreateAppointmentScreen extends Component {
                                     appointment_id: result.appointment_id,
                                     appointment_userName: this.state.name,
                                     appointment_phoneNumber: this.state.phonenumber,
-                                    appointment_DOB: this.state.dob,
+                                    // appointment_DOB: this.state.dob,
                                     appointment_date: this.state.apointmentDate,
                                     appointment_time: this.state.apointmentTime,
                                     appointment_status: 'pending',

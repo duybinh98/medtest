@@ -24,9 +24,6 @@ class customerInformation extends Component {
             // name: this.props.customerInfor ? this.props.customerInfor.name : '',
             townName: this.props.customerInfor ? this.props.customerInfor.townName : "Chọn phường/xã",
             districtName: this.props.customerInfor ? this.props.customerInfor.districtName : 'Chọn quận huyện',
-            districtList: [],
-            townList: [],
-
             serverImage: '',
         };
         this.selectImage = this.selectImage.bind(this)
@@ -46,45 +43,9 @@ class customerInformation extends Component {
     }
     componentDidMount() {
         this.callApiCustomerInfor();
-        this.callApiGetDistrictCode();
-        this.callApiGetTownCode();
-        // this.props.navigation.addListener('focus', () => {
-        //     this.callApiCustomerInfor();
-        //     this.callApiGetDistrictCode();
-        //     this.callApiGetTownCode();
-        // });
-    }
-    callApiGetDistrictCode() {
-        fetch(getApiUrl() + "/management/districts/district-town-list")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState(previousState => ({
-                        districtList: result,
-                    }));
-                },
-                (error) => {
-                    this.setState({
-                        error
-                    });
-                }
-            )
-    }
-    callApiGetTownCode() {
-        fetch(getApiUrl() + "/management/districts/towns/list")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState(previousState => ({
-                        townList: result,
-                    }));
-                },
-                (error) => {
-                    this.setState({
-                        error
-                    });
-                }
-            )
+        this.props.navigation.addListener('focus', () => {
+            this.callApiCustomerInfor();
+        });
     }
     callApiCustomerInfor() {
         fetch(getApiUrl() + '/users/customers/detail/' + this.state.customerId, {
@@ -99,7 +60,10 @@ class customerInformation extends Component {
             .then(
                 (result) => {
                     if (result.message) {
-                        alert(result.message);
+                        Alert.alert(
+                            'Lỗi lấy thông tin người dùng',
+                            result.message,
+                        )
                     } else {
                         console.log(result)
                         this.setState(previousState => ({
@@ -141,7 +105,7 @@ class customerInformation extends Component {
                 Authorization: 'Bearer ' + this.state.token,
             },
             body: JSON.stringify({
-                "file": sendData
+                file: sendData
             }),
         })
             .then(res => res.json())
@@ -195,7 +159,8 @@ class customerInformation extends Component {
                     } else {
                         console.log('result:' + JSON.stringify(result))
                         this.setState({ serverImage: result.image });
-                        this.props.load(result)
+                        this.props.customerInfor.image = result.image
+                        // this.props.load(result)
                     }
 
                 },

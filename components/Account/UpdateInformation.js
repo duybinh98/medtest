@@ -327,17 +327,24 @@ class UpdateInformationScreen extends Component {
                     </View>
                 </View>
                 <View style={styles.dropdownContainer}>
+                    <Icon
+                        name={"map-marker"}
+                        type={'material-community'}
+                        color='black'
+                        size={32}
+                        iconStyle={styles.inputIcon}
+                    ></Icon>
                     <ModalDropdown
                         ref={(ref) => this.districtDropdown = ref}
                         options={this.state.districtList}
-                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
+                        renderSeparator={() => <View style={{ borderWidth: 0.5, borderColor: '#00bfff' }} />}
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
                         defaultValue={this.state.districtName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
-                        showsVerticalScrollIndicator={false}
-                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
+                        showsVerticalScrollIndicator={true}
+                        dropdownStyle={styles.dropdownStyle}
                         dropdownTextStyle={{ fontSize: 16 }}
                         onSelect={(value) => { this.selectItem(value) }}
                     />
@@ -346,18 +353,25 @@ class UpdateInformationScreen extends Component {
                     </View>
                 </View>
                 <View style={styles.dropdownContainer}>
+                    <Icon
+                        name={"map-marker"}
+                        type={'material-community'}
+                        color='black'
+                        size={32}
+                        iconStyle={styles.inputIcon}
+                    ></Icon>
                     <ModalDropdown
                         ref={(ref) => this.townDropdown = ref}
                         disabled={this.state.disableDropdownTown}
                         options={this.state.selectTownList}
-                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
+                        renderSeparator={() => <View style={{ borderWidth: 0.5, borderColor: '#00bfff' }} />}
                         renderRow={_renderTownRow.bind(this)}
                         renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
                         defaultValue={this.state.townName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
                         showsVerticalScrollIndicator={false}
-                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
+                        dropdownStyle={styles.dropdownStyle}
                         dropdownTextStyle={{ fontSize: 16 }}
                     />
                     <View style={{ position: "absolute", right: 30, top: 15 }}>
@@ -469,6 +483,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
         backgroundColor: 'white',
         marginBottom: 1,
+    },
+    dropdownStyle: {
+        width: 200,
+        height: 185,
+        borderColor: '#0A6ADA',
+        borderWidth: 1.5,
+        borderRadius: 5
     },
     dropdownButton: {
         width: WIDTH - 55,

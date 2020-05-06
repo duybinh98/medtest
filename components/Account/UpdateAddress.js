@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity, BackHandler, Alert } from 'react-native';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
-import ScreenTopMenuBack from './../Common/ScreenTopMenuBack';
 import TopMenuFirstScreen from './../Common/TopMenuFirstScreen';
+import { Icon } from 'react-native-elements';
 import { Field, reduxForm } from 'redux-form';
 import { CommonActions } from '@react-navigation/native';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -12,7 +12,7 @@ import { load as loadAccount } from '../Reducers/InitialValue';
 import { login, logout } from '../Reducers/LoginReducer';
 import { loadCustomerInfor } from '../Reducers/LoadInforReducer';
 
-import renderField , {required, notContainSpecialCharacters} from '../../Validate/RenderField';
+import renderField, { required, notContainSpecialCharacters } from '../../Validate/RenderField';
 
 //Render combobox selected value
 const _renderDistrictRow = rowData => {
@@ -49,7 +49,6 @@ class UpdateAddress extends Component {
             townName: 'Chọn phường...',
             districtName: 'Chọn quận...',
             districtList: [],
-            townList: [],
             disableDropdownTown: true,
             disabledButton: false,
         };
@@ -95,14 +94,14 @@ class UpdateAddress extends Component {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
     componentDidMount = value => {
-        this.props.navigation.addListener('focus', () => {
-            this.resetScreen();
-        });
         this.callApiGetDistrictCode();
         // this.callApiGetTownCode();
     }
     resetScreen() {
         this.setState({
+            address: '',
+            districtCode: '',
+            townCode: '',
             townName: 'Chọn phường...',
             districtName: 'Chọn quận...',
         })
@@ -149,16 +148,20 @@ class UpdateAddress extends Component {
     }
     submit = values => {
         if (this.state.districtName == 'Chọn quận...' || this.state.townName == 'Chọn phường...') {
-            alert('Bạn phải chọn quận và phường!')
+            Alert.alert(
+                'Lỗi cập nhật địa chỉ',
+                'Bạn phải chọn quận và phường!',
+            )
         } else {
             this.props.customerInforLoad.address = this.state.address;
             this.props.customerInforLoad.townCode = this.state.townCode;
             this.props.customerInforLoad.districtCode = this.state.districtCode;
+            this.props.customerInforLoad.townName = this.state.townName;
+            this.props.customerInforLoad.districtName = this.state.districtName
             this.setState({
                 customerInfor: this.props.customerInforLoad
             })
             this.callApi()
-
         }
     }
     skip = values => {
@@ -218,7 +221,7 @@ class UpdateAddress extends Component {
                             );
                         } else {
                             Alert.alert(
-                                'Lỗi thay ảnh',
+                                'Lỗi cập nhật địa chỉ',
                                 result.message,
                             )
                         }
@@ -260,17 +263,24 @@ class UpdateAddress extends Component {
                     </View>
                 </View>
                 <View style={styles.dropdownContainer}>
+                    <Icon
+                        name={"map-marker"}
+                        type={'material-community'}
+                        color='black'
+                        size={32}
+                        iconStyle={styles.inputIcon}
+                    ></Icon>
                     <ModalDropdown
                         ref={(ref) => this.districtDropdown = ref}
                         options={this.state.districtList}
-                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
+                        renderSeparator={() => <View style={{ borderWidth: 0.5, borderColor: '#00bfff' }} />}
                         renderRow={_renderDistrictRow.bind(this)}
                         renderButtonText={(rowData) => this._renderDistrictButtonText(rowData)}
                         defaultValue={this.state.districtName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
-                        showsVerticalScrollIndicator={false}
-                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
+                        showsVerticalScrollIndicator={true}
+                        dropdownStyle={styles.dropdownStyle}
                         dropdownTextStyle={{ fontSize: 16 }}
                         onSelect={(value) => { this.selectItem(value) }}
                     />
@@ -279,20 +289,26 @@ class UpdateAddress extends Component {
                     </View>
                 </View>
                 <View style={styles.dropdownContainer}>
+                    <Icon
+                        name={"map-marker"}
+                        type={'material-community'}
+                        color='black'
+                        size={32}
+                        iconStyle={styles.inputIcon}
+                    ></Icon>
                     <ModalDropdown
                         ref={(ref) => this.townDropdown = ref}
                         disabled={this.state.disableDropdownTown}
                         options={this.state.selectTownList}
-                        renderSeparator={() => <View style={{ borderWidth: 0.5 }} />}
+                        renderSeparator={() => <View style={{ borderWidth: 0.5, borderColor: '#00bfff' }} />}
                         renderRow={_renderTownRow.bind(this)}
                         renderButtonText={(listTown) => this._renderTownButtonText(listTown)}
                         defaultValue={this.state.townName}
                         textStyle={styles.dropdownText}
                         style={styles.dropdownButton}
                         showsVerticalScrollIndicator={false}
-                        dropdownStyle={{ width: 220, borderWidth: 2, borderRadius: 5 }}
+                        dropdownStyle={styles.dropdownStyle}
                         dropdownTextStyle={{ fontSize: 16 }}
-
                     />
                     <View style={{ position: "absolute", right: 30, top: 15 }}>
                         <Text style={{ fontSize: 20 }} >▼</Text>
@@ -400,21 +416,26 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         marginBottom: 1,
     },
+    dropdownStyle: {
+        width: 200,
+        height: 185,
+        borderColor: '#0A6ADA',
+        borderWidth: 1.5,
+        borderRadius: 5
+    },
     dropdownButton: {
         width: WIDTH - 55,
         height: 45,
         borderRadius: 15,
         fontSize: 16,
-        paddingLeft: 65,
+        paddingLeft: 60,
         borderWidth: 2,
         borderColor: '#0A6ADA',
         backgroundColor: 'rgba(255,255,255,0.7)',
         color: 'black',
-        // borderRadius: 15,
     },
     dropdownText: {
         marginTop: 10,
-        // marginHorizontal: 85,
         fontSize: 16,
     },
     btnConfirm: {

@@ -15,7 +15,6 @@ class AppointmentDetailScreen extends Component {
         this.state = {
             appointmentId: this.props.route.params.appointment_id ? this.props.route.params.appointment_id : '1',
             name: this.props.route.params.appointment_userName ? this.props.route.params.appointment_userName : '',
-            dob: this.props.route.params.appointment_DOB ? this.props.route.params.appointment_DOB : '',
             phone: this.props.route.params.appointment_phoneNumber ? this.props.route.params.appointment_phoneNumber : '',
             date: this.props.route.params.appointment_date ? this.props.route.params.appointment_date : '',
             freeTime: this.props.route.params.appointment_time ? this.props.route.params.appointment_time : '',
@@ -38,7 +37,6 @@ class AppointmentDetailScreen extends Component {
             this.setState({
                 appointmentId: this.props.route.params.appointment_id ? this.props.route.params.appointment_id : '1',
                 name: this.props.route.params.appointment_userName ? this.props.route.params.appointment_userName : '',
-                dob: this.props.route.params.appointment_DOB ? this.props.route.params.appointment_DOB : '',
                 phone: this.props.route.params.appointment_phoneNumber ? this.props.route.params.appointment_phoneNumber : '',
                 date: this.props.route.params.appointment_date ? this.props.route.params.appointment_date : '',
                 freeTime: this.props.route.params.appointment_time ? this.props.route.params.appointment_time : '',

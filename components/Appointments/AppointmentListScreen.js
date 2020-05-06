@@ -122,7 +122,7 @@ class AppointmentListScreen extends Component {
                                             appointment_id={item.appointment_id}
                                             appointment_userName={item.appointment_customerName}
                                             appointment_phoneNumber={item.appointment_phoneNumber}
-                                            appointment_DOB={item.appointment_DOB}
+                                            // appointment_DOB={item.appointment_DOB}
                                             appointment_meetingTime={item.appointment_meetingTime}
                                             appointment_status={item.appointment_status}
                                             appointment_note={item.appointment_note}
