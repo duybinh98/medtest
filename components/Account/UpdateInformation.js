@@ -181,25 +181,31 @@ class UpdateInformationScreen extends Component {
         })
     }
     checkInformationChanged() {
-        if (this.props.customerInfor.name !== this.state.name) {
+        let gender = '0'
+        if (this.props.customerInfor.name != this.state.name) {
             return true
         }
-        if (this.props.customerInfor.dob !== this.state.dob) {
+        if (convertDateTimeToDate(this.props.customerInfor.dob) != this.state.dob) {
             return true
         }
-        if (this.props.customerInfor.gender !== this.state.gender) {
+        if (this.state.gender ==  "Nữ") {
+            gender = 0
+        } else {
+            gender = 1
+        }
+        if (this.props.customerInfor.gender != gender) {
             return true
         }
-        if (this.props.customerInfor.townCode !== this.state.townCode) {
+        if (this.props.customerInfor.townCode != this.state.townCode) {
             return true
         }
-        if (this.props.customerInfor.districtCode !== this.state.districtCode) {
+        if (this.props.customerInfor.districtCode != this.state.districtCode) {
             return true
         }
-        if (this.props.customerInfor.address !== this.state.address) {
+        if (this.props.customerInfor.address != this.state.address) {
             return true
         }
-        if (this.props.customerInfor.email !== this.state.email) {
+        if (this.props.customerInfor.email != this.state.email) {
             return true
         }
         return false;
