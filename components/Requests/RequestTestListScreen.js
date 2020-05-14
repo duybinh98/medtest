@@ -26,6 +26,7 @@ class RequestTestListScreen extends Component {
         }
         this.selectItem = this.selectItem.bind(this)
         this.resetSelectedTestOnConfirm = this.resetSelectedTestOnConfirm.bind(this)
+        this.isSelected = this.isSelected.bind(this)
     }
 
     componentDidUpdate(prevProps) {
@@ -47,6 +48,10 @@ class RequestTestListScreen extends Component {
         if (found === -1) return true; else return false;
     }
 
+    isSelected(id) {
+        const found = this.state.selectedTest.findIndex(test => test == id);
+        if (found === -1) return false; else return true;
+    }
     resetSelectedTestOnConfirm() {
         this.setState({
             selectedTest: [],
@@ -119,6 +124,7 @@ class RequestTestListScreen extends Component {
                                             test={item.listTest}
                                             viewOnly={false}
                                             selectItem={this.selectItem}
+                                            isSelected={this.isSelected}
                                             resetFlag={this.state.resetList}
                                         >
                                         </TestCategoryItem>

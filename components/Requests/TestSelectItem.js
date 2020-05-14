@@ -16,9 +16,11 @@ export default class TestSelectItem extends Component {
 
     componentDidUpdate  (prevProps, prevState) {        
          if (prevProps.resetFlag !== this.props.resetFlag) {
+            
             this.setState(previousState => ({ 
                 selected: false,
             }));
+
         }
     }
     
@@ -39,7 +41,7 @@ export default class TestSelectItem extends Component {
                     style={styles.iconContainer}
                 >
                 <Icon
-                    name={this.state.selected ? 'check-square' : 'square'}
+                    name={this.props.isSelected(this.props.testID) ? 'check-square' : 'square'}
                     type='feather'
                     color='#0A6ADA'
                     size= {30}            

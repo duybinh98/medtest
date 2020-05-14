@@ -85,7 +85,7 @@ class RequestViewScreen extends Component {
       requestVersion: this.props.route.params.requestVersion
         ? this.props.route.params.requestVersion
         : 1,
-
+      // dataChanged : true,
       disabledButton: false,
     };
     this.isSelected = this.isSelected.bind(this);
@@ -94,12 +94,12 @@ class RequestViewScreen extends Component {
     this.viewNurse = this.viewNurse.bind(this);
   }
   componentDidMount() {
-    if (
-      this.props.route.params.currentVersion !=
-      this.props.route.params.requestVersion
-    ) {
-      this.callApiTestList(this.props.route.params.requestVersion);
-    }
+    // if (
+    //   this.props.route.params.currentVersion !=
+    //   this.props.route.params.requestVersion
+    // ) {
+    //   this.callApiTestList(this.props.route.params.requestVersion);
+    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -161,13 +161,14 @@ class RequestViewScreen extends Component {
         requestVersion: this.props.route.params.requestVersion
           ? this.props.route.params.requestVersion
           : 1,
+          // dataChanged: !this.state.dataChanged
       }));
-      if (
-        this.props.route.params.currentVersion !=
-        this.props.route.params.requestVersion
-      ) {
-        this.callApiTestList(this.props.route.params.requestVersion);
-      }
+      // if (
+      //   this.props.route.params.currentVersion !=
+      //   this.props.route.params.requestVersion
+      // ) {
+      //   this.callApiTestList(this.props.route.params.requestVersion);
+      // }
     }
     // if(prevProps != this.props) {
 
@@ -199,9 +200,14 @@ class RequestViewScreen extends Component {
       );
   };
   isSelected(id) {
+
     const found = this.state.selectedTest.findIndex(test => test == id);
     let result = false;
     found === -1 ? '' : (result = true);
+    if (result == true) {
+      console.log(this.state.requestId + ', ' + id + ', ' + result)
+
+    }
     return result;
   }
 
@@ -300,7 +306,7 @@ class RequestViewScreen extends Component {
                 email: result.email,
                 gender: result.gender,
                 image: result.image,
-                townName : result.townName,
+                townName: result.townName,
                 districtName: result.districtName
               },
             }),
@@ -325,6 +331,8 @@ class RequestViewScreen extends Component {
 
   render() {
     debugger;
+    // console.log('Test list ' + this.state.requestId + ' : ' + JSON.stringify(this.state.selectedTest) )
+    // console.log('Test list ' + this.state.requestId + ' : ' + JSON.stringify(this.state.testsList) )
     const a = this.state.testsList;
     const b = this.props.customerInfor;
     return (
@@ -466,7 +474,6 @@ class RequestViewScreen extends Component {
                     <TestCategoryItem
                       categoryName={item.testTypeName}
                       test={item.listTest}
-                      // test={item.lsTests}
                       viewOnly={true}
                       isSelected={this.isSelected}
                     />

@@ -33,8 +33,12 @@ export default class TestCategoryItem extends Component {
         // view => hide if no selected
         let result = false;
         this.props.test.forEach(test => {
-            this.props.isSelected(test.testID) == true ? result=true : '';  
+            this.props.isSelected(test.testID)  ? result=true : '';  
+            // if(this.props.isSelected(test.testID)){
+            //     console.log(test.testID)
+            // }
         });
+        
         return result;
     }
 
@@ -47,6 +51,7 @@ export default class TestCategoryItem extends Component {
             <View>
                 <TouchableOpacity style={styles.testItem}
                     onPress={() =>{
+                        console.log(this.state.viewTest)
                         this.setState(previousState => ({
                             viewTest: !this.state.viewTest
                         }));
@@ -102,13 +107,14 @@ export default class TestCategoryItem extends Component {
                                     testPrice={(item.price)}
                                     testID={item.testID}
                                     backgroundColor={(index-countHide) % 2 == 0 ? '#EEE': '#FFF'}
-                                    /> : null :
-                                    <TestSelectItem 
+                                    /> : null 
+                                    : <TestSelectItem 
                                     testName={item.testName}
                                     testPrice={(item.price)}
                                     testID={item.testID}
                                     backgroundColor={index % 2 == 0 ? '#EEE': '#FFF'}
                                     onPressItem = {this.props.selectItem}
+                                    isSelected = {this.props.isSelected}
                                     resetFlag={this.state.resetFlag}
                                     /> 
                                      : null}    

@@ -50,36 +50,36 @@ class RequestListScreen extends Component {
       this.callApiRequestList();
     }
   }
-  callApiTestList = async () => {
-    fetch(getApiUrl() + '/tests/versions/lastest-version-test')
-      .then(res => res.json())
-      .then(
-        result => {
-          this.setState(previousState => ({
-            testsList: result.lsTests,
-            // testsList : result,
-            testListVersion: result.versionID,
-          }));
-        },
-        error => {
-          console.log(error);
-        },
-      );
-  };
   // callApiTestList = async () => {
-  //     fetch(getApiUrl()+"/test-types/type-test")
+  //   fetch(getApiUrl() + '/tests/versions/lastest-version-test')
   //     .then(res => res.json())
   //     .then(
-  //         (result) => {
+  //       result => {
   //         this.setState(previousState => ({
-  //             testsList: result,
+  //           testsList: result.lsTests,
+  //           // testsList : result,
+  //           testListVersion: result.versionID,
   //         }));
-  //         },
-  //         (error) => {
-  //             console.log(error)
-  //         }
-  //     )
-  // }
+  //       },
+  //       error => {
+  //         console.log(error);
+  //       },
+  //     );
+  // };
+  callApiTestList = async () => {
+      fetch(getApiUrl()+"/test-types/type-test")
+      .then(res => res.json())
+      .then(
+          (result) => {
+          this.setState(previousState => ({
+              testsList: result,
+          }));
+          },
+          (error) => {
+              console.log(error)
+          }
+      )
+  }
 
   callApiRequestList() {
     fetch(
@@ -244,7 +244,7 @@ const mapStateToProps = state => {
     customerInfor: state.loadCustomer.customerInfor,
     isLoadSuccess: state.loadCustomer.isLoadSuccess,
     loadError: state.loadCustomer.LoadError,
-    token: state.login.token,
+
   };
 };
 const mapStateToDispatch = dispatch => {

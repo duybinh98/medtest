@@ -116,10 +116,11 @@ class LoginComponent extends Component {
             }
         }
             // , 30000)
-            , 22000)
+            , 25000)
         // 
     }
     render() {
+        // debugger;
         const { handleSubmit } = this.props;
         return (
             <ScrollView
