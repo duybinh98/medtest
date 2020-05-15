@@ -44,7 +44,7 @@ class ConfirmOPTScreen extends Component {
     startTimer = () => {
         this.clockCall = setInterval(() => {
             this.decrementClock();
-            console.log("abc " + this.state.timer)
+            // console.log("abc " + this.state.timer)
         }, 1000);
     }
     resetScreen() {
@@ -137,7 +137,7 @@ class ConfirmOPTScreen extends Component {
                 phoneNumber: this.state.phonenumber,
                 email: this.state.email,
                 dob: convertDateToDateTime(this.state.dob),
-                gender: this.state.gender === "Nữ" ? '0' : '1',
+                gender: this.state.gender ,
                 password: this.state.password,
             }),
         })

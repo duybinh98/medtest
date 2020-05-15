@@ -83,7 +83,7 @@ class RegisterScreen extends Component {
                                     email: this.state.email,
                                     dob: this.state.dob,
                                     password: this.state.password,
-                                    gender: this.state.gender === "Nữ" ? '0' : '1',
+                                    gender: this.state.gender == "Nữ" ? '0' : '1',
                                     backScreen: 'LoginScreen',
                                 },
                             })
